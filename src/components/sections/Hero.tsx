@@ -5,6 +5,9 @@ import { useTypingEffect } from '../../hooks/useTypingEffect';
 import { FloatingParticles } from '../ui/FloatingParticles';
 import type { SectionId } from '../../App';
 
+const NAME_GLITCH_OFFSETS = [2, -2] as const;
+const BUTTON_GLITCH_OFFSETS = [-2, 1, -1] as const;
+
 /* ─── Periodic glitch flash hook ─── */
 function useGlitchFlash(baseMs = 4000) {
   const [glitching, setGlitching] = useState(false);
@@ -25,6 +28,29 @@ function useGlitchFlash(baseMs = 4000) {
   return glitching;
 }
 
+function useGlitchJitter(active: boolean, offsets: ReadonlyArray<number>): number {
+  const [offset, setOffset] = useState<number>(0);
+
+  useEffect(() => {
+    if (!active) {
+      setOffset(0);
+      return;
+    }
+
+    let index = 0;
+    setOffset(offsets[index] ?? 0);
+
+    const timer = setInterval(() => {
+      index = (index + 1) % offsets.length;
+      setOffset(offsets[index] ?? 0);
+    }, 45);
+
+    return () => clearInterval(timer);
+  }, [active, offsets]);
+
+  return offset;
+}
+
 const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
 const LABELS: Record<SectionId, string> = {
   hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
@@ -38,6 +64,8 @@ export function Hero({ onNavigate }: HeroProps) {
   const mouse = useMouseParallax();
   const btnGlitch  = useGlitchFlash(3800);
   const nameGlitch = useGlitchFlash(5000);
+  const nameGlitchOffset = useGlitchJitter(nameGlitch, NAME_GLITCH_OFFSETS);
+  const buttonGlitchOffset = useGlitchJitter(btnGlitch, BUTTON_GLITCH_OFFSETS);
 
   const typedText = useTypingEffect(
     ['FRONTEND BUILDER', 'CONTENT CREATOR', 'ANIME ENJOYER', 'WEB ADVENTURER', 'CODE WEAVER'],
@@ -87,14 +115,10 @@ export function Hero({ onNavigate }: HeroProps) {
       {/* ─────── Particles ─────── */}
       <FloatingParticles count={16} />
 
-      {/* ═════════════════════════════════════════════
-          HUD SCREEN FRAME
-          ═════════════════════════════════════════════ */}
+      {/* HUD SCREEN FRAME */}
       <HUDScreenFrame />
 
-      {/* ═════════════════════════════════════════════
-          MAIN LAYOUT  (58px top = navbar height)
-          ═════════════════════════════════════════════ */}
+      {/*MAIN LAYOUT*/}
       <div
         className="relative z-10 h-full flex items-stretch"
         style={{ paddingTop: '58px', paddingBottom: '108px' }}
@@ -137,7 +161,7 @@ export function Hero({ onNavigate }: HeroProps) {
                 textShadow: nameGlitch
                   ? '4px 0 #ff0044, -4px 0 #0088ff, 0 0 30px #cc1133'
                   : '6px 5px 0 rgba(204,17,51,0.5), 0 0 45px rgba(204,17,51,0.32)',
-                transform: nameGlitch ? `translate(${Math.random() > 0.5 ? 2 : -2}px, 0)` : 'none',
+                transform: nameGlitch ? `translate(${nameGlitchOffset}px, 0)` : 'none',
                 transition: 'text-shadow 0.04s, transform 0.04s',
                 letterSpacing: '0.03em',
               }}
@@ -239,7 +263,7 @@ export function Hero({ onNavigate }: HeroProps) {
                   ? '-3px 0 0 rgba(0,136,255,0.5), 3px 0 0 rgba(255,34,68,0.6), 0 0 30px rgba(255,34,68,0.65), 4px 4px 0 rgba(0,0,0,0.65)'
                   : '0 0 22px rgba(204,17,51,0.48), 4px 4px 0 rgba(0,0,0,0.65)',
                 clipPath: 'polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))',
-                transform: btnGlitch ? `translate(${[-2, 1, -1][Math.floor(Math.random() * 3)]}px, 0)` : 'none',
+                transform: btnGlitch ? `translate(${buttonGlitchOffset}px, 0)` : 'none',
                 transition: 'background 0.04s, box-shadow 0.04s',
               }}
             >
@@ -318,17 +342,13 @@ export function Hero({ onNavigate }: HeroProps) {
         </div>
       </div>
 
-      {/* ═════════════════════════════════════════════
-          BOTTOM HUD PANELS
-          ═════════════════════════════════════════════ */}
+      {/* BOTTOM HUD PANELS */}
       <BottomHUD onNavigate={onNavigate} />
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════
-   HUD SCREEN FRAME
-════════════════════════════════════════════════════ */
+/* HUD SCREEN FRAME */
 function HUDScreenFrame() {
   return (
     <div className="pointer-events-none absolute inset-0 z-20">
@@ -408,9 +428,7 @@ function CornerBracket({ pos, path, sqX, sqY }: { pos: string; path: string; sqX
   );
 }
 
-/* ═══════════════════════════════════════════════════
-   BOTTOM HUD PANELS
-════════════════════════════════════════════════════ */
+/* BOTTOM HUD PANEL */
 function BottomHUD({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
   return (
     <motion.div
@@ -418,16 +436,10 @@ function BottomHUD({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.85, duration: 0.6 }}
       className="absolute bottom-0 left-0 right-0 z-10 flex items-end justify-between"
-      /* 
-        More margin from edges: matches reference where panels float a bit in from corners
-        px-8 gives ~32px from left/right red border
-      */
       style={{ padding: '0 32px 16px' }}
     >
 
-      {/* ─────────────────────────
-          PLAYER STATUS (bottom-left)
-          ───────────────────────── */}
+      {/* PLAYER STATUS (bottom-left) */}
       <div
         className="pixel-border hud-panel shrink-0"
         style={{
@@ -488,9 +500,7 @@ function BottomHUD({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
         </div>
       </div>
 
-      {/* ─────────────────────────
-          CENTER: Section nav
-          ───────────────────────── */}
+      {/* CENTER: Section nav */}
       <div className="hidden md:flex flex-col items-center gap-3 shrink-0 pb-3">
         {/* PREV / NEXT buttons — bigger, clearer */}
         <div className="flex items-center gap-3">
@@ -583,9 +593,7 @@ function BottomHUD({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
         </div>
       </div>
 
-      {/* ─────────────────────────
-          CURRENT QUEST (bottom-right)
-          ───────────────────────── */}
+      {/* CURRENT QUEST (bottom-right) */}
       <div
         className="pixel-border hud-panel shrink-0"
         style={{
