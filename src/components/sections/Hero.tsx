@@ -155,7 +155,7 @@ export function Hero({ onNavigate }: HeroProps) {
             style={{ width: '13px', height: '13px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', opacity: 0.8 }}
           />
           <span className="font-pixel uppercase tracking-[0.22em]"
-            style={{ fontSize: '8px', color: '#a09098' }}>
+            style={{ fontSize: '10px', color: '#fff' }}>
             Welcome to my portfolio
           </span>
           <span className="font-mono" style={{ fontSize: '12px', color: 'rgba(160,144,152,0.35)' }}>～～～</span>
@@ -296,7 +296,7 @@ export function Hero({ onNavigate }: HeroProps) {
         }}
       >
         {/* Hint */}
-        <span className="font-pixel" style={{ fontSize: '7px', color: 'rgba(160,144,152,0.45)', letterSpacing: '0.22em' }}>
+        <span className="font-pixel" style={{ fontSize: '7px', color: 'rgba(160,144,152,1)', letterSpacing: '0.22em' }}>
           ◆ TAP TO BEGIN ◆
         </span>
 
@@ -495,7 +495,7 @@ function BottomHUD() {
       style={{ padding: '0 28px 14px' }}
     >
       {/* PLAYER STATUS */}
-      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(228px,21vw,290px)',padding:'10px 13px 12px'}}>
+      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(240px,27vw,300px)',padding:'10px 13px 12px'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
           <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>PLAYER STATUS</span>
@@ -523,7 +523,7 @@ function BottomHUD() {
       <div className="flex-1" />
 
       {/* CURRENT QUEST */}
-      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(208px,19vw,265px)',padding:'10px 13px 12px'}}>
+      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(240px,30vw,290px)',padding:'10px 13px 12px'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
           <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>CURRENT QUEST</span>
