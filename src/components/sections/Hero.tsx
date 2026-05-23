@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import type { CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from '../../hooks/useMouseParallax';
 import { useTypingEffect } from '../../hooks/useTypingEffect';
@@ -22,7 +23,25 @@ function useGlitchFlash(baseMs = 5000) {
   return on;
 }
 
+function useGlitchShift(active: boolean, options: number[]) {
+  const [shift, setShift] = useState(0);
+
+  useEffect(() => {
+    if (!active) return;
+
+    const timer = window.setTimeout(() => {
+      setShift(options[Math.floor(Math.random() * options.length)]);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [active, options]);
+
+  return shift;
+}
+
 const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
+const NAME_GLITCH_SHIFTS = [-3, 2, -2, 3];
+const BUTTON_GLITCH_SHIFTS = [-3, 2, -2];
 const LABELS: Record<SectionId, string> = {
   hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
   projects: 'QUEST BOARD', contact: 'PORTAL',
@@ -37,6 +56,8 @@ export function Hero({ onNavigate }: HeroProps) {
   const btnGlitch   = useGlitchFlash(4200);
   const nameGlitch  = useGlitchFlash(5500);
   const scanGlitch  = useGlitchFlash(3800); // for scan lines around name
+  const nameGlitchShift = useGlitchShift(nameGlitch, NAME_GLITCH_SHIFTS);
+  const buttonGlitchShift = useGlitchShift(btnGlitch, BUTTON_GLITCH_SHIFTS);
 
   const typedText = useTypingEffect(
     ['FRONTEND BUILDER', 'CONTENT CREATOR', 'ANIME ENJOYER', 'WEB ADVENTURER', 'CODE WEAVER'],
@@ -181,7 +202,7 @@ export function Hero({ onNavigate }: HeroProps) {
               textShadow: nameGlitch
                 ? '5px 0 #ff0044, -5px 0 #0088ff, 0 0 50px rgba(255,34,68,0.9)'
                 : '6px 5px 0 rgba(204,17,51,0.6), 0 0 55px rgba(204,17,51,0.35)',
-              transform: nameGlitch ? `translateX(${[-3,2,-2,3][Math.floor(Math.random()*4)]}px)` : 'none',
+              transform: nameGlitch ? `translateX(${nameGlitchShift}px)` : 'none',
               transition: 'text-shadow 0.04s, transform 0.04s',
               padding: '0 8px',
             }}
@@ -304,7 +325,7 @@ export function Hero({ onNavigate }: HeroProps) {
               boxShadow: btnGlitch
                 ? '-4px 0 0 rgba(0,140,255,0.5), 4px 0 0 rgba(255,34,68,0.5), 0 0 35px rgba(255,34,68,0.65), 5px 5px 0 rgba(0,0,0,0.7)'
                 : '0 0 30px rgba(204,17,51,0.52), 5px 5px 0 rgba(0,0,0,0.7)',
-              transform: btnGlitch ? `translateX(${[-3,2,-2][Math.floor(Math.random()*3)]}px)` : 'none',
+              transform: btnGlitch ? `translateX(${buttonGlitchShift}px)` : 'none',
               transition: 'background 0.05s, box-shadow 0.05s, transform 0.05s',
               minWidth: '240px',
               justifyContent: 'center',
@@ -388,7 +409,7 @@ export function Hero({ onNavigate }: HeroProps) {
 function NameCornerMarks({ glitch }: { glitch: boolean }) {
   const c = glitch ? '#ff2244' : '#cc1133';
   const s = glitch ? `0 0 12px ${c}` : `0 0 6px ${c}`;
-  const cornerStyle: React.CSSProperties = { position: 'absolute', color: c, textShadow: s, fontSize: '10px', fontFamily: 'monospace', transition: 'color 0.05s, text-shadow 0.05s', lineHeight: 1 };
+  const cornerStyle: CSSProperties = { position: 'absolute', color: c, textShadow: s, fontSize: '10px', fontFamily: 'monospace', transition: 'color 0.05s, text-shadow 0.05s', lineHeight: 1 };
   return (
     <>
       {/* Top-left */}
