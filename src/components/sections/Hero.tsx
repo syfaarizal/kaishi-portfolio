@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from '../../hooks/useMouseParallax';
 import { useTypingEffect } from '../../hooks/useTypingEffect';
@@ -118,7 +119,7 @@ export function Hero({ onNavigate }: HeroProps) {
           src="/assets/kai-nobg-hero.png" alt="Kai Shi"
           className="w-full h-full object-cover object-center"
           style={{
-            filter: 'brightness(0.82) saturate(1.15) drop-shadow(0 0 28px rgba(204,17,51,0.45))',
+            filter: 'brightness(0.62) saturate(1.15) drop-shadow(0 0 28px rgba(204,17,51,0.45))',
           }}
           draggable={false}
         />
@@ -134,6 +135,10 @@ export function Hero({ onNavigate }: HeroProps) {
       {/* Additional character top-darkener so name text pops */}
       <div className="absolute inset-0 z-[5] pointer-events-none" style={{
         background: 'linear-gradient(to bottom, rgba(4,1,10,0.55) 0%, rgba(4,1,10,0.2) 18%, transparent 35%)'
+      }} />
+      {/* Mid-section darkener — behind description text */}
+      <div className="absolute inset-0 z-[5] pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 70% 38% at 50% 68%, rgba(4,1,10,0.72) 0%, rgba(4,1,10,0.45) 55%, transparent 100%)'
       }} />
 
       {/* HUD SCREEN FRAME */}
@@ -262,7 +267,13 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.48, duration: 0.44 }}
-          className="flex flex-col items-center gap-1 text-center"
+          className="flex flex-col items-center gap-1 text-center px-6 py-3 mx-4"
+          style={{
+            background: 'rgba(4,1,10,0.62)',
+            border: '1px solid rgba(61,15,26,0.5)',
+            backdropFilter: 'blur(6px)',
+            clipPath: 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))',
+          }}
         >
           <p className="font-display text-center" style={{
             fontSize: 'clamp(14px, 1.5vw, 17px)',
@@ -486,6 +497,8 @@ function CornerBracket({pos,path,sqX,sqY}:{pos:string;path:string;sqX:number;sqY
 
 /* BOTTOM HUD PANELS (corners only, no center) */
 function BottomHUD() {
+  const panelGlitch = useGlitchFlash(6500);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 22 }}
@@ -495,7 +508,7 @@ function BottomHUD() {
       style={{ padding: '0 28px 14px' }}
     >
       {/* PLAYER STATUS */}
-      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(240px,27vw,300px)',padding:'10px 13px 12px'}}>
+      <HUDPanel glitch={panelGlitch} style={{width:'clamp(240px,27vw,300px)'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
           <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>PLAYER STATUS</span>
@@ -509,48 +522,124 @@ function BottomHUD() {
           <div className="flex-1 min-w-0 space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="font-pixel" style={{fontSize:'8px',color:'#7a6068'}}>LVL</span>
-              <span className="font-pixel text-white" style={{fontSize:'22px',lineHeight:1,textShadow:'0 0 12px rgba(204,17,51,0.8)'}}>23</span>
+              <span className="font-pixel text-white" style={{
+                fontSize:'22px', lineHeight:1,
+                textShadow: panelGlitch ? '2px 0 #ff0044, -2px 0 #0088ff, 0 0 12px rgba(255,34,68,0.9)' : '0 0 12px rgba(204,17,51,0.8)',
+                transition: 'text-shadow 0.05s',
+              }}>23</span>
               <img src="/assets/icon-kai-shild.png"  alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
               <img src="/assets/icon-kai-console.png" alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
             </div>
-            <StatBar label="EXP" value={75}  color="#cc1133" display="75%"     />
-            <StatBar label="HP"  value={100} color="#22c55e" display="850/850" />
+            <StatBar label="EXP" value={75}  color="#cc1133" display="75%"     glitch={panelGlitch} />
+            <StatBar label="HP"  value={100} color="#22c55e" display="850/850" glitch={false} />
           </div>
         </div>
-      </div>
+      </HUDPanel>
 
-      {/* Spacer — center is occupied by the floating button stack above */}
+      {/* Spacer */}
       <div className="flex-1" />
 
       {/* CURRENT QUEST */}
-      <div className="pixel-border hud-panel shrink-0" style={{width:'clamp(240px,30vw,290px)',padding:'10px 13px 12px'}}>
+      <HUDPanel glitch={panelGlitch} style={{width:'clamp(240px,30vw,290px)'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
           <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>CURRENT QUEST</span>
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
         </div>
         <div className="flex items-center gap-3">
-          <img src="/assets/icon-kai-pedang2.png" alt="" style={{width:'42px',height:'42px',objectFit:'contain',imageRendering:'pixelated',filter:'drop-shadow(0 0 9px #cc1133)',flexShrink:0}}/>
+          <img src="/assets/icon-kai-pedang2.png" alt="" style={{
+            width:'42px', height:'42px', objectFit:'contain', imageRendering:'pixelated', flexShrink:0,
+            filter: panelGlitch ? 'drop-shadow(0 0 14px #ff2244) brightness(1.3)' : 'drop-shadow(0 0 9px #cc1133)',
+            transition: 'filter 0.05s',
+          }}/>
           <div className="flex-1 min-w-0 space-y-2">
-            <div className="font-pixel leading-snug" style={{fontSize:'9px',color:'#fff'}}>BUILD AMAZING<br/>WEBSITES</div>
-            <StatBar label="PROGRESS" value={60} color="#cc1133" display="3 / 5"/>
+            <div className="font-pixel leading-snug" style={{
+              fontSize:'9px',
+              color: panelGlitch ? '#ff8899' : '#fff',
+              transition: 'color 0.05s',
+            }}>BUILD AMAZING<br/>WEBSITES</div>
+            <StatBar label="PROGRESS" value={60} color="#cc1133" display="3 / 5" glitch={panelGlitch}/>
           </div>
         </div>
-      </div>
+      </HUDPanel>
+    </motion.div>
+  );
+}
+
+/* Interactive HUD panel wrapper — hover glow + glitch border */
+function HUDPanel({ children, glitch, style }: {
+  children: React.ReactNode;
+  glitch: boolean;
+  style?: React.CSSProperties;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.div
+      className="pixel-border hud-panel shrink-0 cursor-default"
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      animate={{
+        boxShadow: glitch
+          ? '-2px 0 0 rgba(0,140,255,0.4), 2px 0 0 rgba(255,34,68,0.4), 0 0 22px rgba(204,17,51,0.35)'
+          : hovered
+            ? '0 0 18px rgba(204,17,51,0.35), 0 0 6px rgba(204,17,51,0.2)'
+            : '0 0 0px transparent',
+        x: glitch ? [-1, 1, 0] : 0,
+      }}
+      transition={{ duration: glitch ? 0.05 : 0.25, ease: 'easeOut' }}
+      style={{
+        ...style,
+        padding: '10px 13px 12px',
+        borderColor: hovered ? 'rgba(204,17,51,0.6)' : undefined,
+        transition: 'border-color 0.2s',
+      }}
+    >
+      {/* Hover top-edge sweep */}
+      {hovered && (
+        <motion.div
+          className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+          style={{ background: 'linear-gradient(90deg,transparent,#cc1133,transparent)', zIndex: 2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 1.2, repeat: Infinity }}
+        />
+      )}
+      {/* Glitch scan line overlay */}
+      <AnimatePresence>
+        {glitch && (
+          <motion.div key="gscan"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="absolute inset-0 pointer-events-none overflow-hidden"
+            style={{ zIndex: 2 }}
+          >
+            <motion.div className="absolute left-0 right-0 h-px bg-[#ff2244]/60"
+              animate={{ top: ['10%', '85%'] }}
+              transition={{ duration: 0.18, ease: 'linear' }}
+              style={{ boxShadow: '0 0 4px #ff2244' }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {children}
     </motion.div>
   );
 }
 
 /* Stat bar */
-function StatBar({label,value,color,display}:{label:string;value:number;color:string;display:string}) {
+function StatBar({label,value,color,display,glitch=false}:{label:string;value:number;color:string;display:string;glitch?:boolean}) {
   return (
     <div>
       <div className="flex justify-between mb-0.5">
         <span className="font-pixel" style={{fontSize:'8px',color:'#7a6068'}}>{label}</span>
-        <span className="font-pixel" style={{fontSize:'8px',color}}>{display}</span>
+        <span className="font-pixel" style={{fontSize:'8px',color, textShadow: glitch ? `0 0 8px ${color}` : 'none', transition:'text-shadow 0.05s'}}>{display}</span>
       </div>
       <div className="rounded-sm overflow-hidden" style={{height:'7px',background:'#1a0810'}}>
-        <div className="h-full rounded-sm" style={{width:`${value}%`,background:`linear-gradient(90deg,${color}80,${color})`,boxShadow:`0 0 7px ${color}`}}/>
+        <motion.div className="h-full rounded-sm"
+          style={{width:`${value}%`,background:`linear-gradient(90deg,${color}80,${color})`}}
+          animate={{ boxShadow: glitch ? `0 0 14px ${color}, 0 0 4px #fff` : `0 0 7px ${color}` }}
+          transition={{ duration: 0.05 }}
+        />
       </div>
     </div>
   );
