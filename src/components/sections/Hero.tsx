@@ -288,12 +288,10 @@ export function Hero({ onNavigate }: HeroProps) {
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.62, duration: 0.55 }}
-        className="absolute z-[14] flex flex-col items-center gap-3"
+        className="absolute inset-x-0 z-[14] flex flex-col items-center gap-3"
         style={{
           /* 14px bottom pad + hud panel height (~90px) + gap (~14px) */
           bottom: 'calc(14px + clamp(88px, 11vh, 110px) + 18px)',
-          left: '50%',
-          transform: 'translateX(-50%)',
         }}
       >
         {/* Hint */}
@@ -366,7 +364,7 @@ export function Hero({ onNavigate }: HeroProps) {
         </div>
 
         {/* PREV / DOTS / NEXT  — directly below START JOURNEY */}
-        <div className="flex items-center gap-4 mt-1">
+        <div className="flex items-center justify-center gap-4 mt-1">
           <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('contact')} side="left" />
 
           {/* Section dots */}
