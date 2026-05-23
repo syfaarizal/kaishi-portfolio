@@ -142,7 +142,7 @@ export function Hero({ onNavigate }: HeroProps) {
       {/* TOP TEXT BLOCK — fully centered */}
       <div
         className="absolute left-0 right-0 z-[10] flex flex-col items-center"
-        style={{ top: '58px', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
+        style={{ top: '300px', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
       >
         {/* Welcome label */}
         <motion.div
@@ -199,6 +199,7 @@ export function Hero({ onNavigate }: HeroProps) {
               fontSize: 'clamp(4rem, 11vw, 8rem)',
               lineHeight: 0.92,
               letterSpacing: '0.06em',
+              wordSpacing: '-0.5em',
               textShadow: nameGlitch
                 ? '5px 0 #ff0044, -5px 0 #0088ff, 0 0 50px rgba(255,34,68,0.9)'
                 : '6px 5px 0 rgba(204,17,51,0.6), 0 0 55px rgba(204,17,51,0.35)',
@@ -291,7 +292,7 @@ export function Hero({ onNavigate }: HeroProps) {
         className="absolute inset-x-0 z-[14] flex flex-col items-center gap-3"
         style={{
           /* 14px bottom pad + hud panel height (~90px) + gap (~14px) */
-          bottom: 'calc(14px + clamp(88px, 11vh, 110px) + 18px)',
+          bottom: 'calc(-10px + clamp(88px, 11vh, 110px) + 18px)',
         }}
       >
         {/* Hint */}
@@ -329,9 +330,9 @@ export function Hero({ onNavigate }: HeroProps) {
               justifyContent: 'center',
             }}
           >
-            <img src="/assets/icon-kai-pedang2.png" alt=""
+            <img src="/assets/icon-kai-pedang.png" alt=""
               style={{
-                width: '21px', height: '21px', objectFit: 'contain', imageRendering: 'pixelated',
+                width: '30px', height: '30px', objectFit: 'contain', imageRendering: 'pixelated',
                 filter: btnGlitch ? 'brightness(1.9) hue-rotate(150deg)' : 'drop-shadow(0 0 5px rgba(255,200,200,0.5))',
                 transition: 'filter 0.05s', flexShrink: 0, position: 'relative', zIndex: 1,
               }}
