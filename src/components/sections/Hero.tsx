@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMouseParallax } from '../../hooks/useMouseParallax';
 import { useTypingEffect } from '../../hooks/useTypingEffect';
 import type { SectionId } from '../../App';
+import { KaiShiChatModal } from '../ui/KaiShiChatModal';
 
 /* Glitch flash hook */
 function useGlitchFlash(baseMs = 5000) {
@@ -59,6 +59,7 @@ export function Hero({ onNavigate }: HeroProps) {
   const scanGlitch  = useGlitchFlash(3800); // for scan lines around name
   const nameGlitchShift = useGlitchShift(nameGlitch, NAME_GLITCH_SHIFTS);
   const buttonGlitchShift = useGlitchShift(btnGlitch, BUTTON_GLITCH_SHIFTS);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const typedText = useTypingEffect(
     ['FRONTEND BUILDER', 'CONTENT CREATOR', 'ANIME ENJOYER', 'WEB ADVENTURER', 'CODE WEAVER'],
@@ -163,7 +164,7 @@ export function Hero({ onNavigate }: HeroProps) {
             style={{ fontSize: '10px', color: '#fff' }}>
             Welcome to my portfolio
           </span>
-          <span className="font-mono" style={{ fontSize: '12px', color: 'rgba(160,144,152,0.35)' }}>～～～</span>
+          <span className="font-mono" style={{ fontSize: '12px', color: '#fff' }}>～～～</span>
         </motion.div>
 
         {/* ── NAME: KAI SHI (centered, huge) ── */}
@@ -302,8 +303,8 @@ export function Hero({ onNavigate }: HeroProps) {
         transition={{ delay: 0.62, duration: 0.55 }}
         className="absolute inset-x-0 z-[14] flex flex-col items-center gap-3"
         style={{
-          /* 14px bottom pad + hud panel height (~90px) + gap (~14px) */
-          bottom: 'calc(-10px + clamp(88px, 11vh, 110px) + 18px)',
+          /* START JOURNEY + AI CTA sit above the nav strip */
+          bottom: 'calc(-10px + clamp(88px, 11vh, 110px) + 35px)',
         }}
       >
         {/* Hint */}
@@ -375,43 +376,55 @@ export function Hero({ onNavigate }: HeroProps) {
           </button>
         </div>
 
-        {/* PREV / DOTS / NEXT  — directly below START JOURNEY */}
-        <div className="flex items-center justify-center gap-4 mt-1">
-          <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('contact')} side="left" />
+        {/* ── AI KAI SHI CTA ── */}
+        <AIChatButton onClick={() => setChatOpen(true)} />
+      </motion.div>
 
-          {/* Section dots */}
-          <div className="flex items-center gap-2.5">
-            {SECTIONS.map((s) => {
-              const active = s === 'hero';
-              return (
-                <button key={s} onClick={() => onNavigate(s)} title={LABELS[s]}
-                  className="group relative flex items-center justify-center" style={{ width: '22px', height: '22px' }}>
-                  <motion.span className="block border"
-                    animate={{
-                      width: active ? '14px' : '10px',
-                      height: active ? '14px' : '10px',
-                      background: active ? '#cc1133' : 'transparent',
-                      borderColor: active ? '#cc1133' : 'rgba(204,17,51,0.5)',
-                      boxShadow: active ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
-                      rotate: 45,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  />
-                  <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                    style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}>
-                    {LABELS[s]}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+      {/* PREV / DOTS / NEXT — sits directly above the HUD panels, fully separate */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.78, duration: 0.5 }}
+        className="absolute inset-x-0 z-[14] flex items-center justify-center gap-4"
+        style={{ bottom: 'calc(3px + clamp(88px, 11vh, 110px) - 70px)' }}
+      >
+        <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('contact')} side="left" />
 
-          <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate('about')} side="right" />
+        {/* Section dots */}
+        <div className="flex items-center gap-2.5">
+          {SECTIONS.map((s) => {
+            const active = s === 'hero';
+            return (
+              <button key={s} onClick={() => onNavigate(s)} title={LABELS[s]}
+                className="group relative flex items-center justify-center" style={{ width: '22px', height: '22px' }}>
+                <motion.span className="block border"
+                  animate={{
+                    width: active ? '14px' : '10px',
+                    height: active ? '14px' : '10px',
+                    background: active ? '#cc1133' : 'transparent',
+                    borderColor: active ? '#cc1133' : 'rgba(204,17,51,0.5)',
+                    boxShadow: active ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                    rotate: 45,
+                  }}
+                  transition={{ duration: 0.2 }}
+                />
+                <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                  style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}>
+                  {LABELS[s]}
+                </span>
+              </button>
+            );
+          })}
         </div>
+
+        <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate('about')} side="right" />
       </motion.div>
 
       {/* BOTTOM HUD PANELS — corners */}
       <BottomHUD />
+
+      {/* AI CHAT MODAL */}
+      <KaiShiChatModal open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
@@ -642,6 +655,93 @@ function StatBar({label,value,color,display,glitch=false}:{label:string;value:nu
         />
       </div>
     </div>
+  );
+}
+
+/* AI CHAT CTA Button */
+function AIChatButton({ onClick }: { onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+  const pulse = useGlitchFlash(3200);
+
+  return (
+    <motion.button
+      onClick={onClick}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+      className="relative flex items-center gap-2.5 overflow-hidden group"
+      style={{
+        padding: '11px 32px',
+        minWidth: '240px',
+        width: 'fit-content',
+        justifyContent: 'center',
+        background: hovered ? 'rgba(204,17,51,0.12)' : 'rgba(10,2,8,0.85)',
+        border: `1px solid ${pulse ? '#ff2244' : hovered ? '#cc1133' : 'rgba(204,17,51,0.55)'}`,
+        clipPath: 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))',
+        boxShadow: pulse
+          ? '-2px 0 0 rgba(0,140,255,0.3), 2px 0 0 rgba(255,34,68,0.3), 0 0 18px rgba(204,17,51,0.35)'
+          : hovered
+          ? '0 0 20px rgba(204,17,51,0.3)'
+          : '0 0 8px rgba(204,17,51,0.1)',
+        transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
+      }}
+    >
+      {/* Animated online indicator */}
+      <motion.span
+        className="relative flex-shrink-0"
+        animate={{ scale: pulse ? [1, 1.4, 1] : 1 }}
+        transition={{ duration: 0.18 }}
+      >
+        <span className="block w-2 h-2 rounded-full bg-green-400"
+          style={{ boxShadow: '0 0 6px #4ade80' }} />
+        <motion.span
+          className="absolute inset-0 rounded-full bg-green-400"
+          animate={{ scale: [1, 2, 1], opacity: [0.6, 0, 0.6] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+        />
+      </motion.span>
+
+      {/* Cat icon */}
+      <img src="/assets/icon-kai-cat1.png" alt=""
+        style={{
+          width: '18px', height: '18px', objectFit: 'contain', imageRendering: 'pixelated',
+          filter: hovered ? 'drop-shadow(0 0 6px #cc1133) brightness(1.2)' : 'drop-shadow(0 0 3px #cc1133)',
+          transition: 'filter 0.15s', flexShrink: 0,
+        }}
+      />
+
+      {/* Label */}
+      <span className="font-pixel tracking-widest"
+        style={{
+          fontSize: '10px',
+          color: hovered ? '#ff8899' : '#cc1133',
+          textShadow: hovered ? '0 0 12px rgba(204,17,51,0.8)' : '0 0 6px rgba(204,17,51,0.4)',
+          transition: 'color 0.15s, text-shadow 0.15s',
+        }}>
+        TALK TO KAI SHI
+      </span>
+
+      {/* Signal icon */}
+      <span className="font-mono relative z-10"
+        style={{ fontSize: '10px', color: hovered ? '#cc1133' : 'rgba(204,17,51,0.5)', transition: 'color 0.15s' }}>
+        ◈
+      </span>
+
+      {/* Shimmer on hover */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 pointer-events-none"
+        style={{ background: 'linear-gradient(90deg,transparent,rgba(204,17,51,0.08),transparent)' }} />
+
+      {/* Glitch slice on pulse */}
+      <AnimatePresence>
+        {pulse && (
+          <motion.div key="aiglitch" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(transparent 35%,rgba(0,140,255,0.1) 35%,rgba(0,140,255,0.1) 44%,transparent 44%)' }}
+          />
+        )}
+      </AnimatePresence>
+    </motion.button>
   );
 }
 
