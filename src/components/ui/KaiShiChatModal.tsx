@@ -1,89 +1,85 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import type { KeyboardEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-/* ──────────────────────────────────────────
-   Types
-────────────────────────────────────────── */
+/* ── Types ── */
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
 }
-
 interface KaiShiChatModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-/* ──────────────────────────────────────────
-   Config — put your OpenRouter key in .env
-   VITE_OPENROUTER_API_KEY=sk-or-...
-────────────────────────────────────────── */
-const OPENROUTER_API  = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL           = 'openai/gpt-4o-mini'; // swap freely, all OpenRouter models work
-const API_KEY         = import.meta.env.VITE_OPENROUTER_API_KEY as string | undefined;
+/* ── Config ── */
+const OPENROUTER_API = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL          = 'openai/gpt-4o-mini';
+const API_KEY        = import.meta.env.VITE_OPENROUTER_API_KEY as string | undefined;
 
-/* ──────────────────────────────────────────
-   Kai Shi system prompt
-────────────────────────────────────────── */
-const SYSTEM_PROMPT = `You are Kai Shi — a frontend developer, content creator, and anime enjoyer with a cyberpunk gaming personality. You are Level 23, HP 850/850, and always on a quest to build amazing websites.
+const SYSTEM_PROMPT = `You are Kai Shi — a frontend developer, content creator, and anime enjoyer with a cyberpunk gaming personality. You are Level 23, HP 850/850, always on a quest to build amazing websites.
 
-Your personality:
+Personality:
 - Energetic, friendly, slightly chaotic gamer energy
-- Uses gaming references naturally (HP, XP, quests, level up, etc.)
+- Uses gaming references naturally (HP, XP, quests, level up)
 - Loves anime, cyberpunk aesthetics, pixel art
 - Expert in React, TypeScript, Tailwind, Framer Motion
-- Occasionally speaks with light Japanese gaming phrases (like "yosh!", "sugoi", "ikuzo")
-- Confident about your craft but humble and genuinely helpful
-- Responds with enthusiasm when someone is interested in working together
+- Occasionally uses Japanese gaming phrases ("yosh!", "sugoi", "ikuzo")
+- Confident but humble and genuinely helpful
 - Short to medium responses — punchy, not walls of text
-- Randomly add small pixel-art style decorators: ◆, ✕, ▶, ★
+- Randomly add: ◆ ✕ ▶ ★
 
 Current quest: Build Amazing Websites (3/5)
-Available for: Freelance, collaboration, web projects
+Available for: Freelance, collaboration, web projects.`;
 
-Keep responses conversational, fun, and on-brand. If asked about your portfolio, talk about it like describing a game world.`;
+const WELCOME: Message = {
+  id: 'welcome',
+  role: 'assistant',
+  content: '◆ TRANSMISSION ESTABLISHED ◆\n\nYo! Kai Shi here — Level 23 frontend dev, reporting for duty ▶\n\nGot questions about my work, wanna collab, or just talk anime and code? I\'m listening. 🎮',
+  timestamp: new Date(),
+};
 
-/* ──────────────────────────────────────────
-   Main modal
-────────────────────────────────────────── */
+/* ══════════════════════════════════════════
+   MODAL — rendered into document.body via portal
+   so it always sits above everything else
+══════════════════════════════════════════ */
 export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: '◆ TRANSMISSION ESTABLISHED ◆\n\nYo! Kai Shi here — Level 23 frontend dev reporting for duty ▶\n\nGot questions about my work, want to collab, or just wanna talk anime and code? Hit me. I\'m listening. 🎮',
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput]       = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [messages, setMessages]       = useState<Message[]>([WELCOME]);
+  const [input, setInput]             = useState('');
+  const [loading, setLoading]         = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [resolvedKey, setResolvedKey] = useState<string | undefined>(API_KEY);
   const [streamText, setStreamText]   = useState('');
-  const [glitchOpen, setGlitchOpen]   = useState(false);
-  const bottomRef  = useRef<HTMLDivElement>(null);
-  const inputRef   = useRef<HTMLInputElement>(null);
+  const [glitching, setGlitching]     = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef  = useRef<HTMLInputElement>(null);
 
-  /* Entrance glitch effect */
+  /* Entrance glitch burst */
   useEffect(() => {
-    if (open) {
-      setGlitchOpen(true);
-      const t = setTimeout(() => setGlitchOpen(false), 400);
-      return () => clearTimeout(t);
-    }
+    if (!open) return;
+    setGlitching(true);
+    const t1 = setTimeout(() => setGlitching(false), 80);
+    const t2 = setTimeout(() => setGlitching(true),  130);
+    const t3 = setTimeout(() => setGlitching(false), 220);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [open]);
 
-  /* Auto-scroll */
+  /* Auto-scroll to bottom */
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamText]);
 
   /* Focus input on open */
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 350);
+    if (open) setTimeout(() => inputRef.current?.focus(), 320);
+  }, [open]);
+
+  /* Lock body scroll when open */
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   const sendMessage = useCallback(async () => {
@@ -97,16 +93,12 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
       content: input.trim(),
       timestamp: new Date(),
     };
-
-    setMessages(prev => [...prev, userMsg]);
+    setMessages(p => [...p, userMsg]);
     setInput('');
     setLoading(true);
     setStreamText('');
 
-    const history = [...messages, userMsg].map(m => ({
-      role: m.role,
-      content: m.content,
-    }));
+    const history = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }));
 
     try {
       const res = await fetch(OPENROUTER_API, {
@@ -131,205 +123,245 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
         throw new Error(err?.error?.message || `HTTP ${res.status}`);
       }
 
-      /* SSE streaming */
-      const reader = res.body!.getReader();
+      const reader  = res.body!.getReader();
       const decoder = new TextDecoder();
       let accumulated = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
-
-        for (const line of lines) {
+        for (const line of decoder.decode(value).split('\n')) {
           if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') break;
+          const raw = line.slice(6).trim();
+          if (raw === '[DONE]') break;
           try {
-            const parsed = JSON.parse(data);
-            const delta = parsed.choices?.[0]?.delta?.content ?? '';
+            const delta = JSON.parse(raw).choices?.[0]?.delta?.content ?? '';
             accumulated += delta;
             setStreamText(accumulated);
-          } catch {
-            // skip malformed chunks
-          }
+          } catch { /* skip */ }
         }
       }
 
-      /* Commit streamed message */
-      const assistantMsg: Message = {
+      setMessages(p => [...p, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: accumulated,
         timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, assistantMsg]);
+      }]);
       setStreamText('');
 
     } catch (err: unknown) {
-      const errorMsg: Message = {
+      setMessages(p => [...p, {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `✕ TRANSMISSION ERROR ✕\n\n${err instanceof Error ? err.message : 'Unknown error'}.\n\nCheck your API key or try again later.`,
+        content: `✕ TRANSMISSION ERROR ✕\n\n${err instanceof Error ? err.message : 'Unknown error'}.\n\nCheck your API key and try again.`,
         timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMsg]);
+      }]);
       setStreamText('');
     } finally {
       setLoading(false);
     }
   }, [input, loading, messages, resolvedKey, apiKeyInput]);
 
-  const handleKey = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     if (e.key === 'Escape') onClose();
   };
 
   const needsKey = !resolvedKey;
 
-  return (
+  /* ── Portal target ── */
+  const portal = (
     <AnimatePresence>
       {open && (
         <>
-          {/* ── Backdrop ── */}
+          {/* Backdrop */}
           <motion.div
-            key="backdrop"
+            key="bd"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[300]"
-            style={{ background: 'rgba(2,0,6,0.82)', backdropFilter: 'blur(6px)' }}
+            transition={{ duration: 0.18 }}
             onClick={onClose}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9000,
+              background: 'rgba(2,0,8,0.78)',
+              backdropFilter: 'blur(8px)',
+            }}
           />
 
-          {/* ── Modal ── */}
+          {/* Modal box — fixed centered, never full-screen */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, scale: 0.92, y: 24, filter: 'brightness(3) saturate(4)' }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{
               opacity: 1, scale: 1, y: 0,
-              filter: glitchOpen ? 'brightness(2.5) saturate(4) hue-rotate(160deg)' : 'brightness(1) saturate(1) hue-rotate(0deg)',
+              filter: glitching
+                ? 'brightness(2) saturate(5) hue-rotate(160deg)'
+                : 'brightness(1) saturate(1) hue-rotate(0deg)',
             }}
-            exit={{ opacity: 0, scale: 0.92, y: 20, filter: 'brightness(2) saturate(3)' }}
-            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed z-[301] flex flex-col"
-            style={{
-              /* Wide but not full-screen */
-              top: '50%', left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 'min(90vw, 860px)',
-              height: 'min(80vh, 640px)',
-              background: 'rgba(6,2,10,0.96)',
-              border: '1.5px solid #cc1133',
-              boxShadow: '0 0 40px rgba(204,17,51,0.4), 0 0 80px rgba(204,17,51,0.15), inset 0 0 40px rgba(0,0,0,0.6)',
-            }}
+            exit={{ opacity: 0, scale: 0.92, y: 16 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={e => e.stopPropagation()}
+            style={{
+              position: 'fixed',
+              /* Centered, bounded — never full-screen */
+              top: '12%',
+              left: '25%',
+              transform: 'translate(-50%, -50%)',
+              width: 'min(98vw, 1050px)',
+              height: 'min(90vh, 700px)',
+              maxHeight: '700px',
+              zIndex: 9001,
+              display: 'flex',
+              flexDirection: 'column',
+              background: 'rgba(6,2,10,0.97)',
+              border: '1.5px solid #cc1133',
+              boxShadow: '0 0 50px rgba(204,17,51,0.35), 0 0 100px rgba(204,17,51,0.12), inset 0 0 40px rgba(0,0,0,0.5)',
+              overflow: 'hidden',
+            }}
           >
-            {/* ── Pixel corner brackets ── */}
-            <ModalCorner pos="top-0 left-0"     d="M0 0 L0 0" top left />
-            <ModalCorner pos="top-0 right-0"    d="M0 0 L0 0" top right />
-            <ModalCorner pos="bottom-0 left-0"  d="M0 0 L0 0" bottom left />
-            <ModalCorner pos="bottom-0 right-0" d="M0 0 L0 0" bottom right />
+            {/* Corner brackets */}
+            <Corner pos="tl" /> <Corner pos="tr" />
+            <Corner pos="bl" /> <Corner pos="br" />
 
-            {/* Sweeping top border glow */}
-            <motion.div className="absolute top-0 h-[1.5px] pointer-events-none"
-              style={{ width: 100, background: 'linear-gradient(90deg,transparent,#ff4466,transparent)', boxShadow: '0 0 12px #cc1133', zIndex: 1 }}
-              animate={{ left: [-100, '100%'] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
+            {/* Sweep glow on top border */}
+            <motion.div
+              style={{
+                position: 'absolute', top: 0, height: '1.5px', width: 110, zIndex: 1, pointerEvents: 'none',
+                background: 'linear-gradient(90deg,transparent,#ff4466,transparent)',
+                boxShadow: '0 0 10px #cc1133',
+              }}
+              animate={{ left: [-110, '100%'] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', repeatDelay: 1.8 }}
             />
 
-            {/* ── Header ── */}
-            <div className="flex items-center justify-between px-5 py-3.5 shrink-0"
-              style={{ borderBottom: '1px solid rgba(61,15,26,0.9)', background: 'rgba(20,4,12,0.8)' }}>
-              <div className="flex items-center gap-3">
-                <div className="relative">
+            {/* ── HEADER ── */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 18px', flexShrink: 0,
+              borderBottom: '1px solid rgba(61,15,26,0.9)',
+              background: 'rgba(16,4,10,0.9)',
+            }}>
+              {/* Left: avatar + title */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                   <img src="/assets/icon-kai-cat1.png" alt=""
-                    style={{ width: '32px', height: '32px', objectFit: 'contain', imageRendering: 'pixelated',
-                      filter: 'drop-shadow(0 0 8px #cc1133)' }}
+                    style={{ width: '30px', height: '30px', objectFit: 'contain', imageRendering: 'pixelated',
+                      filter: 'drop-shadow(0 0 7px #cc1133)' }}
                   />
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 border border-[#06020a]"
-                    style={{ boxShadow: '0 0 5px #22c55e' }} />
+                  <span style={{
+                    position: 'absolute', bottom: '-2px', right: '-2px',
+                    width: '9px', height: '9px', borderRadius: '50%',
+                    background: '#22c55e', border: '1.5px solid #06020a',
+                    boxShadow: '0 0 5px #22c55e',
+                  }} />
                 </div>
                 <div>
-                  <div className="font-pixel text-[10px] text-[#cc1133] tracking-widest"
-                    style={{ textShadow: '0 0 10px rgba(204,17,51,0.8)' }}>
+                  <div className="font-pixel" style={{
+                    fontSize: '10px', color: '#cc1133', letterSpacing: '0.12em',
+                    textShadow: '0 0 10px rgba(204,17,51,0.8)',
+                  }}>
                     KAI SHI — AI TRANSMISSION
                   </div>
-                  <div className="font-mono text-[10px] text-[#7a6068] mt-0.5">
-                    Model: {MODEL} &nbsp;◆&nbsp; <span className="text-green-400">ONLINE</span>
+                  <div className="font-mono" style={{ fontSize: '10px', color: '#4a3040', marginTop: '2px' }}>
+                    {MODEL}&nbsp; ◆ &nbsp;<span style={{ color: '#22c55e' }}>ONLINE</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                {/* Clear chat */}
+              {/* Right: clear + close */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <button
-                  onClick={() => setMessages([{
-                    id: 'welcome', role: 'assistant',
-                    content: '◆ SESSION CLEARED ◆\n\nNew transmission ready. What\'s the mission? ▶',
-                    timestamp: new Date(),
-                  }])}
-                  className="font-pixel text-[7px] text-[#7a6068] hover:text-[#cc1133] transition-colors px-2 py-1 border border-[#3d0f1a] hover:border-[#cc1133]"
+                  onClick={() => setMessages([{ ...WELCOME, timestamp: new Date() }])}
+                  className="font-pixel"
+                  style={{
+                    fontSize: '7px', color: '#4a3040', padding: '5px 10px',
+                    border: '1px solid #2a1018', background: 'transparent',
+                    cursor: 'pointer', letterSpacing: '0.1em', transition: 'color 0.15s, border-color 0.15s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#cc1133'; (e.currentTarget as HTMLElement).style.borderColor = '#cc1133'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#4a3040'; (e.currentTarget as HTMLElement).style.borderColor = '#2a1018'; }}
                 >
                   CLEAR
                 </button>
-                {/* Close */}
-                <button onClick={onClose}
-                  className="font-pixel text-[9px] text-[#7a6068] hover:text-[#cc1133] transition-colors w-8 h-8 flex items-center justify-center border border-[#3d0f1a] hover:border-[#cc1133]"
-                  style={{ clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)' }}
+                <button
+                  onClick={onClose}
+                  className="font-pixel"
+                  style={{
+                    width: '30px', height: '30px', fontSize: '12px',
+                    color: '#4a3040', border: '1px solid #2a1018', background: 'transparent',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', transition: 'color 0.15s, border-color 0.15s',
+                    clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#cc1133'; (e.currentTarget as HTMLElement).style.borderColor = '#cc1133'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#4a3040'; (e.currentTarget as HTMLElement).style.borderColor = '#2a1018'; }}
                 >
                   ✕
                 </button>
               </div>
             </div>
 
-            {/* ── API key gate (shown only if no key) ── */}
+            {/* ── API KEY GATE ── */}
             {needsKey && (
-              <div className="px-5 py-3 shrink-0"
-                style={{ background: 'rgba(40,8,16,0.7)', borderBottom: '1px solid rgba(61,15,26,0.7)' }}>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span style={{ color: '#f59e0b', fontSize: '10px' }}>⚠</span>
-                  <span className="font-pixel text-[8px] text-[#f59e0b] tracking-widest">OPENROUTER API KEY REQUIRED</span>
+              <div style={{
+                padding: '10px 18px', flexShrink: 0,
+                background: 'rgba(36,6,12,0.8)',
+                borderBottom: '1px solid rgba(61,15,26,0.7)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                  <span style={{ color: '#f59e0b', fontSize: '11px' }}>⚠</span>
+                  <span className="font-pixel" style={{ fontSize: '8px', color: '#f59e0b', letterSpacing: '0.1em' }}>
+                    OPENROUTER API KEY REQUIRED
+                  </span>
                 </div>
-                <div className="flex gap-2">
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}>
                   <input
                     type="password"
                     placeholder="sk-or-v1-..."
                     value={apiKeyInput}
                     onChange={e => setApiKeyInput(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter' && apiKeyInput.trim()) setResolvedKey(apiKeyInput.trim()); }}
-                    className="flex-1 bg-[#0a020a] border border-[#3d0f1a] px-3 py-2 font-mono text-xs text-[#e8e0e3] placeholder-[#4a3040] focus:border-[#cc1133] focus:outline-none transition-colors"
-                    style={{ clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)' }}
+                    className="font-mono"
+                    style={{
+                      flex: 1, background: '#080210', border: '1px solid #2a1018',
+                      padding: '8px 12px', fontSize: '12px', color: '#e8e0e3',
+                      outline: 'none', transition: 'border-color 0.15s',
+                    }}
+                    onFocus={e => (e.target.style.borderColor = '#cc1133')}
+                    onBlur={e => (e.target.style.borderColor = '#2a1018')}
                   />
                   <button
                     onClick={() => apiKeyInput.trim() && setResolvedKey(apiKeyInput.trim())}
-                    className="font-pixel text-[8px] text-white px-4 py-2 bg-[#cc1133] hover:bg-[#ff1144] transition-colors"
-                    style={{ clipPath: 'polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))' }}
+                    className="font-pixel"
+                    style={{
+                      fontSize: '8px', color: '#fff', padding: '8px 16px',
+                      background: '#cc1133', border: 'none', cursor: 'pointer',
+                      letterSpacing: '0.1em', whiteSpace: 'nowrap',
+                      clipPath: 'polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))',
+                    }}
                   >
                     CONNECT
                   </button>
                 </div>
-                <p className="font-mono text-[9px] text-[#4a3040] mt-1.5">
-                  Get your key at openrouter.ai · Stored in session only · Not sent anywhere except OpenRouter
+                <p className="font-mono" style={{ fontSize: '9px', color: '#3a2030', marginTop: '6px' }}>
+                  openrouter.ai · Session only · Not stored anywhere
                 </p>
               </div>
             )}
 
-            {/* ── Messages ── */}
-            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4"
+            {/* ── MESSAGES ── */}
+            <div
               style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#cc1133 #0a020a',
+                flex: 1, overflowY: 'auto', padding: '16px 18px',
+                display: 'flex', flexDirection: 'column', gap: '14px',
+                scrollbarWidth: 'thin', scrollbarColor: '#cc1133 #0a020a',
               }}
             >
-              {messages.map(msg => (
-                <ChatBubble key={msg.id} message={msg} />
-              ))}
+              {messages.map(msg => <ChatBubble key={msg.id} message={msg} />)}
 
-              {/* Streaming bubble */}
+              {/* Streaming */}
               {streamText && (
                 <ChatBubble
                   message={{ id: 'stream', role: 'assistant', content: streamText, timestamp: new Date() }}
@@ -339,79 +371,109 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
 
               {/* Loading dots */}
               {loading && !streamText && (
-                <div className="flex items-start gap-2.5">
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <img src="/assets/icon-kai-cat2.png" alt=""
-                    style={{ width: '28px', height: '28px', objectFit: 'contain', imageRendering: 'pixelated',
-                      filter: 'drop-shadow(0 0 5px #cc1133)', flexShrink: 0 }}
+                    style={{ width: '26px', height: '26px', objectFit: 'contain', imageRendering: 'pixelated',
+                      filter: 'drop-shadow(0 0 5px #cc1133)', flexShrink: 0, marginTop: '4px' }}
                   />
-                  <div className="flex items-center gap-1 px-4 py-3"
-                    style={{ background: 'rgba(20,4,12,0.8)', border: '1px solid rgba(61,15,26,0.8)',
-                      clipPath: 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)' }}>
-                    {[0, 0.2, 0.4].map((delay, i) => (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '10px 14px',
+                    background: 'rgba(16,4,10,0.85)',
+                    border: '1px solid rgba(61,15,26,0.8)',
+                    clipPath: 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)',
+                  }}>
+                    {[0, 0.18, 0.36].map((d, i) => (
                       <motion.div key={i}
-                        className="w-1.5 h-1.5 rounded-full bg-[#cc1133]"
-                        animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
-                        transition={{ duration: 0.8, repeat: Infinity, delay }}
-                        style={{ boxShadow: '0 0 6px #cc1133' }}
+                        style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#cc1133', boxShadow: '0 0 5px #cc1133' }}
+                        animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
+                        transition={{ duration: 0.75, repeat: Infinity, delay: d }}
                       />
                     ))}
                   </div>
                 </div>
               )}
-
               <div ref={bottomRef} />
             </div>
 
-            {/* ── Input bar ── */}
-            <div className="px-5 py-3.5 shrink-0"
-              style={{ borderTop: '1px solid rgba(61,15,26,0.9)', background: 'rgba(10,2,8,0.85)' }}>
-              <div className="flex gap-2.5">
+            {/* ── INPUT BAR ── */}
+            <div style={{
+              flexShrink: 0,
+              borderTop: '1px solid rgba(61,15,26,0.9)',
+              background: 'rgba(8,2,8,0.92)',
+              padding: '12px 18px',
+            }}>
+              {/* Main row: input + send button */}
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '26px' }}>
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder={needsKey ? 'Connect API key first…' : 'Type your message... (Enter to send)'}
+                  placeholder={needsKey ? 'Connect API key first…' : 'Send a message… (Enter)'}
                   value={input}
                   disabled={loading || needsKey}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={handleKey}
-                  className="flex-1 bg-[#0a020a] border border-[#3d0f1a] px-4 py-3 font-mono text-sm text-[#e8e0e3] placeholder-[#3a2030] focus:border-[#cc1133] focus:outline-none transition-colors disabled:opacity-40"
-                  style={{ clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)' }}
+                  className="font-mono"
+                  style={{
+                    flex: 1,
+                    background: '#0a0210',
+                    border: '1px solid #2a1018',
+                    padding: '11px 14px',
+                    fontSize: '13px',
+                    color: '#e8e0e3',
+                    outline: 'none',
+                    transition: 'border-color 0.15s',
+                    opacity: (loading || needsKey) ? 0.4 : 1,
+                    clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)',
+                  }}
+                  onFocus={e => { if (!needsKey && !loading) e.target.style.borderColor = '#cc1133'; }}
+                  onBlur={e => (e.target.style.borderColor = '#2a1018')}
                 />
+
                 <motion.button
                   onClick={sendMessage}
                   disabled={loading || !input.trim() || needsKey}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="font-pixel text-[9px] text-white px-5 py-3 tracking-widest disabled:opacity-40 disabled:cursor-not-allowed relative overflow-hidden group"
+                  whileHover={!loading && input.trim() && !needsKey ? { scale: 1.04 } : {}}
+                  whileTap={!loading && input.trim() && !needsKey ? { scale: 0.96 } : {}}
+                  className="font-pixel"
                   style={{
-                    background: loading ? '#8b0022' : '#cc1133',
+                    fontSize: '10px', letterSpacing: '0.12em',
+                    color: '#fff', padding: '11px 22px',
+                    background: loading ? '#5a0012' : '#cc1133',
+                    border: 'none', cursor: (loading || !input.trim() || needsKey) ? 'not-allowed' : 'pointer',
+                    opacity: (loading || !input.trim() || needsKey) ? 0.45 : 1,
+                    transition: 'background 0.15s, opacity 0.15s',
+                    whiteSpace: 'nowrap', flexShrink: 0,
                     clipPath: 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))',
-                    boxShadow: loading ? 'none' : '0 0 16px rgba(204,17,51,0.4)',
-                    transition: 'background 0.15s, box-shadow 0.15s',
-                    minWidth: '100px',
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    boxShadow: (!loading && input.trim()) ? '0 0 14px rgba(204,17,51,0.4)' : 'none',
                   }}
                 >
                   {loading ? (
-                    <span className="flex items-center gap-1.5">
-                      <motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        style={{ display: 'inline-block' }}>◆</motion.span>
-                      WAIT
-                    </span>
-                  ) : (
                     <>
-                      SEND ▶
-                      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-400 pointer-events-none"
-                        style={{ background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)' }} />
+                      <motion.span
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
+                        style={{ display: 'inline-block', fontSize: '11px' }}
+                      >◆</motion.span>
+                      WAIT
                     </>
+                  ) : (
+                    <> SEND <span style={{ fontSize: '11px' }}>▶</span> </>
                   )}
                 </motion.button>
               </div>
-              <div className="flex justify-between mt-2">
-                <span className="font-mono text-[9px] text-[#3a2030]">
-                  ESC to close · Enter to send · Shift+Enter for newline
+
+              {/* Hint row */}
+              <div style={{
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                marginTop: '7px',
+              }}>
+                <span className="font-mono" style={{ fontSize: '9px', color: '#871b1b' }}>
+                  ESC close &nbsp;·&nbsp; Enter send
                 </span>
-                <span className="font-pixel text-[7px] text-[#3a2030]">
-                  {messages.length - 1} message{messages.length !== 2 ? 's' : ''} in session
+                <span className="font-pixel" style={{ fontSize: '7px', color: '#871b1b' }}>
+                  {messages.length - 1} msg · {MODEL}
                 </span>
               </div>
             </div>
@@ -420,56 +482,62 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
       )}
     </AnimatePresence>
   );
+
+  return createPortal(portal, document.body);
 }
 
 /* ── Chat bubble ── */
 function ChatBubble({ message, streaming }: { message: Message; streaming?: boolean }) {
   const isUser = message.role === 'user';
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
-      className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : ''}`}
+      transition={{ duration: 0.22 }}
+      style={{ display: 'flex', alignItems: 'flex-start', gap: '10px',
+        flexDirection: isUser ? 'row-reverse' : 'row' }}
     >
       {/* Avatar */}
-      {!isUser ? (
-        <img src="/assets/icon-kai-cat2.png" alt="Kai Shi"
-          style={{ width: '28px', height: '28px', objectFit: 'contain', imageRendering: 'pixelated',
+      {isUser ? (
+        <div style={{
+          width: '26px', height: '26px', flexShrink: 0, marginTop: '2px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          border: '1px solid #2a1018', background: '#0d0408',
+          clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)',
+        }}>
+          <span style={{ fontSize: '9px', color: '#cc1133' }}>U</span>
+        </div>
+      ) : (
+        <img src="/assets/icon-kai-cat2.png" alt="Kai"
+          style={{ width: '26px', height: '26px', objectFit: 'contain', imageRendering: 'pixelated',
             filter: 'drop-shadow(0 0 5px #cc1133)', flexShrink: 0, marginTop: '2px' }}
         />
-      ) : (
-        <div className="w-7 h-7 flex items-center justify-center border border-[#3d0f1a] bg-[#0d0408] shrink-0"
-          style={{ clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)', marginTop: '2px' }}>
-          <span style={{ fontSize: '10px', color: '#cc1133' }}>U</span>
-        </div>
       )}
 
       {/* Bubble */}
-      <div
-        className="max-w-[78%] px-4 py-3 relative"
-        style={{
-          background: isUser ? 'rgba(204,17,51,0.12)' : 'rgba(20,4,12,0.85)',
-          border: `1px solid ${isUser ? 'rgba(204,17,51,0.4)' : 'rgba(61,15,26,0.8)'}`,
-          clipPath: isUser
-            ? 'polygon(8px 0,100% 0,100% 100%,0 100%,0 8px)'
-            : 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)',
-        }}
-      >
-        <p className="font-mono text-[13px] leading-relaxed whitespace-pre-wrap break-words"
-          style={{ color: isUser ? '#e8e0e3' : '#d4c8cc' }}>
+      <div style={{
+        maxWidth: '76%', padding: '10px 14px',
+        background: isUser ? 'rgba(204,17,51,0.1)' : 'rgba(16,4,10,0.9)',
+        border: `1px solid ${isUser ? 'rgba(204,17,51,0.38)' : 'rgba(61,15,26,0.8)'}`,
+        clipPath: isUser
+          ? 'polygon(8px 0,100% 0,100% 100%,0 100%,0 8px)'
+          : 'polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)',
+      }}>
+        <p className="font-mono" style={{
+          fontSize: '13px', lineHeight: 1.65,
+          color: isUser ? '#e8e0e3' : '#d4c8cc',
+          whiteSpace: 'pre-wrap', wordBreak: 'break-word', margin: 0,
+        }}>
           {message.content}
           {streaming && (
             <motion.span
-              className="inline-block ml-0.5"
               animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 0.7, repeat: Infinity }}
-              style={{ color: '#cc1133' }}
+              transition={{ duration: 0.65, repeat: Infinity }}
+              style={{ color: '#cc1133', marginLeft: '2px' }}
             >▋</motion.span>
           )}
         </p>
-        <div className="mt-1.5 font-pixel text-[7px] text-[#3a2030]">
+        <div className="font-pixel" style={{ fontSize: '7px', color: '#2a1420', marginTop: '6px' }}>
           {isUser ? 'YOU' : 'KAI SHI'} · {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>
       </div>
@@ -477,29 +545,35 @@ function ChatBubble({ message, streaming }: { message: Message; streaming?: bool
   );
 }
 
-/* ── Corner pixel bracket ── */
-function ModalCorner({ pos, top, bottom, left, right }: {
-  pos: string; d?: string;
-  top?: boolean; bottom?: boolean; left?: boolean; right?: boolean;
-}) {
-  const size = 40;
-  let path = '';
-  if (top && left)    path = `M${size} 2 L2 2 L2 ${size}`;
-  if (top && right)   path = `M2 2 L${size} 2 L${size} ${size}`;
-  if (bottom && left) path = `M2 ${size} L2 2 L${size} 2`;
-  if (bottom && right) path = `M${size} ${size} L${size} 2 L2 2`;
-  const sqX = right ? size - 8 : 0;
-  const sqY = bottom ? size - 8 : 0;
-
+/* ── Pixel corner bracket ── */
+function Corner({ pos }: { pos: 'tl'|'tr'|'bl'|'br' }) {
+  const size = 36;
+  const paths: Record<string, string> = {
+    tl: `M${size} 2 L2 2 L2 ${size}`,
+    tr: `M2 2 L${size} 2 L${size} ${size}`,
+    bl: `M2 ${size} L2 2 L${size} 2`,
+    br: `M${size} ${size} L${size} 2 L2 2`,
+  };
+  const positions: Record<string, React.CSSProperties> = {
+    tl: { top: 0, left: 0 },
+    tr: { top: 0, right: 0 },
+    bl: { bottom: 0, left: 0 },
+    br: { bottom: 0, right: 0 },
+  };
+  const sqMap: Record<string, [number, number]> = {
+    tl: [0, 0], tr: [size - 7, 0], bl: [0, size - 7], br: [size - 7, size - 7],
+  };
+  const [sqX, sqY] = sqMap[pos];
   return (
-    <svg className={`absolute ${pos} pointer-events-none`}
+    <svg
+      style={{ position: 'absolute', pointerEvents: 'none', zIndex: 2, ...positions[pos] }}
       width={size + 4} height={size + 4}
       viewBox={`0 0 ${size + 4} ${size + 4}`}
-      fill="none" style={{ zIndex: 2 }}
+      fill="none"
     >
-      <path d={path} stroke="#cc1133" strokeWidth="2"
+      <path d={paths[pos]} stroke="#cc1133" strokeWidth="2"
         style={{ filter: 'drop-shadow(0 0 4px #cc1133)' }} />
-      <rect x={sqX} y={sqY} width="8" height="8" fill="#cc1133" opacity="0.9"
+      <rect x={sqX} y={sqY} width="8" height="8" fill="#cc1133" opacity="0.92"
         style={{ filter: 'drop-shadow(0 0 3px #cc1133)' }} />
     </svg>
   );
