@@ -672,7 +672,7 @@ function AIChatButton({ onClick }: { onClick: () => void }) {
       whileTap={{ scale: 0.97 }}
       className="relative flex items-center gap-2.5 overflow-hidden group"
       style={{
-        padding: '11px 32px',
+        padding: '11px 22px',
         minWidth: '240px',
         width: 'fit-content',
         justifyContent: 'center',
@@ -714,7 +714,7 @@ function AIChatButton({ onClick }: { onClick: () => void }) {
       {/* Label */}
       <span className="font-pixel tracking-widest"
         style={{
-          fontSize: '10px',
+          fontSize: '8px',
           color: hovered ? '#ff8899' : '#cc1133',
           textShadow: hovered ? '0 0 12px rgba(204,17,51,0.8)' : '0 0 6px rgba(204,17,51,0.4)',
           transition: 'color 0.15s, text-shadow 0.15s',
@@ -724,7 +724,7 @@ function AIChatButton({ onClick }: { onClick: () => void }) {
 
       {/* Signal icon */}
       <span className="font-mono relative z-10"
-        style={{ fontSize: '10px', color: hovered ? '#cc1133' : 'rgba(204,17,51,0.5)', transition: 'color 0.15s' }}>
+        style={{ fontSize: '12px', color: hovered ? '#cc1133' : 'rgba(204,17,51,0.5)', transition: 'color 0.15s' }}>
         ◈
       </span>
 
