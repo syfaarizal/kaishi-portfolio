@@ -33,7 +33,7 @@ const GALLERY_FILTERS = ['ALL', 'UI/UX', 'WEB', 'ART', 'EXPERIMENT'] as const;
 type GalleryFilter = typeof GALLERY_FILTERS[number];
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  { id: 1, title: 'DARK DASHBOARD',   tag: 'UI/UX DESIGN', category: 'UI/UX',      image: 'https://picsum.photos/seed/kai1/600/400' },
+  { id: 1, title: 'DARK DASHBOARD',   tag: 'UI/UX DESIGN', category: 'UI/UX',      image: '/public/assets/gallery/KaiShiPose1.png' },
   { id: 2, title: 'CYBER DAWN',       tag: 'PIXEL ART',    category: 'ART',        image: 'https://picsum.photos/seed/kai2/600/400' },
   { id: 3, title: 'PORTAL INTERFACE', tag: 'WEB DESIGN',   category: 'WEB',        image: 'https://picsum.photos/seed/kai3/600/400' },
   { id: 4, title: 'VOID LAB',         tag: 'EXPERIMENT',   category: 'EXPERIMENT', image: 'https://picsum.photos/seed/kai4/600/400' },
