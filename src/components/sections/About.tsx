@@ -2,13 +2,13 @@ import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import type { SectionId } from '../../App';
 
-/* ─────────────────────────── Types ─── */
+/* Types */
 interface StatItem  { label: string; value: number; icon: string; }
 interface SkillNode { label: string; icon: string; locked: boolean; }
 interface GalleryItem { id: number; title: string; tag: string; image: string; }
 interface AboutProps { onNavigate: (id: SectionId) => void; }
 
-/* ─────────────────────────── Data ─── */
+/* Data */
 const CORE_STATS: StatItem[] = [
   { label: 'CODING SPEED',    value: 88, icon: '/assets/icon-kai-petir.png'  },
   { label: 'PROBLEM SOLVING', value: 92, icon: '/assets/icon-kai-target.png' },
@@ -32,14 +32,14 @@ type GFilter = typeof GALLERY_FILTERS[number];
 
 const GALLERY: GalleryItem[] = [
   { id:1, title:'DARK DASHBOARD',   tag:'UI/UX',      image:'/assets/gallery/KaiShiPose1.png' },
-  { id:2, title:'CYBER DAWN',       tag:'ART',        image:'https://picsum.photos/seed/kd2/600/400' },
-  { id:3, title:'PORTAL INTERFACE', tag:'WEB',        image:'https://picsum.photos/seed/kd3/600/400' },
-  { id:4, title:'VOID LAB',         tag:'EXPERIMENT', image:'https://picsum.photos/seed/kd4/600/400' },
-  { id:5, title:'NEON GRID',        tag:'ART',        image:'https://picsum.photos/seed/kd5/600/400' },
-  { id:6, title:'PIXEL QUEST',      tag:'UI/UX',      image:'https://picsum.photos/seed/kd6/600/400' },
+  { id:2, title:'CYBER DAWN',       tag:'ART',        image:'/assets/gallery/KaiShiPose2.png' },
+  { id:3, title:'PORTAL INTERFACE', tag:'WEB',        image:'/assets/gallery/KaiShiPose3.png' },
+  { id:4, title:'VOID LAB',         tag:'EXPERIMENT', image:'/assets/gallery/KaiShiPose4.png' },
+  { id:5, title:'NEON GRID',        tag:'ART',        image:'/assets/gallery/KaiShiPose5.png' },
+  { id:6, title:'PIXEL QUEST',      tag:'UI/UX',      image:'/assets/gallery/KaiShiPose6.png' },
 ];
 
-/* ─────────────────────────── Constants ─── */
+/* Constants */
 const PIX: React.CSSProperties = { imageRendering: 'pixelated' };
 const R  = '#cc1133';
 const R2 = '#ff2244';
@@ -52,9 +52,7 @@ const SECTION_LABELS: Record<SectionId, string> = {
   contact: 'PORTAL',
 };
 
-/* ══════════════════════════════════════════════
-   ROOT
-══════════════════════════════════════════════ */
+/* ROOT */
 export function About({ onNavigate }: AboutProps) {
   const ref   = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
@@ -176,9 +174,7 @@ export function About({ onNavigate }: AboutProps) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   ANIMATED CYBERPUNK BACKGROUND
-══════════════════════════════════════════════ */
+/* ANIMATED CYBERPUNK BACKGROUND */
 function CyberpunkBg() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ zIndex:0 }}>
@@ -232,9 +228,7 @@ function CyberpunkBg() {
   );
 }
 
-/* ══════════════════════════════════════════════
-   OUTER HUD FRAME (red border + corner marks)
-══════════════════════════════════════════════ */
+/* OUTER HUD FRAME (red border + corner marks) */
 function OuterFrame() {
   return (
     <div className="pointer-events-none absolute inset-0 z-[2]">
@@ -276,9 +270,7 @@ function OuterFrame() {
   );
 }
 
-/* ══════════════════════════════════════════════
-   PROFILE CARD
-══════════════════════════════════════════════ */
+/* PROFILE CARD */
 function ProfileCard({ inView }: { inView:boolean }) {
   const [glitch, setGlitch] = useState(false);
   useEffect(() => {
@@ -359,9 +351,7 @@ function ProfileCard({ inView }: { inView:boolean }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   BIOGRAPHY PANEL
-══════════════════════════════════════════════ */
+/* BIOGRAPHY PANEL */
 function BioPanel({ inView }: { inView:boolean }) {
   return (
     <Panel className="flex flex-col gap-4 py-5 px-5">
@@ -406,9 +396,7 @@ function BioPanel({ inView }: { inView:boolean }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   CORE STATS PANEL
-══════════════════════════════════════════════ */
+/* CORE STATS PANEL */
 function StatsPanel({ inView }: { inView:boolean }) {
   const [hover, setHover] = useState<number|null>(null);
   return (
@@ -446,9 +434,7 @@ function StatsPanel({ inView }: { inView:boolean }) {
   );
 }
 
-/* ══════════════════════════════════════════════
-   SKILL TREE PANEL
-══════════════════════════════════════════════ */
+/* SKILL TREE PANEL */
 function SkillsPanel({ inView }: { inView:boolean }) {
   const [hover, setHover] = useState<number|null>(null);
   return (
@@ -534,9 +520,7 @@ function SkillNode({ skill, inView, delay, hovered, onHover, onLeave }: {
   );
 }
 
-/* ══════════════════════════════════════════════
-   GALLERY SECTION
-══════════════════════════════════════════════ */
+/* GALLERY SECTION */
 function GallerySection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once:true, margin:'-40px' });
@@ -716,9 +700,7 @@ function GallerySection() {
   );
 }
 
-/* ══════════════════════════════════════════════
-   STATUS BAR
-══════════════════════════════════════════════ */
+/* STATUS BAR */
 function StatusBar() {
   const [time, setTime] = useState(new Date());
   useEffect(() => {
@@ -749,9 +731,7 @@ function StatusBar() {
   );
 }
 
-/* ══════════════════════════════════════════════
-   PRIMITIVES
-══════════════════════════════════════════════ */
+/* PRIMITIVES */
 
 /* HUD panel */
 function Panel({ children, className='' }: { children:React.ReactNode; className?:string }) {
