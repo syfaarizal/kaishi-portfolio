@@ -67,7 +67,7 @@ function App() {
   const renderSection = () => {
     switch (activeSection) {
       case 'hero':     return <Hero onNavigate={navigate} />;
-      case 'about':    return <About />;
+      case 'about':    return <About onNavigate={navigate} />;
       case 'skills':   return <Skills />;
       case 'projects': return <Projects />;
       case 'contact':  return <Contact />;
