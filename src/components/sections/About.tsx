@@ -6,8 +6,7 @@ import type { SectionId } from '../../App';
 interface StatItem  { label: string; value: number; icon: string; }
 interface SkillNode { label: string; icon: string; locked: boolean; }
 interface GalleryItem { id: number; title: string; tag: string; image: string; }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface AboutProps { onNavigate: (_n: SectionId) => void; }
+interface AboutProps { onNavigate: (id: SectionId) => void; }
 
 /* ─────────────────────────── Data ─── */
 const CORE_STATS: StatItem[] = [
@@ -44,11 +43,19 @@ const GALLERY: GalleryItem[] = [
 const PIX: React.CSSProperties = { imageRendering: 'pixelated' };
 const R  = '#cc1133';
 const R2 = '#ff2244';
+const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
+const SECTION_LABELS: Record<SectionId, string> = {
+  hero: 'INTRO',
+  about: 'PROFILE',
+  skills: 'INVENTOR',
+  projects: 'QUEST BOARD',
+  contact: 'PORTAL',
+};
 
 /* ══════════════════════════════════════════════
    ROOT
 ══════════════════════════════════════════════ */
-export function About({ onNavigate: _n }: AboutProps) {
+export function About({ onNavigate }: AboutProps) {
   const ref   = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
 
@@ -118,6 +125,51 @@ export function About({ onNavigate: _n }: AboutProps) {
           transition={{ duration:0.5, delay:0.4 }}
         >
           <StatusBar />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="flex items-center justify-center gap-4 pt-2 pb-2"
+        >
+          <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('hero')} side="left" />
+
+          <div className="flex items-center gap-2.5">
+            {SECTIONS.map((section) => {
+              const active = section === 'about';
+              return (
+                <button
+                  key={section}
+                  onClick={() => onNavigate(section)}
+                  title={SECTION_LABELS[section]}
+                  className="group relative flex items-center justify-center"
+                  style={{ width: '22px', height: '22px' }}
+                >
+                  <motion.span
+                    className="block border"
+                    animate={{
+                      width: active ? '14px' : '10px',
+                      height: active ? '14px' : '10px',
+                      background: active ? R : 'transparent',
+                      borderColor: active ? R : 'rgba(204,17,51,0.5)',
+                      boxShadow: active ? `0 0 12px ${R}, 0 0 24px rgba(204,17,51,0.4)` : 'none',
+                      rotate: 45,
+                    }}
+                    transition={{ duration: 0.2 }}
+                  />
+                  <span
+                    className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                    style={{ fontSize: '6px', color: R, textShadow: `0 0 8px ${R}` }}
+                  >
+                    {SECTION_LABELS[section]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate('skills')} side="right" />
         </motion.div>
       </div>
     </div>
@@ -289,7 +341,7 @@ function ProfileCard({ inView }: { inView:boolean }) {
         <motion.div initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:0.35}}>
           <div className="flex justify-between mb-1">
             <span className="font-pixel text-[8px]" style={{color:'#7a6068'}}>LVL</span>
-            <span className="font-pixel text-[15px] leading-none text-white" style={{textShadow:`0 0 10px ${R}88`}}>23</span>
+            <span className="font-pixel text-[15px] leading-none text-white" style={{textShadow:`0 0 10px ${R}88`}}>21</span>
             <span className="font-pixel text-[8px]" style={{color:R}}>75%</span>
           </div>
           <SegBar value={75} color={R} segs={16} inView={inView} delay={0.4}/>
@@ -742,6 +794,48 @@ function CarouselArrow({ dir, onClick }:{ dir:'left'|'right'; onClick:()=>void }
       onMouseLeave={e=>{ const el=e.currentTarget as HTMLElement; el.style.boxShadow=`0 0 8px ${R}33`; el.style.borderColor=`${R}55`; }}
     >
       {dir==='left' ? '◀' : '▶'}
+    </motion.button>
+  );
+}
+
+/* PREV / NEXT button */
+function NavBtn({ label, icon, onClick, side }:{
+  label:string; icon:string; onClick:()=>void; side:'left'|'right';
+}) {
+  const clip = side === 'left'
+    ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
+    : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
+
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      className="flex items-center gap-2 font-pixel transition-all"
+      style={{
+        fontSize: '9px',
+        color: '#7a6068',
+        border: '1px solid rgba(61,15,26,0.9)',
+        padding: '9px 18px',
+        background: 'rgba(8,2,6,0.78)',
+        clipPath: clip,
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.color = R;
+        el.style.borderColor = R;
+        el.style.boxShadow = '0 0 12px rgba(204,17,51,0.3)';
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.color = '#7a6068';
+        el.style.borderColor = 'rgba(61,15,26,0.9)';
+        el.style.boxShadow = 'none';
+      }}
+    >
+      {side === 'left' && <span style={{ fontSize: '13px' }}>{icon}</span>}
+      {label}
+      {side === 'right' && <span style={{ fontSize: '13px' }}>{icon}</span>}
     </motion.button>
   );
 }

@@ -539,7 +539,7 @@ function BottomHUD() {
                 fontSize:'22px', lineHeight:1,
                 textShadow: panelGlitch ? '2px 0 #ff0044, -2px 0 #0088ff, 0 0 12px rgba(255,34,68,0.9)' : '0 0 12px rgba(204,17,51,0.8)',
                 transition: 'text-shadow 0.05s',
-              }}>23</span>
+              }}>21</span>
               <img src="/assets/icon-kai-shild.png"  alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
               <img src="/assets/icon-kai-console.png" alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
             </div>
