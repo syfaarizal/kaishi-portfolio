@@ -149,7 +149,7 @@ function ProfileCard({inView}:{inView:boolean}) {
       <Corners c={R} s={9} />
       {/* Header label */}
       <div className="profile-header">
-        <img src="/assets/kai-icon-cat-cyber.png" alt="" className="profile-cat-icon"/>
+        <img src="/assets/icon-kai-cat1.png" alt="" className="profile-cat-icon"/>
         <span className="font-pixel profile-header-title">/ USER PROFILE</span>
         <div className="profile-header-bars">
           {[1,0.6,0.4].map((o,i)=>(
@@ -274,7 +274,7 @@ function BiographyPanel({inView}:{inView:boolean}) {
   return (
     <Panel>
       <Corners c={R} s={9} />
-      <PanelHeader icon="/assets/kai-icon-cat-cyber.png" label="BIOGRAPHY"/>
+      <PanelHeader icon="/assets/icon-kai-cat1.png" label="BIOGRAPHY"/>
 
       <div className="bio-content">
         {/* Main quote row */}
@@ -401,51 +401,22 @@ function StatIcon({type,active=false}:{type:string;active?:boolean}) {
   const sz = 13;
   switch(type) {
     case 'code': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <path d="M4.5 3.5L1.5 7L4.5 10.5" stroke={c} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9.5 3.5L12.5 7L9.5 10.5" stroke={c} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M8.5 2L5.5 12" stroke={c} strokeWidth="1.2" strokeLinecap="round"/>
-      </svg>
+      <img src="/assets/icon-kai-code.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     case 'puzzle': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <rect x="1.5" y="1.5" width="4.5" height="4.5" rx="0.8" stroke={c} strokeWidth="1.2"/>
-        <rect x="8" y="1.5" width="4.5" height="4.5" rx="0.8" stroke={c} strokeWidth="1.2"/>
-        <rect x="1.5" y="8" width="4.5" height="4.5" rx="0.8" stroke={c} strokeWidth="1.2"/>
-        <path d="M8 10.25h2.5V8" stroke={c} strokeWidth="1.2" strokeLinecap="round"/>
-        <path d="M12 10.25h.5" stroke={c} strokeWidth="1.2" strokeLinecap="round"/>
-      </svg>
+      <img src="/assets/icon-kai-lego.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     case 'palette': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <circle cx="7" cy="7" r="5" stroke={c} strokeWidth="1.2"/>
-        <circle cx="4.5" cy="5.5" r="0.9" fill={c}/>
-        <circle cx="9.5" cy="5.5" r="0.9" fill={c}/>
-        <circle cx="7" cy="9.5" r="0.9" fill={c}/>
-        <circle cx="5.2" cy="8.2" r="0.7" fill={c} opacity="0.65"/>
-        <circle cx="8.8" cy="8.2" r="0.7" fill={c} opacity="0.65"/>
-      </svg>
+      <img src="/assets/icon-kai-star.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     case 'lightning': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <path d="M8 1.5L3.5 8H7L6 12.5L11 6H7.5L8 1.5Z" stroke={c} strokeWidth="1.2" strokeLinejoin="round" fill={`${c}28`}/>
-      </svg>
+      <img src="/assets/kai-icon-pen.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     case 'brain': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <ellipse cx="7" cy="7" rx="5" ry="4" stroke={c} strokeWidth="1.2"/>
-        <path d="M7 4V7M7 7L4.5 9.2M7 7L9.5 9.2" stroke={c} strokeWidth="1.2" strokeLinecap="round"/>
-        <circle cx="4.5" cy="9.2" r="0.7" fill={c}/>
-        <circle cx="9.5" cy="9.2" r="0.7" fill={c}/>
-      </svg>
+      <img src="/assets/icon-kai-ring.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     case 'cycle': return (
-      <svg width={sz} height={sz} viewBox="0 0 14 14" fill="none" style={{filter:f}}>
-        <path d="M2.5 7A4.5 4.5 0 0 1 11.5 7" stroke={c} strokeWidth="1.3" strokeLinecap="round"/>
-        <path d="M11.5 7A4.5 4.5 0 0 1 2.5 7" stroke={c} strokeWidth="1.3" strokeLinecap="round"/>
-        <path d="M10 4.8L11.5 7L13 4.8" stroke={c} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M1 9.2L2.5 7L4 9.2" stroke={c} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+      <img src="/assets/icon-kai-re.png" alt="" width={sz} height={sz} style={{filter:f}} />
     );
     default: return null;
   }
@@ -459,7 +430,7 @@ function SkillTreePanel({inView}:{inView:boolean}) {
 
   const skills = [
     { label:'FRONTEND',   icon:<SkillCodeIcon/>,    locked:false, color:R,         id:0 },
-    { label:'DESIGN',     icon:<SkillHeartIcon/>,   locked:false, color:R,         id:1 },
+    { label:'DESIGN',     icon:<SkillPenIcon/>,     locked:false, color:R,         id:1 },
     { label:'REACT',      icon:<SkillReactIcon/>,   locked:false, color:'#61dafb', id:2 },
     { label:'TAILWIND',   icon:<SkillWindIcon/>,    locked:false, color:'#38bdf8', id:3 },
     { label:'JAVASCRIPT', icon:<SkillJSIcon/>,      locked:false, color:'#f7df1e', id:4 },
@@ -583,11 +554,9 @@ function SkillCodeIcon() {
     </svg>
   );
 }
-function SkillHeartIcon() {
+function SkillPenIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill={R} stroke="none" style={{filter:`drop-shadow(0 0 4px ${R})`}}>
-      <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
-    </svg>
+    <img src="/assets/kai-icon-pen.png" alt="pen" style={{width:'20px',height:'20px',filter:`drop-shadow(0 0 6px ${R})`}} />
   );
 }
 function SkillReactIcon() {
@@ -646,7 +615,7 @@ function GallerySection() {
         {/* Header row */}
         <div className="gallery-header">
           <div className="gallery-header-title">
-            <img src="/assets/kai-icon-cat-cyber.png" alt="" className="panel-header-icon"/>
+            <img src="/assets/icon-kai-cat1.png" alt="" className="panel-header-icon"/>
             <span className="font-pixel text-[10px] tracking-widest" style={{color:R}}>DIGITAL LOGS</span>
           </div>
 
