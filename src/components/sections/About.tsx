@@ -314,15 +314,17 @@ function BiographyPanel({inView}:{inView:boolean}) {
           <div className="code-quote-icon-box">
             <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
           </div>
-          <div>
-            <div className="font-pixel text-[10px] mb-1.5" style={{color:R,letterSpacing:'0.1em'}}>
-              CODE IS MY WEAPON
+          <div className="code-quote-content">
+            <div className="code-quote-text">
+              <div className="font-pixel text-[16px] mb-1.5" style={{color:R,letterSpacing:'0.1em'}}>
+                CODE IS MY WEAPON
+              </div>
+              <div className="font-mono text-[14px]" style={{color:'rgba(232,224,227,0.7)',lineHeight:1.625}}>
+                Creativity is my power.<br/>The web is my playground.
+              </div>
             </div>
-            <div className="font-mono text-[11px]" style={{color:'rgba(232,224,227,0.7)',lineHeight:1.625}}>
-              Creativity is my power.<br/>The web is my playground.
-            </div>
-            <div className="side-img" style={{filter:`drop-shadow(0 0 6px ${R})`}}>
-              <img src="/assets/kai-icon-chibi.png" alt="code" width={32} height={32} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
+            <div className="side-img">
+              <img src="/assets/kai-icon-chibi.png" alt="code" width={28} height={28} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
             </div>
           </div>
         </motion.div>
