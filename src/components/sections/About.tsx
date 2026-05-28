@@ -189,7 +189,7 @@ function ProfileCard({inView}:{inView:boolean}) {
         </div>
         
         {/* Pixel heart icon (New Icon Applied) */}
-        <motion.img src="/assets/kai-icon-owesome.png" alt="" className="profile-heart-icon"
+        <motion.img src="/assets/icon-kai-love.png" alt="" className="profile-heart-icon"
           animate={{scale:[1,1.18,1],opacity:[0.85,1,0.85]}}
           transition={{duration:2,repeat:Infinity}}
         />
@@ -296,7 +296,7 @@ function BiographyPanel({inView}:{inView:boolean}) {
           {/* Floating mascot (New Icon Applied) */}
           <div className="bio-mascot-wrapper">
             <motion.div className="float-y bio-mascot-inner">
-              <img src="/assets/kai-icon-chibi.png" alt="" className="bio-mascot-img" />
+              <img src="/assets/icon-kai-cat1.png" alt="" className="bio-mascot-img" />
               <div className="bio-mascot-shadow" />
               <Corners c={R} s={6}/>
             </motion.div>
@@ -312,11 +312,7 @@ function BiographyPanel({inView}:{inView:boolean}) {
             animate={{x:['-120%','120%']}} transition={{duration:3.5,repeat:Infinity,repeatDelay:4,ease:'easeInOut'}}
           />
           <div className="code-quote-icon-box">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M8 8L4 12L8 16" stroke={R} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M16 8L20 12L16 16" stroke={R} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M13 6L11 18" stroke={R2} strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+            <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
           </div>
           <div>
             <div className="font-pixel text-[10px] mb-1.5" style={{color:R,letterSpacing:'0.1em'}}>
@@ -324,6 +320,9 @@ function BiographyPanel({inView}:{inView:boolean}) {
             </div>
             <div className="font-mono text-[11px]" style={{color:'rgba(232,224,227,0.7)',lineHeight:1.625}}>
               Creativity is my power.<br/>The web is my playground.
+            </div>
+            <div className="side-img" style={{filter:`drop-shadow(0 0 6px ${R})`}}>
+              <img src="/assets/kai-icon-chibi.png" alt="code" width={32} height={32} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
             </div>
           </div>
         </motion.div>
