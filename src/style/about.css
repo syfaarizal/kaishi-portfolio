@@ -336,8 +336,8 @@
 .tag-text { font-size: 11px; letter-spacing: 0.05em; color: #c0a8b4; }
 
 /* Core Stats */
-.stats-list { padding: 14px 14px 14px; display: flex; flex-direction: column; gap: 20px; }
-.stat-row-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.stats-list { padding: 20px 14px 14px; display: flex; flex-direction: column; gap: 30px; }
+.stat-row-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .stat-icon-box { width: 27px; height: 27px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transform: rotate(45deg); transition: all 0.2s; }
 .stat-label { font-size: 10px; flex: 1; letter-spacing: 0.05em; transition: color 0.2s; }
 .stat-value { font-size: 10px; transition: color 0.2s; }
@@ -638,7 +638,7 @@
   margin-bottom: 8px;
 }
 .stats-overall-number {
-  font-size: 30px;
+  font-size: 25px;
   color: var(--kai-red);
   line-height: 1;
   letter-spacing: -0.02em;
@@ -647,9 +647,6 @@
   display: flex;
   align-items: center;
   gap: 3px;
-}
-.stats-overall-label-right {
-  margin-left: auto;
 }
 
 /* ══════════════════════════════════════════════════

@@ -525,8 +525,8 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
             transition={{duration:3.2,repeat:Infinity}}
           >87.0</motion.span>
           <div className="stats-overall-trend">
-            <span style={{color:'#22c55e',fontSize:'10px'}}>▲</span>
-            <span className="font-pixel" style={{fontSize:'6px',color:'#22c55e',letterSpacing:'0.05em'}}>+2.4%</span>
+            <span style={{color:'#22c55e',fontSize:'12px',marginBottom:'5px'}}>▲</span>
+            <span className="font-pixel" style={{fontSize:'7px',color:'#22c55e',letterSpacing:'0.05em'}}>+2.4%</span>
           </div>
           <div className="stats-overall-label-right">
             <span className="font-pixel" style={{fontSize:'6px',color:'#4a3040'}}>AVG / 6 STATS</span>
@@ -552,24 +552,26 @@ function StatIcon({type,active=false}:{type:string;active?:boolean}) {
     cycle: 'rotate(-45deg)',
   };
   const rot = rotMap[type] ?? 'rotate(0deg)';
+  // add padding to certain icons to make them more visually balanced
+  const p = (type === 'brain' || type === 'lightning' || type === 'cycle' || type === 'palette' || type === 'puzzle') ? 1 : 0;
   switch(type) {
     case 'code': return (
-      <img src="/assets/icon-kai-code.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/icon-kai-code.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     case 'puzzle': return (
-      <img src="/assets/icon-kai-lego.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/icon-kai-lego.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     case 'palette': return (
-      <img src="/assets/icon-kai-star.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/icon-kai-star.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     case 'lightning': return (
-      <img src="/assets/kai-icon-pen.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/kai-icon-pen.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     case 'brain': return (
-      <img src="/assets/icon-kai-ring.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/icon-kai-ring.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     case 'cycle': return (
-      <img src="/assets/icon-kai-re.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
+      <img src="/assets/icon-kai-re.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot, padding: `${p}px`}} />
     );
     default: return null;
   }
