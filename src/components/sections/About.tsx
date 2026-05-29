@@ -215,7 +215,7 @@ function ProfileCard({inView}:{inView:boolean}) {
           <span style={{color:R,fontSize:'14px'}}>✦</span> KAI SHI <span style={{color:R,fontSize:'14px'}}>✦</span>
         </div>
         <div className="font-pixel profile-title">
-          FRONTEND BUILDER · CONTENT CREATOR
+          FRONTEND BUILDER <br></br> CONTENT CREATOR
         </div>
       </div>
 
@@ -228,8 +228,8 @@ function ProfileCard({inView}:{inView:boolean}) {
             <span className="font-pixel text-[7px]" style={{color:R}}>Lv.</span>
             <span className="font-pixel text-[20px] text-white" style={{textShadow:`0 0 12px ${R}`,lineHeight:1}}>21</span>
           </motion.div>
-          <div style={{flex:1}}>
-            <div className="flex justify-between mb-1">
+          <div className="lvl-exp-track">
+            <div className="lvl-exp-meta">
               <span className="font-pixel text-[7px]" style={{color:'#7a6068'}}>EXP</span>
               <span className="font-pixel text-[7px]" style={{color:R3}}>12,340 / 16,000</span>
             </div>
@@ -239,16 +239,24 @@ function ProfileCard({inView}:{inView:boolean}) {
 
         {/* HP bar */}
         <div className="hp-cp-row">
-          <span className="font-pixel hp-cp-label">HP</span>
-          <div style={{flex:1}}><SegBar value={100} color={R} segs={14} inView={inView} delay={0.5}/></div>
-          <span className="font-pixel text-[7px]" style={{color:R}}>850 / 850</span>
+          <div className="hp-cp-meta">
+            <span className="font-pixel hp-cp-label">HP</span>
+            <span className="font-pixel hp-cp-value">850 / 850</span>
+          </div>
+          <div className="hp-cp-track">
+            <SegBar value={100} color={R} segs={14} inView={inView} delay={0.5}/>
+          </div>
         </div>
 
         {/* CP bar */}
         <div className="hp-cp-row mb-3">
-          <span className="font-pixel hp-cp-label">CP</span>
-          <div style={{flex:1}}><SegBar value={100} color="#22aaff" segs={14} inView={inView} delay={0.58}/></div>
-          <span className="font-pixel text-[7px]" style={{color:'#22aaff'}}>640 / 640</span>
+          <div className="hp-cp-meta">
+            <span className="font-pixel hp-cp-label">CP</span>
+            <span className="font-pixel hp-cp-value" style={{color:'#22aaff'}}>640 / 640</span>
+          </div>
+          <div className="hp-cp-track">
+            <SegBar value={100} color="#22aaff" segs={14} inView={inView} delay={0.58}/>
+          </div>
         </div>
 
         {/* STATUS: ONLINE with Diogram */}
@@ -420,9 +428,9 @@ function BiographyPanel({inView}:{inView:boolean}) {
           </div>
           <div className="bio-terminal-body">
             {([
-              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'15px'},
-              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'15px'},
-              {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'15px'},
+              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'13px'},
+              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'13px'},
+              {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'13px'},
             ]).map((ln,i)=>(
               <motion.div key={i} className="font-mono bio-terminal-line"
                 initial={{opacity:0,x:-12}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.76+i*0.14}}
