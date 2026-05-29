@@ -45,10 +45,9 @@ export function About({ onNavigate }: AboutProps) {
 
   return (
     <div ref={ref} className="about-root">
-      <BG />
-      <OuterFrame />
-
       <div className="about-content-wrapper">
+        <BG />
+        <OuterFrame />
         {/* ── TOP FOUR PANELS ── */}
         <motion.div
           initial={{opacity:0,y:16}}
@@ -262,6 +261,67 @@ function ProfileCard({inView}:{inView:boolean}) {
           </motion.span>
           <img src="/assets/kai-icon-diogram.png" alt="waveform" className="status-diogram" />
         </div>
+
+        {/* ─── Social Platforms ─── */}
+        <div className="profile-socials-section">
+          <div className="profile-divider-row">
+            <div className="profile-divider-glow"/>
+            <span className="font-pixel profile-micro-label">PLATFORMS</span>
+            <div className="profile-divider-glow"/>
+          </div>
+          <div className="profile-socials-col">
+            {([
+              {label:'YOUTUBE', color:R},
+              {label:'TIKTOK',  color:R3},
+              {label:'GITHUB',  color:'#9090b8'},
+            ] as const).map((s,i)=>(
+              <motion.div key={s.label} className="social-platform-chip"
+                initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}
+                whileHover={{scale:1.04, boxShadow:`0 0 12px ${s.color}44`}}
+                style={{borderColor:`${s.color}33`, color:s.color}}
+              >
+                <motion.span style={{fontSize:'7px', color:s.color}}
+                  animate={{opacity:[1,0.35,1]}} transition={{duration:1.8+i*0.5,repeat:Infinity}}>●</motion.span>
+                <span className="font-pixel social-platform-text">{s.label}</span>
+                <div className="social-chip-arrow" style={{color:`${s.color}66`}}>›</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ─── Achievement Badges ─── */}
+        <div className="profile-badges-section">
+          <span className="font-pixel profile-micro-label">BADGES EARNED</span>
+          <div className="profile-badges-row">
+            {([
+              {sym:'⚡', title:'SPEED CODER',  c:R},
+              {sym:'🎨', title:'PIXEL ARTIST', c:'#ff8844'},
+              {sym:'🌙', title:'NIGHT OWL',   c:'#9966ff'},
+              {sym:'★',  title:'TOP CREATOR', c:'#ffcc22'},
+            ]).map((b,i)=>(
+              <motion.div key={b.title} className="achievement-badge"
+                initial={{scale:0, opacity:0}} animate={inView?{scale:1,opacity:1}:{}}
+                transition={{delay:0.88+i*0.09, type:'spring', stiffness:240}}
+                whileHover={{scale:1.22, boxShadow:`0 0 18px ${b.c}77`}}
+                style={{borderColor:`${b.c}44`, boxShadow:`0 0 6px ${b.c}22`}}
+                title={b.title}
+              >
+                <span style={{fontSize:'13px', lineHeight:1}}>{b.sym}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ─── Faction Row ─── */}
+        <div className="profile-faction-row">
+          <span className="font-pixel profile-micro-label">FACTION</span>
+          <div className="profile-faction-value">
+            <motion.span style={{color:R,fontSize:'7px'}} animate={{opacity:[0.6,1,0.6]}} transition={{duration:2.5,repeat:Infinity}}>◆</motion.span>
+            <span className="font-pixel" style={{fontSize:'8px', color:'#c0a8b4', letterSpacing:'0.12em'}}>INDIE CREATORS</span>
+            <motion.span style={{color:R,fontSize:'7px'}} animate={{opacity:[0.6,1,0.6]}} transition={{duration:2.5,repeat:Infinity,delay:1.25}}>◆</motion.span>
+          </div>
+        </div>
+
       </div>
     </Panel>
   );
@@ -343,6 +403,59 @@ function BiographyPanel({inView}:{inView:boolean}) {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* ─── Current Mission Terminal ─── */}
+        <motion.div className="bio-mission-terminal"
+          initial={{opacity:0,y:12}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.65,duration:0.48}}
+        >
+          <div className="bio-terminal-header">
+            <div className="bio-terminal-traffic">
+              {[R,'#ffcc33','#22c55e'].map((c,i)=>(
+                <div key={i} style={{width:8,height:8,borderRadius:'50%',background:c,opacity:0.75}}/>
+              ))}
+            </div>
+            <span className="font-pixel bio-terminal-title-text">current_build.exe</span>
+            <motion.span className="font-pixel bio-terminal-run-label"
+              animate={{opacity:[1,0.25,1]}} transition={{duration:1.1,repeat:Infinity}}>● RUNNING</motion.span>
+          </div>
+          <div className="bio-terminal-body">
+            {([
+              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'15px'},
+              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'15px'},
+              {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'15px'},
+            ]).map((ln,i)=>(
+              <motion.div key={i} className="font-mono bio-terminal-line"
+                initial={{opacity:0,x:-12}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.76+i*0.14}}
+              >
+                <span className="bio-terminal-prompt">{ln.prompt}</span>
+                <span style={{color:'#6a5868', fontSize:ln.fsz}}>{ln.pre}</span>
+                <span style={{color:ln.col, fontSize:ln.fsz}}>{ln.val}</span>
+              </motion.div>
+            ))}
+          </div>
+          {/* Scan line sweep */}
+          <motion.div className="bio-terminal-sweep"
+            animate={{x:['-110%','110%']}} transition={{duration:4,repeat:Infinity,repeatDelay:6,ease:'easeInOut'}}
+          />
+        </motion.div>
+
+        {/* ─── Activity Mini Metrics ─── */}
+        <motion.div className="bio-metrics-row"
+          initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:0.85}}
+        >
+          {([
+            {label:'PROJECTS', val:'12', icon:'◈', fsz:'11px'},
+            {label:'COMMITS',  val:'340', icon:'◉', fsz:'11px'},
+            {label:'STREAK',   val:'28D', icon:'▲', fsz:'11px'},
+          ]).map((m,i)=>(
+            <div key={m.label} className="bio-metric-item">
+              <span className="font-pixel bio-metric-icon" style={{color:i===2?'#22c55e':R, fontSize:m.fsz}}>{m.icon}</span>
+              <span className="font-pixel bio-metric-val" style={{fontSize:m.fsz}}>{m.val}</span>
+              <span className="font-pixel bio-metric-label" style={{fontSize:m.fsz}}>{m.label}</span>
+            </div>
+          ))}
+        </motion.div>
+
       </div>
     </Panel>
   );
@@ -392,6 +505,36 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
           </motion.div>
         ))}
       </div>
+
+      {/* ─── Overall Power Block ─── */}
+      <motion.div className="stats-overall-block"
+        initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.72}}
+      >
+        <div className="stats-overall-header">
+          <span className="font-pixel" style={{fontSize:'7px',color:'#4a3040',letterSpacing:'0.12em'}}>OVERALL POWER</span>
+          <motion.div className="power-rank-pill"
+            animate={{boxShadow:[`0 0 8px ${R}55`,`0 0 22px ${R}99`,`0 0 8px ${R}55`]}}
+            transition={{duration:2.6,repeat:Infinity}}
+          >
+            <span className="font-pixel" style={{fontSize:'7px',color:'#fff',letterSpacing:'0.1em'}}>S-RANK</span>
+          </motion.div>
+        </div>
+        <div className="stats-overall-value-row">
+          <motion.span className="font-pixel stats-overall-number"
+            animate={{textShadow:[`0 0 12px ${R}66`,`0 0 26px ${R}cc`,`0 0 12px ${R}66`]}}
+            transition={{duration:3.2,repeat:Infinity}}
+          >87.0</motion.span>
+          <div className="stats-overall-trend">
+            <span style={{color:'#22c55e',fontSize:'10px'}}>▲</span>
+            <span className="font-pixel" style={{fontSize:'6px',color:'#22c55e',letterSpacing:'0.05em'}}>+2.4%</span>
+          </div>
+          <div className="stats-overall-label-right">
+            <span className="font-pixel" style={{fontSize:'6px',color:'#4a3040'}}>AVG / 6 STATS</span>
+          </div>
+        </div>
+        <SegBar value={87} color={R} segs={20} inView={inView} delay={0.82}/>
+      </motion.div>
+
     </Panel>
   );
 }
@@ -399,25 +542,34 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
 function StatIcon({type,active=false}:{type:string;active?:boolean}) {
   const c = active ? R2 : R;
   const f = `drop-shadow(0 0 ${active?4:2}px ${c}${active?'cc':'77'})`;
-  const sz = 13;
+  const sz = 16;
+  const rotMap: Record<string, string> = {
+    code: 'rotate(-45deg)',
+    puzzle: 'rotate(-45deg)',
+    palette: 'rotate(-45deg)',
+    lightning: 'rotate(-45deg)',
+    brain: 'rotate(-45deg)',
+    cycle: 'rotate(-45deg)',
+  };
+  const rot = rotMap[type] ?? 'rotate(0deg)';
   switch(type) {
     case 'code': return (
-      <img src="/assets/icon-kai-code.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/icon-kai-code.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     case 'puzzle': return (
-      <img src="/assets/icon-kai-lego.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/icon-kai-lego.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     case 'palette': return (
-      <img src="/assets/icon-kai-star.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/icon-kai-star.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     case 'lightning': return (
-      <img src="/assets/kai-icon-pen.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/kai-icon-pen.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     case 'brain': return (
-      <img src="/assets/icon-kai-ring.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/icon-kai-ring.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     case 'cycle': return (
-      <img src="/assets/icon-kai-re.png" alt="" width={sz} height={sz} style={{filter:f}} />
+      <img src="/assets/icon-kai-re.png" alt="" width={sz} height={sz} style={{filter:f, transform:rot}} />
     );
     default: return null;
   }
@@ -491,6 +643,34 @@ function SkillTreePanel({inView}:{inView:boolean}) {
           {skills.slice(5).map((sk,i)=>(
             <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.5+i*0.07}/>
           ))}
+        </div>
+      </div>
+
+      {/* ─── Skill Summary Bar ─── */}
+      <div className="skill-summary-bar">
+        <div className="skill-summary-cell">
+          <span className="font-pixel skill-summary-label">UNLOCKED</span>
+          <div className="skill-summary-count-row">
+            <motion.span className="font-pixel skill-summary-count-main"
+              animate={{textShadow:[`0 0 8px ${R}55`,`0 0 18px ${R}bb`,`0 0 8px ${R}55`]}}
+              transition={{duration:2.8,repeat:Infinity}}
+            >5</motion.span>
+            <span className="font-pixel skill-summary-count-denom">/8</span>
+          </div>
+        </div>
+        <div className="skill-summary-sep"/>
+        <div className="skill-summary-cell" style={{flex:2,alignItems:'flex-start',paddingLeft:'10px'}}>
+          <span className="font-pixel skill-summary-label">NEXT UNLOCK</span>
+          <span className="font-pixel" style={{fontSize:'8px',color:'#c0a8b4',letterSpacing:'0.08em',marginBottom:'5px'}}>TYPESCRIPT</span>
+          <SegBar value={65} color={`${R}99`} segs={10} inView={inView} delay={0.62}/>
+        </div>
+        <div className="skill-summary-sep"/>
+        <div className="skill-summary-cell">
+          <span className="font-pixel skill-summary-label">MASTERY</span>
+          <motion.span className="font-pixel skill-summary-mastery"
+            animate={{textShadow:[`0 0 8px #ff884455`,`0 0 18px #ff884499`,`0 0 8px #ff884455`]}}
+            transition={{duration:3.5,repeat:Infinity}}
+          >A+</motion.span>
         </div>
       </div>
 
