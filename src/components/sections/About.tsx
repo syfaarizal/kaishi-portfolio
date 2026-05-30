@@ -1128,22 +1128,78 @@ function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
   const sections: SectionId[] = ['hero','about','skills','projects','contact'];
   const labels: Record<SectionId,string> = {hero:'INTRO',about:'PROFILE',skills:'INVENTOR',projects:'QUEST BOARD',contact:'PORTAL'};
   return (
-    <div className="nav-dots-bar">
-      {sections.map((s,i)=>(
-        <motion.button key={s} onClick={()=>onNavigate(s)} title={labels[s]} className="nav-dot-btn"
-          initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.5+i*0.05}} whileHover={{scale:1.2}}
-        >
-          <motion.div className="gallery-dot-shape"
-            animate={{
-              width:  s==='about'?'12px':'8px', height: s==='about'?'12px':'8px',
-              background: s==='about'?R:'transparent', borderColor: s==='about'?R:`${R}44`,
-              rotate:45, boxShadow: s==='about'?`0 0 10px ${R}`:'none',
-            }}
-            transition={{duration:0.2}}
-          />
-        </motion.button>
-      ))}
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.78, duration: 0.5 }}
+      className="nav-dots-bar flex items-center justify-center gap-4"
+    >
+      <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('hero')} side="left" />
+
+      <div className="flex items-center gap-2.5">
+        {sections.map((s) => {
+          const active = s === 'about';
+          return (
+            <button
+              key={s}
+              onClick={() => onNavigate(s)}
+              title={labels[s]}
+              className="group relative flex items-center justify-center"
+              style={{ width: '22px', height: '22px' }}
+            >
+              <motion.span
+                className="block border"
+                animate={{
+                  width: active ? '14px' : '10px',
+                  height: active ? '14px' : '10px',
+                  background: active ? '#cc1133' : 'transparent',
+                  borderColor: active ? '#cc1133' : 'rgba(204,17,51,0.5)',
+                  boxShadow: active ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                  rotate: 45,
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <span
+                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
+              >
+                {labels[s]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate('skills')} side="right" />
+    </motion.div>
+  );
+}
+
+function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>void;side:'left'|'right'}) {
+  const clip = side==='left'
+    ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
+    : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      className="flex items-center gap-2 font-pixel transition-all"
+      style={{
+        fontSize: '9px',
+        color: '#7a6068',
+        border: '1px solid rgba(61,15,26,0.9)',
+        padding: '9px 18px',
+        background: 'rgba(8,2,6,0.78)',
+        clipPath: clip,
+      }}
+      onMouseEnter={(e)=>{const el=e.currentTarget as HTMLElement;el.style.color='#cc1133';el.style.borderColor='#cc1133';el.style.boxShadow='0 0 12px rgba(204,17,51,0.3)';}}
+      onMouseLeave={(e)=>{const el=e.currentTarget as HTMLElement;el.style.color='#7a6068';el.style.borderColor='rgba(61,15,26,0.9)';el.style.boxShadow='none';}}
+    >
+      {side==='left' && <span style={{fontSize:'13px'}}>{icon}</span>}
+      {label}
+      {side==='right' && <span style={{fontSize:'13px'}}>{icon}</span>}
+    </motion.button>
   );
 }
 
