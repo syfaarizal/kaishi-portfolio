@@ -61,12 +61,14 @@ export function About({ onNavigate }: AboutProps) {
           <SkillTreePanel inView={inView}/>
         </motion.div>
 
-        {/* ── DIGITAL LOGS / GALLERY ── */}
+        {/* ── LOWER CONTENT / GALLERY ── */}
         <motion.div
+          className="about-lower-grid"
           initial={{opacity:0,y:20}}
           animate={inView?{opacity:1,y:0}:{}}
           transition={{duration:0.55,delay:0.2}}
         >
+          <AboutRailStack onNavigate={onNavigate} inView={inView}/>
           <GallerySection/>
         </motion.div>
 
@@ -282,9 +284,6 @@ function ProfileCard({inView}:{inView:boolean}) {
               {label:'YOUTUBE', color:R},
               {label:'TIKTOK',  color:R3},
               {label:'GITHUB',  color:'#9090b8'},
-              {label:'INSTAGRAM',color:'#ff66aa'},
-              {label:'TWITTER', color:'#1da1f2'},
-              {label:'DISCORD', color:'#7289da'},
             ] as const).map((s,i)=>(
               <motion.div key={s.label} className="social-platform-chip"
                 initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}
@@ -295,29 +294,6 @@ function ProfileCard({inView}:{inView:boolean}) {
                   animate={{opacity:[1,0.35,1]}} transition={{duration:1.8+i*0.5,repeat:Infinity}}>●</motion.span>
                 <span className="font-pixel social-platform-text">{s.label}</span>
                 <div className="social-chip-arrow" style={{color:`${s.color}66`}}>›</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* ─── Achievement Badges ─── */}
-        <div className="profile-badges-section">
-          <span className="font-pixel profile-micro-label">BADGES EARNED</span>
-          <div className="profile-badges-row">
-            {([
-              {sym:'⚡', title:'SPEED CODER',  c:R},
-              {sym:'🎨', title:'PIXEL ARTIST', c:'#ff8844'},
-              {sym:'🌙', title:'NIGHT OWL',   c:'#9966ff'},
-              {sym:'★',  title:'TOP CREATOR', c:'#ffcc22'},
-            ]).map((b,i)=>(
-              <motion.div key={b.title} className="achievement-badge"
-                initial={{scale:0, opacity:0}} animate={inView?{scale:1,opacity:1}:{}}
-                transition={{delay:0.88+i*0.09, type:'spring', stiffness:240}}
-                whileHover={{scale:1.22, boxShadow:`0 0 18px ${b.c}77`}}
-                style={{borderColor:`${b.c}44`, boxShadow:`0 0 6px ${b.c}22`}}
-                title={b.title}
-              >
-                <span style={{fontSize:'13px', lineHeight:1}}>{b.sym}</span>
               </motion.div>
             ))}
           </div>
@@ -594,15 +570,26 @@ function StatIcon({type,active=false}:{type:string;active?:boolean}) {
 function SkillTreePanel({inView}:{inView:boolean}) {
   const [hov,setHov] = useState<number|null>(null);
 
+  // Row 1 — core disciplines (2)
+  // Row 2 — JS ecosystem (3)
+  // Row 3 — TypeScript / Next.js / Node.js (3 NEW)
+  // Row 4 — HTML5 / GSAP / Git (3 NEW)
+  // Row 5 — locked (3)
   const skills = [
-    { label:'FRONTEND',   icon:<SkillCodeIcon/>,    locked:false, color:R,         id:0 },
-    { label:'DESIGN',     icon:<SkillPenIcon/>,     locked:false, color:R,         id:1 },
-    { label:'REACT',      icon:<SkillReactIcon/>,   locked:false, color:'#61dafb', id:2 },
-    { label:'TAILWIND',   icon:<SkillWindIcon/>,    locked:false, color:'#38bdf8', id:3 },
-    { label:'JAVASCRIPT', icon:<SkillJSIcon/>,      locked:false, color:'#f7df1e', id:4 },
-    { label:'???',        icon:null,                locked:true,  color:DIM,       id:5 },
-    { label:'???',        icon:null,                locked:true,  color:DIM,       id:6 },
-    { label:'???',        icon:null,                locked:true,  color:DIM,       id:7 },
+    { label:'FRONTEND',   icon:<SkillCodeIcon/>,    locked:false, color:R,         id:0  },
+    { label:'DESIGN',     icon:<SkillPenIcon/>,     locked:false, color:R,         id:1  },
+    { label:'REACT',      icon:<SkillReactIcon/>,   locked:false, color:'#61dafb', id:2  },
+    { label:'TAILWIND',   icon:<SkillWindIcon/>,    locked:false, color:'#38bdf8', id:3  },
+    { label:'JAVASCRIPT', icon:<SkillJSIcon/>,      locked:false, color:'#f7df1e', id:4  },
+    { label:'TYPESCRIPT', icon:<SkillTSIcon/>,      locked:false, color:'#3178c6', id:5  },
+    { label:'NEXT.JS',    icon:<SkillNextIcon/>,    locked:false, color:'#e8e0e3', id:6  },
+    { label:'NODE.JS',    icon:<SkillNodeIcon/>,    locked:false, color:'#68a063', id:7  },
+    { label:'HTML5',      icon:<SkillHTMLIcon/>,    locked:false, color:'#e34f26', id:8  },
+    { label:'GSAP',       icon:<SkillGSAPIcon/>,    locked:false, color:'#88ce02', id:9  },
+    { label:'GIT',        icon:<SkillGitIcon/>,     locked:false, color:'#f05032', id:10 },
+    { label:'???',        icon:null,                locked:true,  color:DIM,       id:11 },
+    { label:'???',        icon:null,                locked:true,  color:DIM,       id:12 },
+    { label:'???',        icon:null,                locked:true,  color:DIM,       id:13 },
   ];
 
   return (
@@ -610,20 +597,18 @@ function SkillTreePanel({inView}:{inView:boolean}) {
       <Corners c={R} s={9} />
       <PanelHeader icon="/assets/icon-kai-mekanik.png" label="SKILL TREE"/>
 
-      <div className="skill-tree-content">
-        {/* ── ROW 1: FRONTEND ◄─── center heart ───► DESIGN ── */}
+      <div className="skill-tree-content" style={{overflowY:'auto',overflowX:'hidden'}}>
+        {/* ── ROW 1: FRONTEND ◄─── heart ───► DESIGN ── */}
         <div className="skill-row">
           <SkillHex skill={skills[0]} hov={hov} setHov={setHov} inView={inView} delay={0.15}/>
-          {/* Connector: left arrow + line */}
           <div className="skill-connector-h">
             <span className="font-pixel text-[7px]" style={{color:`${R}88`}}>◄</span>
             <div className="skill-connector-line"/>
-            {/* Center heart node (pulsing) */}
             <motion.div className="skill-heart-node"
-              animate={{ scale: [1, 1.15, 1], boxShadow: [`0 0 8px ${R}66`, `0 0 22px ${R}cc`, `0 0 8px ${R}66`] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ scale:[1,1.15,1], boxShadow:[`0 0 8px ${R}66`,`0 0 22px ${R}cc`,`0 0 8px ${R}66`] }}
+              transition={{ duration:1.8, repeat:Infinity, ease:'easeInOut' }}
             >
-              <svg viewBox="0 0 24 24" fill={R} style={{ filter: `drop-shadow(0 0 6px ${R})` }}>
+              <svg viewBox="0 0 24 24" fill={R} style={{filter:`drop-shadow(0 0 6px ${R})`}}>
                 <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
               </svg>
             </motion.div>
@@ -633,7 +618,7 @@ function SkillTreePanel({inView}:{inView:boolean}) {
           <SkillHex skill={skills[1]} hov={hov} setHov={setHov} inView={inView} delay={0.23}/>
         </div>
 
-        {/* Vertical connectors row 1 → row 2 */}
+        {/* v connector 1→2 */}
         <div className="skill-connector-v">
           <div className="skill-v-line"/><div className="skill-v-line"/><div className="skill-v-line"/>
         </div>
@@ -646,15 +631,41 @@ function SkillTreePanel({inView}:{inView:boolean}) {
           ))}
         </div>
 
-        {/* Vertical connectors row 2 → row 3 */}
+        {/* v connector 2→3 */}
+        <div className="skill-connector-v">
+          {[0,1,2].map(i=>(<div key={i} className="skill-v-line"/>))}
+        </div>
+
+        {/* ── ROW 3: TYPESCRIPT · NEXT.JS · NODE.JS ── */}
+        <div className="skill-row-2">
+          <div className="skill-row-2-bg" style={{background:`linear-gradient(90deg,transparent,#3178c644,#3178c666,#3178c644,transparent)`}}/>
+          {skills.slice(5,8).map((sk,i)=>(
+            <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.44+i*0.09}/>
+          ))}
+        </div>
+
+        {/* v connector 3→4 */}
+        <div className="skill-connector-v">
+          {[0,1,2].map(i=>(<div key={i} className="skill-v-line"/>))}
+        </div>
+
+        {/* ── ROW 4: HTML5 · GSAP · GIT ── */}
+        <div className="skill-row-2">
+          <div className="skill-row-2-bg" style={{background:`linear-gradient(90deg,transparent,#e34f2644,#88ce0244,transparent)`}}/>
+          {skills.slice(8,11).map((sk,i)=>(
+            <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.56+i*0.09}/>
+          ))}
+        </div>
+
+        {/* v connector 4→5 (dim = locked) */}
         <div className="skill-connector-v">
           {[0,1,2].map(i=>(<div key={i} className="skill-v-line-dim"/>))}
         </div>
 
-        {/* ── ROW 3: Locked ── */}
+        {/* ── ROW 5: Locked ── */}
         <div className="skill-row-3">
-          {skills.slice(5).map((sk,i)=>(
-            <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.5+i*0.07}/>
+          {skills.slice(11).map((sk,i)=>(
+            <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.68+i*0.07}/>
           ))}
         </div>
       </div>
@@ -667,15 +678,15 @@ function SkillTreePanel({inView}:{inView:boolean}) {
             <motion.span className="font-pixel skill-summary-count-main"
               animate={{textShadow:[`0 0 8px ${R}55`,`0 0 18px ${R}bb`,`0 0 8px ${R}55`]}}
               transition={{duration:2.8,repeat:Infinity}}
-            >5</motion.span>
-            <span className="font-pixel skill-summary-count-denom">/8</span>
+            >11</motion.span>
+            <span className="font-pixel skill-summary-count-denom">/14</span>
           </div>
         </div>
         <div className="skill-summary-sep"/>
         <div className="skill-summary-cell" style={{flex:2,alignItems:'flex-start',paddingLeft:'10px'}}>
           <span className="font-pixel skill-summary-label">NEXT UNLOCK</span>
-          <span className="font-pixel" style={{fontSize:'8px',color:'#c0a8b4',letterSpacing:'0.08em',marginBottom:'5px'}}>TYPESCRIPT</span>
-          <SegBar value={65} color={`${R}99`} segs={10} inView={inView} delay={0.62}/>
+          <span className="font-pixel" style={{fontSize:'8px',color:'#c0a8b4',letterSpacing:'0.08em',marginBottom:'5px'}}>VUE 3</span>
+          <SegBar value={42} color={`${R}99`} segs={10} inView={inView} delay={0.62}/>
         </div>
         <div className="skill-summary-sep"/>
         <div className="skill-summary-cell">
@@ -707,38 +718,98 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
 }) {
   const isHov = hov===skill.id;
   const c = skill.locked ? DIM : skill.color;
+
+  /* ─── per-hex random glitch ─── */
+  const [glitch,    setGlitch   ] = useState(false);
+  const [glitchDir, setGlitchDir] = useState(1);
+  useEffect(()=>{
+    if (skill.locked) return;
+    const interval = setInterval(()=>{
+      if (Math.random()>0.6){
+        const dir = Math.random()>0.5?1:-1;
+        setGlitchDir(dir);
+        setGlitch(true);
+        setTimeout(()=>setGlitch(false),55);
+        setTimeout(()=>{setGlitchDir(-dir);setGlitch(true);setTimeout(()=>setGlitch(false),40);},110);
+      }
+    }, 2800+skill.id*650);
+    return ()=>clearInterval(interval);
+  },[skill.locked,skill.id]);
+
   return (
     <motion.div className="skill-hex-wrapper"
-      initial={{opacity:0,scale:0.6}} animate={inView?{opacity:1,scale:1}:{}} transition={{delay,duration:0.38,type:'spring',stiffness:200}}
-      onMouseEnter={()=>!skill.locked&&setHov(skill.id)} onMouseLeave={()=>setHov(null)}
+      initial={{opacity:0,scale:0.6}}
+      animate={inView?{opacity:1,scale:1}:{}}
+      transition={{delay,duration:0.38,type:'spring',stiffness:200}}
+      onMouseEnter={()=>!skill.locked&&setHov(skill.id)}
+      onMouseLeave={()=>setHov(null)}
       style={{cursor:skill.locked?'default':'pointer'}}
     >
       <motion.div className="skill-hex-shape"
-        animate={{ boxShadow: skill.locked?'none':isHov?`0 0 24px ${c}99,0 0 10px ${c}66`:`0 0 10px ${c}44` }}
-        transition={{duration:0.2}}
+        animate={{
+          boxShadow: skill.locked ? 'none'
+            : glitch ? `0 0 28px ${c}cc, 0 0 6px #ff0044 inset`
+            : isHov  ? `0 0 24px ${c}99, 0 0 10px ${c}66`
+            :          `0 0 10px ${c}44`,
+          x: glitch ? glitchDir*2 : 0,
+        }}
+        transition={{duration: glitch?0.04:0.2}}
         style={{
+          position:'relative', overflow:'hidden',
           background: skill.locked?'rgba(8,2,6,0.6)':'rgba(14,4,10,0.95)',
-          borderColor: skill.locked?DIM+'44':isHov?c:c+'55',
+          borderColor: skill.locked?`${DIM}44`:glitch?R2:isHov?c:`${c}55`,
         }}
       >
+        {/* Glitch scan-slice overlay */}
+        <AnimatePresence>
+          {glitch && !skill.locked && (
+            <motion.div key="gscan"
+              initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
+              style={{
+                position:'absolute',inset:0,zIndex:3,pointerEvents:'none',
+                background:'linear-gradient(transparent 28%,rgba(0,136,255,0.18) 28%,rgba(0,136,255,0.18) 46%,transparent 46%)',
+              }}
+            />
+          )}
+        </AnimatePresence>
+
         {skill.locked ? (
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <rect x="4" y="9" width="12" height="9" rx="1" stroke={`${DIM}99`} strokeWidth="1.5"/>
             <path d="M7 9V6a3 3 0 016 0v3" stroke={`${DIM}99`} strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          <motion.div animate={{scale:isHov?1.15:1,opacity:isHov?1:0.9}} transition={{duration:0.2}}>
+          <motion.div
+            animate={{
+              scale:  isHov?1.15:1,
+              opacity:isHov?1:0.9,
+              filter: glitch
+                ? `drop-shadow(2px 0 #ff0044) drop-shadow(-2px 0 #0088ff)`
+                : isHov
+                  ? `drop-shadow(0 0 8px ${c})`
+                  : 'none',
+            }}
+            transition={{duration:glitch?0.04:0.2}}
+          >
             {skill.icon}
           </motion.div>
         )}
       </motion.div>
-      <span className="font-pixel skill-hex-label" style={{color:skill.locked?'#2a1020':isHov?c:'#887078'}}>
+
+      <span className="font-pixel skill-hex-label" style={{
+        color:       skill.locked?'#2a1020':glitch?R2:isHov?c:'#887078',
+        textShadow:  glitch&&!skill.locked?`0 0 10px ${R}`:'none',
+        transition:  glitch?'none':'all 0.2s',
+      }}>
         {skill.label}
       </span>
     </motion.div>
   );
 }
 
+/* ──────────────────────────────────────────────────
+   SKILL ICONS — existing
+────────────────────────────────────────────────── */
 function SkillCodeIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
@@ -749,9 +820,7 @@ function SkillCodeIcon() {
   );
 }
 function SkillPenIcon() {
-  return (
-    <img src="/assets/kai-icon-pen.png" alt="pen" style={{width:'20px',height:'20px',filter:`drop-shadow(0 0 6px ${R})`}} />
-  );
+  return <img src="/assets/kai-icon-pen.png" alt="pen" style={{width:'20px',height:'20px',filter:`drop-shadow(0 0 6px ${R})`}}/>;
 }
 function SkillReactIcon() {
   return (
@@ -774,10 +843,81 @@ function SkillWindIcon() {
 }
 function SkillJSIcon() {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
       <rect width="24" height="24" rx="2" fill="#f7df1e" opacity="0.15"/>
       <rect width="24" height="24" rx="2" stroke="#f7df1e" strokeWidth="1" fill="none" opacity="0.4"/>
-      <text x="4" y="18" fontFamily="monospace" fontWeight="bold" fontSize="13" fill="#f7df1e">JS</text>
+      <path d="M8 16c0 1.5 1 2.5 3 2.5s3-1 3-2.5V9h-2v7" stroke="#f7df1e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+/* ──────────────────────────────────────────────────
+   SKILL ICONS — new (rows 3 & 4)
+────────────────────────────────────────────────── */
+function SkillTSIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="2" fill="#3178c6" opacity="0.15"/>
+      <rect width="24" height="24" rx="2" stroke="#3178c6" strokeWidth="1" fill="none" opacity="0.5"/>
+      {/* T */}
+      <path d="M4 8h6M7 8v8" stroke="#3178c6" strokeWidth="1.8" strokeLinecap="round"/>
+      {/* S */}
+      <path d="M13 9.5c.5-1 1.2-1.5 2.5-1.5s2.5.8 2.5 2-.8 1.8-2.5 2-2.5.8-2.5 2 1 2 2.5 2 2-.5 2.5-1.5" stroke="#3178c6" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function SkillNextIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="#e8e0e3" strokeWidth="1.2" opacity="0.35"/>
+      {/* N shape */}
+      <path d="M8 16V8l8 8V8" stroke="#e8e0e3" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.85"/>
+    </svg>
+  );
+}
+function SkillNodeIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      {/* Hexagon */}
+      <path d="M12 3L20.5 7.5v9L12 21 3.5 16.5v-9L12 3z" stroke="#68a063" strokeWidth="1.4" opacity="0.5"/>
+      {/* N */}
+      <path d="M9 16V8l6 8V8" stroke="#68a063" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
+    </svg>
+  );
+}
+function SkillHTMLIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      {/* Shield/document */}
+      <path d="M4 4l1.4 15L12 21l6.6-2L20 4H4z" stroke="#e34f26" strokeWidth="1.4" opacity="0.45"/>
+      {/* < > slashes */}
+      <path d="M8 10l-2.5 2L8 14" stroke="#e34f26" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 10l2.5 2L16 14" stroke="#e34f26" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13 9l-2 6" stroke="#e34f26" strokeWidth="1.4" strokeLinecap="round" opacity="0.7"/>
+    </svg>
+  );
+}
+function SkillGSAPIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      {/* Animated wave / timeline */}
+      <path d="M2 12h3l2-6 3 12 2-7 2 4 2-3h6" stroke="#88ce02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      {/* playhead */}
+      <line x1="12" y1="4" x2="12" y2="20" stroke="#88ce02" strokeWidth="1" opacity="0.3" strokeDasharray="2 2"/>
+    </svg>
+  );
+}
+function SkillGitIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      {/* Main branch vertical */}
+      <line x1="8" y1="4" x2="8" y2="20" stroke="#f05032" strokeWidth="1.5" strokeLinecap="round"/>
+      {/* Commit nodes */}
+      <circle cx="8" cy="6"  r="2.2" fill="#f05032" opacity="0.9"/>
+      <circle cx="8" cy="18" r="2.2" fill="#f05032" opacity="0.9"/>
+      {/* Branch off */}
+      <path d="M8 10 Q8 14 16 14" stroke="#f05032" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <circle cx="16" cy="14" r="2" fill="#f05032" opacity="0.65"/>
     </svg>
   );
 }
@@ -785,6 +925,60 @@ function SkillJSIcon() {
 /* ══════════════════════════════════════════════════
    GALLERY / DIGITAL LOGS
 ══════════════════════════════════════════════════ */
+function AboutRailStack({inView}: {onNavigate:(id:SectionId)=>void;inView:boolean}) {
+  const broadcastNotes = [
+    { label: 'MODE', value: 'ACTIVE', color: '#22c55e' },
+    { label: 'SIGNAL', value: 'STABLE', color: R3 },
+    { label: 'FOCUS', value: 'NIGHT BUILD', color: '#88c4ff' },
+  ];
+
+  return (
+    <div className="about-rail-stack">
+      <Panel className="about-rail-panel about-broadcast-panel">
+        <Corners c={R} s={9} />
+        <PanelHeader icon="/assets/icon-kai-diamond.png" label="BROADCAST LOG" />
+        <div className="about-broadcast-body">
+          <div className="about-broadcast-hero">
+            <div className="about-broadcast-image-frame">
+              <img src="/assets/KaiShi-Main.png" alt="Kai Shi" className="about-broadcast-image" />
+              <div className="about-broadcast-image-glow" />
+            </div>
+            <div className="about-broadcast-summary">
+              <div className="font-pixel about-broadcast-title">CHANNEL NOTES</div>
+              <p className="about-broadcast-text">
+                Built for late-night pushes, polished motion, and a clean red-signal UI that keeps the archive readable.
+              </p>
+            </div>
+          </div>
+
+          <div className="about-broadcast-metrics">
+            {broadcastNotes.map((note, i) => (
+              <motion.div
+                key={note.label}
+                className="about-broadcast-metric"
+                initial={{ opacity: 0, y: 6 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.3, delay: 0.22 + i * 0.06 }}
+                style={{ borderColor: `${note.color}33` }}
+              >
+                <span className="about-broadcast-metric-label">{note.label}</span>
+                <span className="font-pixel about-broadcast-metric-value" style={{ color: note.color }}>
+                  {note.value}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="about-broadcast-footer">
+            <img src="/assets/kai-icon-diogram.png" alt="" className="about-broadcast-wave" />
+            <span className="font-pixel about-broadcast-footer-text">LIVE ARCHIVE FEED</span>
+          </div>
+        </div>
+      </Panel>
+    </div>
+  );
+}
+
 function GallerySection() {
   const ref = useRef(null);
   const [filter,   setFilter  ] = useState<GFilter>('ALL');
