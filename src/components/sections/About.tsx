@@ -282,6 +282,9 @@ function ProfileCard({inView}:{inView:boolean}) {
               {label:'YOUTUBE', color:R},
               {label:'TIKTOK',  color:R3},
               {label:'GITHUB',  color:'#9090b8'},
+              {label:'INSTAGRAM',color:'#ff66aa'},
+              {label:'TWITTER', color:'#1da1f2'},
+              {label:'DISCORD', color:'#7289da'},
             ] as const).map((s,i)=>(
               <motion.div key={s.label} className="social-platform-chip"
                 initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}

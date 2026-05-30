@@ -195,7 +195,7 @@
   background: rgba(7,2,5,0.92);
   box-shadow: 0 0 0 1px rgba(204,17,51,0.05), 0 0 24px rgba(204,17,51,0.08), inset 0 0 28px rgba(0,0,0,0.55);
   backdrop-filter: blur(6px);
-  height: 100%;
+  height: auto;
 }
 .panel-highlight {
   position: absolute;
@@ -241,12 +241,12 @@
 .profile-name { font-size: 22px; color: white; line-height: 1; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.05em; transition: text-shadow 0.05s; }
 .profile-title { font-size: 9px; letter-spacing: 0.22em; margin-top: 10px; color: #8a6878; }
 
-.stats-container { padding: 10px 14px 8px; }
+.stats-container { padding: 20px 14px 8px; }
 .lvl-exp-row {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 8px;
+  gap: 15px;
   margin-bottom: 10px;
 }
 .lvl-box {
@@ -291,7 +291,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 7px;
 }
 .lvl-exp-meta {
   display: flex;
@@ -302,7 +302,7 @@
 .hp-cp-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 7px;
   margin-bottom: 6px;
 }
 .hp-cp-meta {
@@ -326,7 +326,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin: 15px 0 12px;
 }
 .status-label { font-size: 7px; color: #7a6068; }
 .status-dot { font-size: 7px; color: #cc113355; letter-spacing: 0.1em; }
