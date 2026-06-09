@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import type { SectionId } from '../../App';
-import '../../style/about.css';
 
 /* ─── Types ─── */
 interface AboutProps { onNavigate: (id: SectionId) => void; }
@@ -36,56 +35,107 @@ const R2  = '#ff2244';
 const R3  = '#ff6688';
 const DIM = '#3d0f1a';
 
+/* ─── Custom Styles & Keyframes ─── */
+const injectedStyles = `
+  @keyframes heartbeat {
+    0%, 100% { transform: scaleX(1); }
+    10% { transform: scaleX(1.8); }
+    20% { transform: scaleX(0.6); }
+    30% { transform: scaleX(1.4); }
+    40% { transform: scaleX(0.8); }
+    50% { transform: scaleX(1); }
+  }
+  @keyframes scanH {
+    0% { transform: translateY(-100%); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.5; filter: blur(60px); }
+    50% { opacity: 1; filter: blur(40px); }
+  }
+  @keyframes borderSweep {
+    0% { left: -150px; }
+    100% { left: 110%; }
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-7px); }
+  }
+  @keyframes neonFlicker {
+    0%, 94%, 96%, 100% { opacity: 1; }
+    95% { opacity: 0.3; }
+    97% { opacity: 0.8; }
+    99% { opacity: 0.4; }
+  }
+  
+  .animate-float-y { animation: floatY 3.5s ease-in-out infinite; }
+  .animate-neon-flicker { animation: neonFlicker 6s infinite; }
+  .animate-glow-pulse { animation: glowPulse 5s ease-in-out infinite; }
+  .animate-glow-pulse-delayed { animation: glowPulse 7s ease-in-out infinite 2s; }
+  .animate-scan-h { animation: scanH 8s linear infinite; }
+  .animate-border-sweep { animation: borderSweep 6s linear infinite; }
+
+  .skill-tree-scroll::-webkit-scrollbar { width: 3px; }
+  .skill-tree-scroll::-webkit-scrollbar-thumb { background: #cc113366; border-radius: 2px; }
+  .skill-tree-scroll { scrollbar-width: thin; scrollbar-color: #cc113344 transparent; }
+`;
+
 export function About({ onNavigate }: AboutProps) {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
 
   return (
-    <div ref={ref} className="about-root">
-      <div className="about-content-wrapper">
-        <BG />
-        <OuterFrame />
-        {/* ── TOP FOUR PANELS ── */}
-        <motion.div
-          initial={{opacity:0,y:16}}
-          animate={inView?{opacity:1,y:0}:{}}
-          transition={{duration:0.55,delay:0.05}}
-          className="about-top-grid"
-        >
-          <ProfileCard inView={inView}/>
-          <BiographyPanel inView={inView}/>
-          <CoreStatsPanel inView={inView}/>
-          <SkillTreePanel inView={inView}/>
-        </motion.div>
+    <>
+      <style>{injectedStyles}</style>
+      <div ref={ref} className="relative w-full h-full overflow-y-auto overflow-x-hidden overscroll-contain bg-[#060408] text-[#e8e0e3]">
+        <div className="relative z-10 flex flex-col pt-[80px] px-[40px] pb-0 min-h-full gap-[14px]">
+          <BG />
+          <OuterFrame />
+          
+          {/* ── TOP FOUR PANELS ── */}
+          <motion.div
+            initial={{opacity:0,y:16}}
+            animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:0.55,delay:0.05}}
+            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_1fr_270px_270px] gap-[14px] items-stretch"
+          >
+            <ProfileCard inView={inView}/>
+            <BiographyPanel inView={inView}/>
+            <CoreStatsPanel inView={inView}/>
+            <SkillTreePanel inView={inView}/>
+          </motion.div>
 
-        {/* ── LOWER CONTENT / GALLERY ── */}
-        <motion.div
-          className="about-lower-grid"
-          initial={{opacity:0,y:20}}
-          animate={inView?{opacity:1,y:0}:{}}
-          transition={{duration:0.55,delay:0.2}}
-        >
-          <AboutRailStack onNavigate={onNavigate} inView={inView}/>
-          <GallerySection/>
-        </motion.div>
+          {/* ── LOWER CONTENT / GALLERY ── */}
+          <motion.div
+            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_minmax(0,1fr)] gap-[14px] items-stretch"
+            initial={{opacity:0,y:20}}
+            animate={inView?{opacity:1,y:0}:{}}
+            transition={{duration:0.55,delay:0.2}}
+          >
+            <AboutRailStack onNavigate={onNavigate} inView={inView}/>
+            <GallerySection/>
+          </motion.div>
 
-        <NavDotsBar onNavigate={onNavigate}/>
+          <NavDotsBar onNavigate={onNavigate}/>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 function BG() {
   return (
-    <div className="bg-root">
-      <div className="bg-layer-1"/>
-      <div className="bg-layer-2"/>
-      <div className="bg-layer-3"/>
-      <div className="bg-glow-top"/>
-      <div className="bg-glow-bottom"/>
-      <div className="bg-scan-h"/>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden z-0">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_25%,rgba(36,4,14,0.95)_0%,#060408_68%)]"/>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(204,17,51,0.055)_1px,transparent_1px),linear-gradient(90deg,rgba(204,17,51,0.055)_1px,transparent_1px)] [background-size:38px_38px]"/>
+      <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(0,0,0,0.28)_3px,rgba(0,0,0,0.28)_4px)]"/>
+      <div className="absolute -top-[80px] -left-[80px] w-[500px] h-[400px] bg-[radial-gradient(circle,#cc113355_0%,transparent_70%)] animate-glow-pulse"/>
+      <div className="absolute -bottom-[100px] -right-[100px] w-[600px] h-[500px] bg-[radial-gradient(circle,#cc113333_0%,transparent_70%)] animate-glow-pulse-delayed"/>
+      <div className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#cc1133]/30 to-transparent opacity-0 animate-scan-h"/>
       {[18,38,62,82].map((p,i) => (
-        <motion.div key={i} className="bg-vert-line"
+        <motion.div key={i} className="absolute top-0 bottom-0 w-[1px]"
           animate={{opacity:[0.02,0.07,0.02]}}
           transition={{duration:4+i,repeat:Infinity,delay:i*1.4}}
           style={{background:`linear-gradient(to bottom,transparent,${R},transparent)`,left:`${p}%`}}
@@ -97,27 +147,27 @@ function BG() {
 
 function OuterFrame() {
   return (
-    <div className="outer-frame-root">
-      {['pos-top','pos-bottom'].map((c,i) => (
-        <div key={i} className={`outer-edge-h ${c}`}/>
+    <div className="pointer-events-none absolute inset-0 z-[2]">
+      {['top-0','bottom-0'].map((c,i) => (
+        <div key={i} className={`absolute left-0 right-0 h-[1.5px] bg-[linear-gradient(90deg,transparent,#cc1133,#cc1133,transparent)] shadow-[0_0_10px_#cc113388,0_0_24px_#cc113333] ${c}`}/>
       ))}
-      {['pos-left','pos-right'].map((c,i) => (
-        <div key={i} className={`outer-edge-v ${c}`}/>
+      {['left-0','right-0'].map((c,i) => (
+        <div key={i} className={`absolute top-0 bottom-0 w-[1.5px] bg-[linear-gradient(180deg,transparent,#cc1133,#cc1133,transparent)] shadow-[0_0_10px_#cc113388,0_0_24px_#cc113333] ${c}`}/>
       ))}
       {([
-        ['pos-top pos-left',    `M2 44L2 2L44 2`,   0, 0 ],
-        ['pos-top pos-right',   `M6 2L50 2L50 44`,  42,0 ],
-        ['pos-bottom pos-left', `M2 6L2 50L44 50`,  0, 42],
-        ['pos-bottom pos-right',`M6 50L50 50L50 6`, 42,42],
+        ['top-0 left-0',    `M2 44L2 2L44 2`,   0, 0 ],
+        ['top-0 right-0',   `M6 2L50 2L50 44`,  42,0 ],
+        ['bottom-0 left-0', `M2 6L2 50L44 50`,  0, 42],
+        ['bottom-0 right-0',`M6 50L50 50L50 6`, 42,42],
       ] as [string,string,number,number][]).map(([pos,d,sx,sy],i)=>(
-        <svg key={i} className={`outer-svg-corner ${pos}`} width="52" height="52" viewBox="0 0 52 52" fill="none" style={{filter:`drop-shadow(0 0 5px ${R})`}}>
+        <svg key={i} className={`absolute ${pos}`} width="52" height="52" viewBox="0 0 52 52" fill="none" style={{filter:`drop-shadow(0 0 5px ${R})`}}>
           <path d={d} stroke={R} strokeWidth="2.5" />
           <rect x={sx} y={sy} width="10" height="10" fill={R} opacity="0.95" style={{filter:`drop-shadow(0 0 4px ${R})`}}/>
         </svg>
       ))}
-      {[20,40,60,80].map(p=><div key={`t${p}`} className="outer-tick-h pos-top" style={{left:`${p}%`}}/>)}
-      {[20,40,60,80].map(p=><div key={`b${p}`} className="outer-tick-h pos-bottom" style={{left:`${p}%`}}/>)}
-      <div className="outer-sweep"/>
+      {[20,40,60,80].map(p=><div key={`t${p}`} className="absolute w-[1px] h-[12px] bg-[#cc1133]/40 top-0" style={{left:`${p}%`}}/>)}
+      {[20,40,60,80].map(p=><div key={`b${p}`} className="absolute w-[1px] h-[12px] bg-[#cc1133]/40 bottom-0" style={{left:`${p}%`}}/>)}
+      <div className="absolute top-0 h-[1.5px] w-[130px] bg-[linear-gradient(90deg,transparent,#ff2244,transparent)] shadow-[0_0_14px_#cc1133] animate-border-sweep"/>
     </div>
   );
 }
@@ -134,24 +184,24 @@ function ProfileCard({inView}:{inView:boolean}) {
   },[]);
 
   return (
-    <Panel className="profile-panel-inner">
+    <Panel className="!p-0 overflow-hidden flex-1 h-auto min-h-0">
       <Corners c={R} s={9} />
       {/* Header label */}
-      <div className="profile-header">
-        <img src="/assets/icon-kai-cat1.png" alt="" className="profile-cat-icon"/>
-        <span className="font-pixel profile-header-title">/ USER PROFILE</span>
-        <div className="profile-header-bars">
+      <div className="flex items-center gap-[8px] p-[12px_12px_4px]">
+        <img src="/assets/icon-kai-cat1.png" alt="" className="w-[14px] h-[14px] [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]"/>
+        <span className="font-pixel text-[9px] tracking-[0.1em] text-[#cc1133]">/ USER PROFILE</span>
+        <div className="flex items-center gap-[2px] ml-[4px]">
           {[1,0.6,0.4].map((o,i)=>(
-            <motion.div key={i} className="header-bar" style={{opacity:o}}
+            <motion.div key={i} className="w-[3px] h-[10px] bg-[#cc1133]" style={{opacity:o}}
               animate={{opacity:[o,o*0.2,o]}} transition={{duration:1.2,repeat:Infinity,delay:i*0.2}}/>
           ))}
         </div>
       </div>
 
       {/* Character image in glowing circular frame */}
-      <div className="avatar-wrapper">
-        <motion.div animate={{rotate:360}} transition={{duration:22,repeat:Infinity,ease:'linear'}} className="avatar-ring-outer"/>
-        <div className="avatar-tech-arcs">
+      <div className="relative flex items-center justify-center h-[226px] overflow-hidden">
+        <motion.div animate={{rotate:360}} transition={{duration:22,repeat:Infinity,ease:'linear'}} className="w-[196px] h-[196px] rounded-full border border-dashed border-[#cc1133]/20 absolute"/>
+        <div className="w-[208px] h-[208px] rounded-full border border-transparent absolute">
           {[0,60,120,180,240,300].map((deg,i)=>(
             <div key={i} style={{
               position:'absolute',top:'50%',left:'50%', width:'6px',height:'3px',
@@ -161,13 +211,13 @@ function ProfileCard({inView}:{inView:boolean}) {
             }}/>
           ))}
         </div>
-        <motion.div animate={{rotate:-360}} transition={{duration:35,repeat:Infinity,ease:'linear'}} className="avatar-ring-counter"/>
-        <div className="avatar-ring-glow"/>
-        <div className="avatar-ring-inner"/>
+        <motion.div animate={{rotate:-360}} transition={{duration:35,repeat:Infinity,ease:'linear'}} className="w-[182px] h-[182px] rounded-full border border-dashed border-[#cc1133]/20 absolute"/>
+        <div className="w-[176px] h-[176px] rounded-full shadow-[0_0_22px_#cc113399,0_0_55px_#cc113344,inset_0_0_30px_rgba(0,0,0,0.6)] border-2 border-[#cc1133] absolute"/>
+        <div className="w-[156px] h-[156px] rounded-full border border-[#cc1133]/30 shadow-[inset_0_0_14px_#cc113322] absolute"/>
         
-        {/* Character image (New Icon Applied) */}
-        <div className="avatar-image-container">
-          <img src="/assets/kai-icon-anime-wink.png" alt="Kai Shi" className="profile-avatar-img"
+        {/* Character image */}
+        <div className="absolute overflow-hidden w-[160px] h-[160px] rounded-full bg-[#10040a]/90">
+          <img src="/assets/kai-icon-anime-wink.png" alt="Kai Shi" className="w-full h-full object-cover object-top transition-transform duration-75"
             style={{
               filter: glitch
                 ? `drop-shadow(0 0 12px ${R}) brightness(1.1) saturate(1.3)`
@@ -177,8 +227,8 @@ function ProfileCard({inView}:{inView:boolean}) {
           />
         </div>
         
-        {/* Pixel heart icon (New Icon Applied) */}
-        <motion.img src="/assets/icon-kai-love.png" alt="" className="profile-heart-icon"
+        {/* Pixel heart icon */}
+        <motion.img src="/assets/icon-kai-love.png" alt="" className="absolute top-[12px] right-[18px] w-[30px] h-[30px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_8px_#cc1133]"
           animate={{scale:[1,1.18,1],opacity:[0.85,1,0.85]}}
           transition={{duration:2,repeat:Infinity}}
         />
@@ -195,32 +245,36 @@ function ProfileCard({inView}:{inView:boolean}) {
       </div>
 
       {/* Name + title */}
-      <div className="profile-name-section">
-        <div className="font-pixel profile-name"
+      <div className="text-center px-[12px] mt-[4px]">
+        <div className="font-pixel text-[22px] text-white leading-none flex items-center justify-center gap-[8px] tracking-[0.05em] transition-all"
           style={{
             textShadow: glitch
               ? `3px 0 #ff0044,-3px 0 #0088ff,0 0 24px ${R}`
               : `0 0 18px ${R}88,2px 2px 0 rgba(204,17,51,0.4)`,
           }}>
-          <span style={{color:R,fontSize:'14px'}}>✦</span> KAI SHI <span style={{color:R,fontSize:'14px'}}>✦</span>
+          <span className="text-[#cc1133] text-[14px]">✦</span> KAI SHI <span className="text-[#cc1133] text-[14px]">✦</span>
         </div>
-        <div className="font-pixel profile-title">
+        <div className="font-pixel text-[9px] tracking-[0.22em] mt-[10px] text-[#8a6878]">
           FRONTEND BUILDER <br></br> CONTENT CREATOR
         </div>
       </div>
 
       {/* Stats section */}
-      <div className="stats-container">
+      <div className="p-[20px_14px_8px]">
         {/* LVL + EXP */}
-        <div className="lvl-exp-row">
-          <motion.div className="lvl-box"
+        <div className="flex flex-col items-stretch gap-[18px] mb-[10px]">
+          <motion.div className="self-center min-w-[64px] p-[6px_12px_5px] border border-[#cc1133]/85 bg-[linear-gradient(180deg,rgba(255,34,68,0.24),rgba(204,17,51,0.12)),rgba(16,4,10,0.96)] shadow-[0_0_0_1px_rgba(255,102,136,0.12)_inset,0_0_14px_rgba(204,17,51,0.3),0_0_22px_rgba(204,17,51,0.12)] relative flex flex-col items-center justify-center [clip-path:polygon(0_0,calc(100%-7px)_0,100%_7px,100%_100%,7px_100%,0_calc(100%-7px))]"
             initial={{opacity:0,scale:0.7}} animate={inView?{opacity:1,scale:1}:{}} transition={{delay:0.35}}>
+            {/* Box pseudo corners */}
+            <div className="absolute w-[8px] h-[8px] border-t border-l border-[#ff6688]/55 top-[3px] left-[3px] pointer-events-none" />
+            <div className="absolute w-[8px] h-[8px] border-b border-r border-[#ff6688]/55 bottom-[3px] right-[3px] pointer-events-none" />
+
             <span className="font-pixel text-[7px]" style={{color:R}}>Lv.</span>
             <span className="font-pixel text-[20px] text-white" style={{textShadow:`0 0 12px ${R}`,lineHeight:1}}>21</span>
           </motion.div>
-          <div className="lvl-exp-track">
-            <div className="lvl-exp-meta">
-              <span className="font-pixel text-[7px]" style={{color:'#7a6068'}}>EXP</span>
+          <div className="flex-1 flex flex-col gap-[7px]">
+            <div className="flex justify-between items-center px-[2px]">
+              <span className="font-pixel text-[7px] text-[#7a6068]">EXP</span>
               <span className="font-pixel text-[7px]" style={{color:R3}}>12,340 / 16,000</span>
             </div>
             <SegBar value={77} color={R} segs={16} inView={inView} delay={0.4}/>
@@ -228,71 +282,71 @@ function ProfileCard({inView}:{inView:boolean}) {
         </div>
 
         {/* HP bar */}
-        <div className="hp-cp-row">
-          <div className="hp-cp-meta">
-            <span className="font-pixel hp-cp-label">HP</span>
-            <span className="font-pixel hp-cp-value">850 / 850</span>
+        <div className="flex flex-col gap-[7px] mb-[6px]">
+          <div className="flex justify-between items-center px-[2px]">
+            <span className="font-pixel text-[7px] text-[#7a6068]">HP</span>
+            <span className="font-pixel text-[7px] text-[#ff6688]">850 / 850</span>
           </div>
-          <div className="hp-cp-track">
+          <div className="w-full">
             <SegBar value={100} color={R} segs={14} inView={inView} delay={0.5}/>
           </div>
         </div>
 
         {/* CP bar */}
-        <div className="hp-cp-row mb-3">
-          <div className="hp-cp-meta">
-            <span className="font-pixel hp-cp-label">CP</span>
-            <span className="font-pixel hp-cp-value" style={{color:'#22aaff'}}>640 / 640</span>
+        <div className="flex flex-col gap-[7px] mb-[6px] pb-1">
+          <div className="flex justify-between items-center px-[2px]">
+            <span className="font-pixel text-[7px] text-[#7a6068]">CP</span>
+            <span className="font-pixel text-[7px] text-[#22aaff]">640 / 640</span>
           </div>
-          <div className="hp-cp-track">
+          <div className="w-full">
             <SegBar value={100} color="#22aaff" segs={14} inView={inView} delay={0.58}/>
           </div>
         </div>
 
         {/* STATUS: ONLINE with Diogram */}
-        <div className="status-online-box">
-          <span className="font-pixel status-label">STATUS:</span>
-          <span className="font-pixel status-dot">●</span>
-          <motion.span className="font-pixel status-text"
+        <div className="border border-[#cc1133]/30 bg-[#cc1133]/10 p-[6px_10px] flex items-center gap-[8px] my-[15px] mb-[12px]">
+          <span className="font-pixel text-[7px] text-[#7a6068]">STATUS:</span>
+          <span className="font-pixel text-[7px] text-[#cc1133]/50 tracking-[0.1em]">●</span>
+          <motion.span className="font-pixel text-[8px] text-[#22c55e]"
             animate={{opacity:[1,0.3,1]}} transition={{duration:2,repeat:Infinity}}>
             ONLINE
           </motion.span>
-          <img src="/assets/kai-icon-diogram.png" alt="waveform" className="status-diogram" />
+          <img src="/assets/kai-icon-diogram.png" alt="waveform" className="ml-auto h-[16px] drop-shadow-[0_0_4px_#cc1133] object-contain" />
         </div>
 
         {/* ─── Social Platforms ─── */}
-        <div className="profile-socials-section">
-          <div className="profile-divider-row">
-            <div className="profile-divider-glow"/>
-            <span className="font-pixel profile-micro-label">PLATFORMS</span>
-            <div className="profile-divider-glow"/>
+        <div className="px-[14px] pb-[10px]">
+          <div className="flex items-center gap-[8px] mb-[8px]">
+            <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#cc1133]/20 to-transparent"/>
+            <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.14em] whitespace-nowrap">PLATFORMS</span>
+            <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#cc1133]/20 to-transparent"/>
           </div>
-          <div className="profile-socials-col">
+          <div className="flex flex-col gap-[5px]">
             {([
               {label:'YOUTUBE', color:R},
               {label:'TIKTOK',  color:R3},
               {label:'GITHUB',  color:'#9090b8'},
             ] as const).map((s,i)=>(
-              <motion.div key={s.label} className="social-platform-chip"
+              <motion.div key={s.label} className="flex items-center gap-[8px] p-[5px_10px] border bg-[#0a0208]/80 cursor-default relative [clip-path:polygon(0_0,calc(100%-6px)_0,100%_6px,100%_100%,6px_100%,0_calc(100%-6px))] transition-all duration-200"
                 initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}
                 whileHover={{scale:1.04, boxShadow:`0 0 12px ${s.color}44`}}
                 style={{borderColor:`${s.color}33`, color:s.color}}
               >
                 <motion.span style={{fontSize:'7px', color:s.color}}
                   animate={{opacity:[1,0.35,1]}} transition={{duration:1.8+i*0.5,repeat:Infinity}}>●</motion.span>
-                <span className="font-pixel social-platform-text">{s.label}</span>
-                <div className="social-chip-arrow" style={{color:`${s.color}66`}}>›</div>
+                <span className="font-pixel text-[7px] tracking-[0.1em] flex-1">{s.label}</span>
+                <div className="text-[12px] leading-none font-mono" style={{color:`${s.color}66`}}>›</div>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* ─── Faction Row ─── */}
-        <div className="profile-faction-row">
-          <span className="font-pixel profile-micro-label">FACTION</span>
-          <div className="profile-faction-value">
+        <div className="px-[14px] pb-[14px] flex flex-col items-center gap-[6px]">
+          <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.14em] whitespace-nowrap">FACTION</span>
+          <div className="flex items-center gap-[8px] p-[6px_14px] border border-[#cc1133]/15 bg-[#cc1133]/5 w-full justify-center">
             <motion.span style={{color:R,fontSize:'7px'}} animate={{opacity:[0.6,1,0.6]}} transition={{duration:2.5,repeat:Infinity}}>◆</motion.span>
-            <span className="font-pixel" style={{fontSize:'8px', color:'#c0a8b4', letterSpacing:'0.12em'}}>INDIE CREATORS</span>
+            <span className="font-pixel text-[8px] text-[#c0a8b4] tracking-[0.12em]">INDIE CREATORS</span>
             <motion.span style={{color:R,fontSize:'7px'}} animate={{opacity:[0.6,1,0.6]}} transition={{duration:2.5,repeat:Infinity,delay:1.25}}>◆</motion.span>
           </div>
         </div>
@@ -308,46 +362,46 @@ function BiographyPanel({inView}:{inView:boolean}) {
       <Corners c={R} s={9} />
       <PanelHeader icon="/assets/icon-kai-cat1.png" label="BIOGRAPHY"/>
 
-      <div className="bio-content">
+      <div className="p-[18px_17px_14px]">
         {/* Main quote row */}
-        <motion.div className="bio-quote-row"
+        <motion.div className="relative flex gap-[14px] my-[14px] min-h-[88px]"
           initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.2,duration:0.5}}
         >
           {/* Quote text side */}
-          <div className="bio-text-side">
-            <img src="/assets/kai-icon-kutip-atas.png" className="quote-icon quote-start" alt='"'/>
-            <p className="font-display bio-text">
+          <div className="relative flex-1">
+            <img src="/assets/kai-icon-kutip-atas.png" className="absolute top-[6px] -left-[4px] w-[30px] h-[30px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
+            <p className="font-display text-[20px] leading-[1.7] text-[#e8e0e3]/90 pl-[30px] pt-[8px]">
               A digital builder crafting immersive<br/>
               web experiences through code,<br/>
               creativity, and{' '}
-              <span className="neon-flicker" style={{color:R2,fontWeight:'bold'}}>anime-powered vibes.</span>
-              <img src="/assets/kai-icon-kutip-bawah.png" className="quote-icon quote-end" alt='"'/>
+              <span className="font-bold text-[#ff2244] animate-neon-flicker">anime-powered vibes.</span>
+              <img src="/assets/kai-icon-kutip-bawah.png" className="ml-[6px] align-bottom inline-block relative -top-[2px] w-[26px] h-[26px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
             </p>
           </div>
 
-          {/* Floating mascot (New Icon Applied) */}
-          <div className="bio-mascot-wrapper">
-            <motion.div className="float-y bio-mascot-inner">
-              <img src="/assets/icon-kai-cat1.png" alt="" className="bio-mascot-img" />
-              <div className="bio-mascot-shadow" />
+          {/* Floating mascot */}
+          <div className="relative w-[110px] top-[10px] shrink-0">
+            <motion.div className="w-full h-[114px] relative animate-float-y">
+              <img src="/assets/icon-kai-cat1.png" alt="" className="w-full h-full object-cover object-top drop-shadow-[0_0_16px_#cc113388] brightness-90 rounded-[4px]" />
+              <div className="absolute inset-0 rounded-[4px] shadow-[inset_0_0_20px_rgba(204,17,51,0.3),0_0_20px_#cc113344] pointer-events-none" />
               <Corners c={R} s={6}/>
             </motion.div>
-            <div className="bio-mascot-base"/>
+            <div className="absolute -bottom-[4px] left-[10%] right-[10%] h-[6px] bg-[radial-gradient(ellipse,#cc113366,transparent_70%)] blur-[4px]"/>
           </div>
         </motion.div>
 
         {/* Code block quote card */}
-        <motion.div className="code-quote-card"
+        <motion.div className="border border-[#cc1133]/30 bg-[#cc1133]/10 p-[5px_8px] mt-[40px] mb-[14px] flex gap-[14px] items-center relative overflow-hidden"
           initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.38,duration:0.48}}
         >
-          <motion.div className="code-quote-sweep"
+          <motion.div className="absolute top-0 bottom-0 w-[40%] bg-[linear-gradient(90deg,transparent,#cc113311,transparent)] pointer-events-none"
             animate={{x:['-120%','120%']}} transition={{duration:3.5,repeat:Infinity,repeatDelay:4,ease:'easeInOut'}}
           />
-          <div className="code-quote-icon-box">
-            <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
+          <div className="w-[70px] h-[70px] border border-[#cc1133]/40 bg-[#cc1133]/10 flex mx-[14px] items-center justify-center shadow-[0_0_14px_#cc113344] rotate-45 shrink-0">
+            <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} className="-rotate-45" style={{filter:`drop-shadow(0 0 6px ${R})`}} />
           </div>
-          <div className="code-quote-content">
-            <div className="code-quote-text">
+          <div className="flex-1 flex items-center gap-[12px] justify-between">
+            <div className="flex-1 min-w-0">
               <div className="font-pixel text-[16px] mb-1.5" style={{color:R,letterSpacing:'0.1em'}}>
                 CODE IS MY WEAPON
               </div>
@@ -355,64 +409,63 @@ function BiographyPanel({inView}:{inView:boolean}) {
                 Creativity is my power.<br/>The web is my playground.
               </div>
             </div>
-            <div className="side-img">
-              <img src="/assets/kai-icon-chibi.png" alt="code" width={28} height={28} style={{filter:`drop-shadow(0 0 6px ${R})`}} />
+            <div className="ml-auto w-[100px] h-[100px] shrink-0 flex items-center justify-end">
+              <img src="/assets/kai-icon-chibi.png" alt="code" width={28} height={28} style={{filter:`drop-shadow(0 0 6px ${R})`}} className="w-full h-full object-contain [image-rendering:pixelated]" />
             </div>
           </div>
         </motion.div>
 
         {/* Tag chips */}
-        <motion.div className="tags-container"
+        <motion.div className="flex flex-wrap gap-[12px] mt-[30px]"
           initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.5,duration:0.45}}
         >
           {TAGS.map((tag,i) => (
-            <motion.div key={tag} className="tag-chip"
+            <motion.div key={tag} className="flex items-center gap-[7px] border border-[#cc1133]/30 rounded-[10px_0_10px_0] bg-[#0a0208]/85 p-[7px] cursor-default w-fit shadow-[0_0_6px_#cc113322] relative overflow-hidden"
               whileHover={{scale:1.06,boxShadow:`0 0 18px ${R}66`}}
             >
               <img src={['/assets/icon-kai-code.png','/assets/icon-kai-mekanik.png','/assets/kai-icon-cat-cyber.png','/assets/icon-kai-target.png'][i]}
-                alt="" className="tag-icon" />
-              <span className="font-pixel tag-text">{tag}</span>
+                alt="" className="w-[14px] h-[14px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc113388]" />
+              <span className="font-pixel text-[11px] tracking-[0.05em] text-[#c0a8b4]">{tag}</span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* ─── Current Mission Terminal ─── */}
-        <motion.div className="bio-mission-terminal"
+        <motion.div className="mt-[30px] border border-[#cc1133]/30 bg-[#030106]/95 relative overflow-hidden"
           initial={{opacity:0,y:12}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.65,duration:0.48}}
         >
-          <div className="bio-terminal-header">
-            <div className="bio-terminal-traffic">
+          <div className="flex items-center gap-[10px] p-[10px_12px] border-b border-[#cc1133]/15 bg-[#cc1133]/5">
+            <div className="flex gap-[5px] items-center">
               {[R,'#ffcc33','#22c55e'].map((c,i)=>(
                 <div key={i} style={{width:8,height:8,borderRadius:'50%',background:c,opacity:0.75}}/>
               ))}
             </div>
-            <span className="font-pixel bio-terminal-title-text">current_build.exe</span>
-            <motion.span className="font-pixel bio-terminal-run-label"
+            <span className="font-pixel text-[9px] text-[#5a4858] tracking-[0.06em] flex-1">current_build.exe</span>
+            <motion.span className="font-pixel text-[7px] text-[#22c55e]"
               animate={{opacity:[1,0.25,1]}} transition={{duration:1.1,repeat:Infinity}}>● RUNNING</motion.span>
           </div>
-          <div className="bio-terminal-body">
+          <div className="p-[10px_14px_12px] flex flex-col gap-[5px]">
             {([
               {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'13px'},
               {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'13px'},
               {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'13px'},
             ]).map((ln,i)=>(
-              <motion.div key={i} className="font-mono bio-terminal-line"
+              <motion.div key={i} className="font-mono text-[12px] flex gap-[6px] items-baseline whitespace-nowrap"
                 initial={{opacity:0,x:-12}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.76+i*0.14}}
               >
-                <span className="bio-terminal-prompt">{ln.prompt}</span>
+                <span className="text-[#cc1133] font-bold shrink-0">{ln.prompt}</span>
                 <span style={{color:'#6a5868', fontSize:ln.fsz}}>{ln.pre}</span>
                 <span style={{color:ln.col, fontSize:ln.fsz}}>{ln.val}</span>
               </motion.div>
             ))}
           </div>
-          {/* Scan line sweep */}
-          <motion.div className="bio-terminal-sweep"
+          <motion.div className="absolute top-0 bottom-0 w-[45%] bg-[linear-gradient(90deg,transparent,#cc113308,transparent)] pointer-events-none"
             animate={{x:['-110%','110%']}} transition={{duration:4,repeat:Infinity,repeatDelay:6,ease:'easeInOut'}}
           />
         </motion.div>
 
         {/* ─── Activity Mini Metrics ─── */}
-        <motion.div className="bio-metrics-row"
+        <motion.div className="flex mt-[30px] border border-[#cc1133]/15 bg-[#080206]/70 overflow-hidden"
           initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:0.85}}
         >
           {([
@@ -420,10 +473,10 @@ function BiographyPanel({inView}:{inView:boolean}) {
             {label:'COMMITS',  val:'340', icon:'◉', fsz:'11px'},
             {label:'STREAK',   val:'28D', icon:'▲', fsz:'11px'},
           ]).map((m,i)=>(
-            <div key={m.label} className="bio-metric-item">
-              <span className="font-pixel bio-metric-icon" style={{color:i===2?'#22c55e':R, fontSize:m.fsz}}>{m.icon}</span>
-              <span className="font-pixel bio-metric-val" style={{fontSize:m.fsz}}>{m.val}</span>
-              <span className="font-pixel bio-metric-label" style={{fontSize:m.fsz}}>{m.label}</span>
+            <div key={m.label} className="flex-1 flex flex-col items-center p-[8px_6px] gap-[10px] border-r border-[#cc1133]/10 relative last:border-r-0">
+              <span className="font-pixel text-[10px]" style={{color:i===2?'#22c55e':R, fontSize:m.fsz}}>{m.icon}</span>
+              <span className="font-pixel text-[16px] text-[#e8e0e3] leading-none tracking-[-0.01em]" style={{fontSize:m.fsz}}>{m.val}</span>
+              <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.1em]" style={{fontSize:m.fsz}}>{m.label}</span>
             </div>
           ))}
         </motion.div>
@@ -439,36 +492,36 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
     <Panel>
       <Corners c={R} s={9} />
       <PanelHeader icon="/assets/icon-kai-piala.png" label="CORE STATS"/>
-      <div className="stats-list">
+      <div className="p-[20px_14px_14px] flex flex-col gap-[30px]">
         {CORE_STATS.map((s,i) => (
           <motion.div key={s.label}
             initial={{opacity:0,x:14}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.1+i*0.07,duration:0.4}}
             onMouseEnter={()=>setHov(i)} onMouseLeave={()=>setHov(null)}
           >
-            <div className="stat-row-header">
-              <div className="stat-icon-box" style={{
+            <div className="flex items-center gap-[10px] mb-[16px]">
+              <div className="w-[27px] h-[27px] shrink-0 flex items-center justify-center rotate-45 transition-all duration-200" style={{
                 border:`1px solid ${hov===i?R:DIM}`,
                 background: hov===i?'rgba(204,17,51,0.18)':'rgba(10,2,8,0.8)',
                 boxShadow: hov===i?`0 0 12px ${R}55`:'none',
               }}>
                 <StatIcon type={s.icon} active={hov===i}/>
               </div>
-              <span className="font-pixel stat-label" style={{color: hov===i?'#e8e0e3':'#a09098'}}>
+              <span className="font-pixel text-[10px] flex-1 tracking-[0.05em] transition-colors duration-200" style={{color: hov===i?'#e8e0e3':'#a09098'}}>
                 {s.label}
               </span>
-              <motion.span className="font-pixel stat-value"
+              <motion.span className="font-pixel text-[10px] transition-colors duration-200"
                 animate={hov===i?{textShadow:`0 0 10px ${R},0 0 20px ${R}44`}:{textShadow:'none'}}
                 style={{color: hov===i?R2:R}}>
                 {s.value}%
               </motion.span>
             </div>
-            <div className="stat-bar-container">
+            <div className="flex items-center gap-[4px]">
               <div style={{flex:1}}>
                 <SegBar value={s.value} color={R} segs={16} inView={inView} delay={0.15+i*0.07} active={hov===i}/>
               </div>
               <motion.div
                 animate={hov===i ?{boxShadow:`0 0 10px ${R},0 0 20px ${R}44`,background:R2,scale:1.2} :{boxShadow:`0 0 5px ${R}88`,background:R,scale:1}}
-                transition={{duration:0.2}} style={{width:'8px',height:'8px',borderRadius:'50%',flexShrink:0}}
+                transition={{duration:0.2}} className="w-[8px] h-[8px] rounded-full shrink-0"
               />
             </div>
           </motion.div>
@@ -476,28 +529,28 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
       </div>
 
       {/* ─── Overall Power Block ─── */}
-      <motion.div className="stats-overall-block"
+      <motion.div className="p-[30px_14px_14px] border-t border-[#cc1133]/15 mt-[30px]"
         initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.72}}
       >
-        <div className="stats-overall-header">
+        <div className="flex items-center justify-between mb-[6px]">
           <span className="font-pixel" style={{fontSize:'7px',color:'#4a3040',letterSpacing:'0.12em'}}>OVERALL POWER</span>
-          <motion.div className="power-rank-pill"
+          <motion.div className="p-[3px_10px] bg-[#cc1133] [clip-path:polygon(0_0,calc(100%-5px)_0,100%_5px,100%_100%,5px_100%,0_calc(100%-5px))]"
             animate={{boxShadow:[`0 0 8px ${R}55`,`0 0 22px ${R}99`,`0 0 8px ${R}55`]}}
             transition={{duration:2.6,repeat:Infinity}}
           >
             <span className="font-pixel" style={{fontSize:'7px',color:'#fff',letterSpacing:'0.1em'}}>S-RANK</span>
           </motion.div>
         </div>
-        <div className="stats-overall-value-row">
-          <motion.span className="font-pixel stats-overall-number"
+        <div className="flex items-baseline gap-[8px] mb-[8px]">
+          <motion.span className="font-pixel text-[25px] text-[#cc1133] leading-none tracking-[-0.02em]"
             animate={{textShadow:[`0 0 12px ${R}66`,`0 0 26px ${R}cc`,`0 0 12px ${R}66`]}}
             transition={{duration:3.2,repeat:Infinity}}
           >87.0</motion.span>
-          <div className="stats-overall-trend">
+          <div className="flex items-center gap-[3px]">
             <span style={{color:'#22c55e',fontSize:'12px',marginBottom:'5px'}}>▲</span>
             <span className="font-pixel" style={{fontSize:'7px',color:'#22c55e',letterSpacing:'0.05em'}}>+2.4%</span>
           </div>
-          <div className="stats-overall-label-right">
+          <div className="ml-auto flex items-center">
             <span className="font-pixel" style={{fontSize:'6px',color:'#4a3040'}}>AVG / 6 STATS</span>
           </div>
         </div>
@@ -521,7 +574,6 @@ function StatIcon({type,active=false}:{type:string;active?:boolean}) {
     cycle: 'rotate(-45deg)',
   };
   const rot = rotMap[type] ?? 'rotate(0deg)';
-  // add padding to certain icons to make them more visually balanced
   const p = (type === 'brain' || type === 'lightning' || type === 'cycle' || type === 'palette' || type === 'puzzle') ? 1 : 0;
   switch(type) {
     case 'code': return (
@@ -571,14 +623,14 @@ function SkillTreePanel({inView}:{inView:boolean}) {
       <Corners c={R} s={9} />
       <PanelHeader icon="/assets/icon-kai-mekanik.png" label="SKILL TREE"/>
 
-      <div className="skill-tree-content" style={{overflowY:'auto',overflowX:'hidden'}}>
+      <div className="p-[4px_14px_0] flex-1 overflow-y-auto overflow-x-hidden skill-tree-scroll">
         {/* ── ROW 1: FRONTEND ◄─── heart ───► DESIGN ── */}
-        <div className="skill-row">
+        <div className="flex justify-center items-center gap-0 mb-0 relative">
           <SkillHex skill={skills[0]} hov={hov} setHov={setHov} inView={inView} delay={0.15}/>
-          <div className="skill-connector-h">
+          <div className="flex items-center flex-1 px-[4px] mb-[22px]">
             <span className="font-pixel text-[7px]" style={{color:`${R}88`}}>◄</span>
-            <div className="skill-connector-line"/>
-            <motion.div className="skill-heart-node"
+            <div className="flex-1 h-[1px] bg-[linear-gradient(90deg,#cc113355,#cc113388,#cc113355)]"/>
+            <motion.div className="w-[20px] h-[20px] shrink-0 mx-[4px] relative"
               animate={{ scale:[1,1.15,1]}}
               transition={{ duration:1.8, repeat:Infinity, ease:'easeInOut' }}
             >
@@ -586,58 +638,58 @@ function SkillTreePanel({inView}:{inView:boolean}) {
                 <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
               </svg>
             </motion.div>
-            <div className="skill-connector-line"/>
+            <div className="flex-1 h-[1px] bg-[linear-gradient(90deg,#cc113355,#cc113388,#cc113355)]"/>
             <span className="font-pixel text-[7px]" style={{color:`${R}88`}}>►</span>
           </div>
           <SkillHex skill={skills[1]} hov={hov} setHov={setHov} inView={inView} delay={0.23}/>
         </div>
 
         {/* v connector 1→2 */}
-        <div className="skill-connector-v">
-          <div className="skill-v-line"/><div className="skill-v-line"/><div className="skill-v-line"/>
+        <div className="flex justify-between h-[14px] px-[26px]">
+          <div className="w-[1px] h-full bg-[linear-gradient(to_bottom,#cc113355,#cc113322)]"/><div className="w-[1px] h-full bg-[linear-gradient(to_bottom,#cc113355,#cc113322)]"/><div className="w-[1px] h-full bg-[linear-gradient(to_bottom,#cc113355,#cc113322)]"/>
         </div>
 
         {/* ── ROW 2: REACT · TAILWIND · JS ── */}
-        <div className="skill-row-2">
-          <div className="skill-row-2-bg"/>
+        <div className="flex justify-between mb-0 relative">
+          <div className="absolute top-[30px] left-[26px] right-[26px] h-[1px] pointer-events-none" style={{background:`linear-gradient(90deg,transparent,#cc113344,#cc113355,#cc113344,transparent)`}}/>
           {skills.slice(2,5).map((sk,i)=>(
             <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.32+i*0.09}/>
           ))}
         </div>
 
         {/* v connector 2→3 */}
-        <div className="skill-connector-v">
-          {[0,1,2].map(i=>(<div key={i} className="skill-v-line"/>))}
+        <div className="flex justify-between h-[14px] px-[26px]">
+          {[0,1,2].map(i=>(<div key={i} className="w-[1px] h-full bg-[linear-gradient(to_bottom,#cc113355,#cc113322)]"/>))}
         </div>
 
         {/* ── ROW 3: TYPESCRIPT · NEXT.JS · NODE.JS ── */}
-        <div className="skill-row-2">
-          <div className="skill-row-2-bg" style={{background:`linear-gradient(90deg,transparent,#3178c644,#3178c666,#3178c644,transparent)`}}/>
+        <div className="flex justify-between mb-0 relative">
+          <div className="absolute top-[30px] left-[26px] right-[26px] h-[1px] pointer-events-none" style={{background:`linear-gradient(90deg,transparent,#3178c644,#3178c666,#3178c644,transparent)`}}/>
           {skills.slice(5,8).map((sk,i)=>(
             <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.44+i*0.09}/>
           ))}
         </div>
 
         {/* v connector 3→4 */}
-        <div className="skill-connector-v">
-          {[0,1,2].map(i=>(<div key={i} className="skill-v-line"/>))}
+        <div className="flex justify-between h-[14px] px-[26px]">
+          {[0,1,2].map(i=>(<div key={i} className="w-[1px] h-full bg-[linear-gradient(to_bottom,#cc113355,#cc113322)]"/>))}
         </div>
 
         {/* ── ROW 4: HTML5 · GSAP · GIT ── */}
-        <div className="skill-row-2">
-          <div className="skill-row-2-bg" style={{background:`linear-gradient(90deg,transparent,#e34f2644,#88ce0244,transparent)`}}/>
+        <div className="flex justify-between mb-0 relative">
+          <div className="absolute top-[30px] left-[26px] right-[26px] h-[1px] pointer-events-none" style={{background:`linear-gradient(90deg,transparent,#e34f2644,#88ce0244,transparent)`}}/>
           {skills.slice(8,11).map((sk,i)=>(
             <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.56+i*0.09}/>
           ))}
         </div>
 
         {/* v connector 4→5 (dim = locked) */}
-        <div className="skill-connector-v">
-          {[0,1,2].map(i=>(<div key={i} className="skill-v-line-dim"/>))}
+        <div className="flex justify-between h-[14px] px-[26px]">
+          {[0,1,2].map(i=>(<div key={i} className="w-[1px] h-full bg-[linear-gradient(to_bottom,#3d0f1a88,#3d0f1a22)]"/>))}
         </div>
 
         {/* ── ROW 5: Locked ── */}
-        <div className="skill-row-3">
+        <div className="flex justify-between mb-[14px]">
           {skills.slice(11).map((sk,i)=>(
             <SkillHex key={sk.id} skill={sk} hov={hov} setHov={setHov} inView={inView} delay={0.68+i*0.07}/>
           ))}
@@ -645,27 +697,27 @@ function SkillTreePanel({inView}:{inView:boolean}) {
       </div>
 
       {/* ─── Skill Summary Bar ─── */}
-      <div className="skill-summary-bar">
-        <div className="skill-summary-cell">
-          <span className="font-pixel skill-summary-label">UNLOCKED</span>
-          <div className="skill-summary-count-row">
-            <motion.span className="font-pixel skill-summary-count-main"
+      <div className="flex items-stretch mx-[14px] my-[10px] mt-[4px] border border-[#3d0f1a]/30 bg-[#080206]/80 overflow-hidden min-h-[58px]">
+        <div className="flex-1 flex flex-col items-center justify-center p-[8px_4px] gap-[3px]">
+          <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.1em] whitespace-nowrap">UNLOCKED</span>
+          <div className="flex items-baseline gap-[2px]">
+            <motion.span className="font-pixel text-[22px] text-[#cc1133] leading-none"
               animate={{textShadow:[`0 0 8px ${R}55`,`0 0 18px ${R}bb`,`0 0 8px ${R}55`]}}
               transition={{duration:2.8,repeat:Infinity}}
             >11</motion.span>
-            <span className="font-pixel skill-summary-count-denom">/14</span>
+            <span className="font-pixel text-[9px] text-[#4a3040]">/14</span>
           </div>
         </div>
-        <div className="skill-summary-sep"/>
-        <div className="skill-summary-cell" style={{flex:2,alignItems:'flex-start',paddingLeft:'10px'}}>
-          <span className="font-pixel skill-summary-label">NEXT UNLOCK</span>
+        <div className="w-[1px] bg-[linear-gradient(to_bottom,transparent,#cc113333,transparent)] shrink-0 self-stretch"/>
+        <div className="flex-1 flex flex-col items-center justify-center p-[8px_4px] gap-[3px]" style={{flex:2,alignItems:'flex-start',paddingLeft:'10px'}}>
+          <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.1em] whitespace-nowrap">NEXT UNLOCK</span>
           <span className="font-pixel" style={{fontSize:'8px',color:'#c0a8b4',letterSpacing:'0.08em',marginBottom:'5px'}}>VUE 3</span>
           <SegBar value={42} color={`${R}99`} segs={10} inView={inView} delay={0.62}/>
         </div>
-        <div className="skill-summary-sep"/>
-        <div className="skill-summary-cell">
-          <span className="font-pixel skill-summary-label">MASTERY</span>
-          <motion.span className="font-pixel skill-summary-mastery"
+        <div className="w-[1px] bg-[linear-gradient(to_bottom,transparent,#cc113333,transparent)] shrink-0 self-stretch"/>
+        <div className="flex-1 flex flex-col items-center justify-center p-[8px_4px] gap-[3px]">
+          <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.1em] whitespace-nowrap">MASTERY</span>
+          <motion.span className="font-pixel text-[20px] text-[#ff8844] leading-none"
             animate={{textShadow:[`0 0 8px #ff884455`,`0 0 18px #ff884499`,`0 0 8px #ff884455`]}}
             transition={{duration:3.5,repeat:Infinity}}
           >A+</motion.span>
@@ -673,8 +725,8 @@ function SkillTreePanel({inView}:{inView:boolean}) {
       </div>
 
       {/* VIEW DETAILS button */}
-      <div className="skill-btn-wrapper">
-        <motion.button className="font-pixel skill-btn"
+      <div className="px-[14px] pb-[14px]">
+        <motion.button className="w-full font-pixel text-[8px] tracking-[0.1em] py-[10px] border border-[#cc1133]/40 text-[#cc1133] bg-[#cc1133]/10 transition-all duration-200 relative overflow-hidden cursor-pointer"
           whileHover={{scale:1.02,boxShadow:`0 0 22px ${R}55`}} whileTap={{scale:0.97}}
           onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background=`rgba(204,17,51,0.18)`;}}
           onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background=`rgba(204,17,51,0.08)`;}}
@@ -711,7 +763,7 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
   },[skill.locked,skill.id]);
 
   return (
-    <motion.div className="skill-hex-wrapper"
+    <motion.div className="flex flex-col items-center gap-[5px]"
       initial={{opacity:0,scale:0.6}}
       animate={inView?{opacity:1,scale:1}:{}}
       transition={{delay,duration:0.38,type:'spring',stiffness:200}}
@@ -719,7 +771,7 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
       onMouseLeave={()=>setHov(null)}
       style={{cursor:skill.locked?'default':'pointer'}}
     >
-      <motion.div className="skill-hex-shape"
+      <motion.div className="w-[56px] h-[56px] relative flex items-center justify-center transition-colors duration-200 [clip-path:polygon(50%_0%,93%_25%,93%_75%,50%_100%,7%_75%,7%_25%)]"
         animate={{
           boxShadow: skill.locked ? 'none'
             : glitch ? `0 0 28px ${c}cc, 0 0 6px #ff0044 inset`
@@ -729,7 +781,6 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
         }}
         transition={{duration: glitch?0.04:0.2}}
         style={{
-          position:'relative', overflow:'hidden',
           background: skill.locked?'rgba(8,2,6,0.6)':'rgba(14,4,10,0.95)',
           borderColor: skill.locked?`${DIM}44`:glitch?R2:isHov?c:`${c}55`,
         }}
@@ -770,10 +821,9 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
         )}
       </motion.div>
 
-      <span className="font-pixel skill-hex-label" style={{
+      <span className="font-pixel text-[6px] tracking-[0.08em] text-center transition-colors duration-200" style={{
         color:       skill.locked?'#2a1020':glitch?R2:isHov?c:'#887078',
         textShadow:  glitch&&!skill.locked?`0 0 10px ${R}`:'none',
-        transition:  glitch?'none':'all 0.2s',
       }}>
         {skill.label}
       </span>
@@ -898,45 +948,45 @@ function AboutRailStack({inView}: {onNavigate:(id:SectionId)=>void;inView:boolea
   ];
 
   return (
-    <div className="about-rail-stack">
-      <Panel className="about-rail-panel about-broadcast-panel">
+    <div className="flex flex-col gap-[14px] h-full">
+      <Panel className="min-h-0 flex-1">
         <Corners c={R} s={9} />
         <PanelHeader icon="/assets/icon-kai-diamond.png" label="BROADCAST LOG" />
-        <div className="about-broadcast-body">
-          <div className="about-broadcast-hero">
-            <div className="about-broadcast-image-frame">
-              <img src="/assets/KaiShi-Main.png" alt="Kai Shi" className="about-broadcast-image" />
-              <div className="about-broadcast-image-glow" />
+        <div className="flex-1 flex flex-col gap-[12px] p-[12px_14px_14px]">
+          <div className="flex gap-[12px] items-stretch">
+            <div className="relative w-[100px] shrink-0 overflow-hidden border border-[#cc1133]/30 bg-[#0a0208]/90">
+              <img src="/assets/KaiShi-Main.png" alt="Kai Shi" className="w-full h-full min-h-[108px] object-cover object-top block" />
+              <div className="absolute inset-0 shadow-[inset_0_0_24px_rgba(204,17,51,0.22),0_0_18px_rgba(204,17,51,0.12)] pointer-events-none" />
             </div>
-            <div className="about-broadcast-summary">
-              <div className="font-pixel about-broadcast-title">CHANNEL NOTES</div>
-              <p className="about-broadcast-text">
+            <div className="min-w-0 flex-1 flex flex-col justify-center gap-[8px]">
+              <div className="font-pixel text-[7px] tracking-[0.14em] text-[#cc1133]">CHANNEL NOTES</div>
+              <p className="m-0 text-[10px] leading-[1.65] text-[#c7b6bd]">
                 Built for late-night pushes, polished motion, and a clean red-signal UI that keeps the archive readable.
               </p>
             </div>
           </div>
 
-          <div className="about-broadcast-metrics">
+          <div className="grid grid-cols-1 gap-[8px]">
             {broadcastNotes.map((note, i) => (
               <motion.div
                 key={note.label}
-                className="about-broadcast-metric"
+                className="flex items-center justify-between gap-[12px] border border-[#3d0f1a]/75 bg-[#0a0208]/80 p-[8px_10px]"
                 initial={{ opacity: 0, y: 6 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.3, delay: 0.22 + i * 0.06 }}
                 style={{ borderColor: `${note.color}33` }}
               >
-                <span className="about-broadcast-metric-label">{note.label}</span>
-                <span className="font-pixel about-broadcast-metric-value" style={{ color: note.color }}>
+                <span className="text-[6px] tracking-[0.12em] text-[#8a6878]">{note.label}</span>
+                <span className="font-pixel text-[8px] tracking-[0.1em]" style={{ color: note.color }}>
                   {note.value}
                 </span>
               </motion.div>
             ))}
           </div>
 
-          <div className="about-broadcast-footer">
-            <img src="/assets/kai-icon-diogram.png" alt="" className="about-broadcast-wave" />
-            <span className="font-pixel about-broadcast-footer-text">LIVE ARCHIVE FEED</span>
+          <div className="flex items-center gap-[10px] border border-[#cc1133]/20 bg-[#cc1133]/5 p-[8px_10px]">
+            <img src="/assets/kai-icon-diogram.png" alt="" className="w-[54px] h-[18px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_6px_rgba(204,17,51,0.65)] shrink-0" />
+            <span className="font-pixel text-[7px] tracking-[0.12em] text-[#c0a8b4]">LIVE ARCHIVE FEED</span>
           </div>
         </div>
       </Panel>
@@ -959,28 +1009,28 @@ function GallerySection() {
 
   return (
     <div ref={ref}>
-      <Panel className="gallery-panel">
+      <Panel className="p-0 overflow-visible relative w-full min-[1100px]:w-auto ml-0 justify-center flex-1">
         <Corners c={R} s={9} />
         {/* Outer nav arrows */}
-        <GalleryArrow dir="left"  onClick={prev} className="gallery-nav-left"/>
-        <GalleryArrow dir="right" onClick={next} className="gallery-nav-right"/>
+        <GalleryArrow dir="left"  onClick={prev} className="-left-[24px]"/>
+        <GalleryArrow dir="right" onClick={next} className="-right-[24px]"/>
 
         {/* Header row */}
-        <div className="gallery-header">
-          <div className="gallery-header-title">
-            <img src="/assets/icon-kai-cat1.png" alt="" className="panel-header-icon"/>
+        <div className="flex items-center gap-[10px] p-[10px_16px] border-b border-[#3d0f1a]/70 flex-wrap row-gap-[6px]">
+          <div className="flex items-center gap-[8px] shrink-0">
+            <img src="/assets/icon-kai-cat1.png" alt="" className="w-[16px] h-[16px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_5px_#cc1133]"/>
             <span className="font-pixel text-[10px] tracking-widest" style={{color:R}}>DIGITAL LOGS</span>
           </div>
 
           {/* Filter tabs */}
-          <div className="gallery-filters">
+          <div className="flex gap-[6px] items-center">
             {GALLERY_FILTERS.map(f=>(
               <motion.button key={f} onClick={() => {
                 setFilter(f);
                 setSelected(0);
               }}
                 whileHover={{scale:1.06}} whileTap={{scale:0.94}}
-                className="font-pixel gallery-filter-btn"
+                className="font-pixel text-[7px] tracking-[0.05em] p-[5px_12px] transition-all duration-150 cursor-pointer"
                 style={{
                   border:`1px solid ${filter===f?R:'rgba(61,15,26,0.6)'}`,
                   background: filter===f?R:'rgba(8,2,6,0.8)',
@@ -992,25 +1042,25 @@ function GallerySection() {
           </div>
 
           {/* Right: sync text + live clock */}
-          <div className="gallery-sync-info">
+          <div className="ml-auto flex items-center gap-[10px]">
             <motion.span className="font-pixel text-[7px]" style={{color:'#3a2030'}}
               animate={{opacity:[0.4,0.9,0.4]}} transition={{duration:3,repeat:Infinity}}>
               SWITCH LOG • PROFILE DATA SYNCED
             </motion.span>
-            <span className="font-pixel gallery-clock">
+            <span className="font-pixel text-[8px] tabular-nums text-[#e8e0e3] bg-[#cc1133]/10 border border-[#cc1133]/30 p-[3px_8px]">
               {pad(time.getHours())}:{pad(time.getMinutes())}:{pad(time.getSeconds())}
             </span>
           </div>
         </div>
 
         {/* Cards strip */}
-        <div className="gallery-cards-viewport">
-          <div className="gallery-cards-track">
+        <div className="p-[14px_16px_0] overflow-hidden">
+          <div className="flex gap-[10px] items-stretch min-h-[240px]">
             <AnimatePresence mode="popLayout">
               {items.map((item,i)=>{
                 const isSel = i===selected;
                 return (
-                  <motion.div key={`${filter}-${item.id}`} className="gallery-card"
+                  <motion.div key={`${filter}-${item.id}`} className="relative overflow-hidden cursor-pointer min-w-0 shrink-0 transition-all duration-300"
                     layout onClick={()=>setSelected(i)}
                     initial={{opacity:0,scale:0.88}} animate={{opacity:1,scale:1,flex:isSel?2.8:1}} exit={{opacity:0,scale:0.88}}
                     transition={{duration:0.35,ease:[0.16,1,0.3,1]}}
@@ -1020,21 +1070,21 @@ function GallerySection() {
                     }}
                   >
                     {/* Background image */}
-                    <img src={item.image} alt={item.title} className="gallery-card-img"
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover absolute inset-0 transition-all duration-300"
                       style={{ filter: isSel?'brightness(0.75) saturate(1.2)':'brightness(0.45) saturate(0.65)' }}
                     />
-                    {isSel && <div className="gallery-card-tint"/>}
-                    <div className="gallery-card-gradient"/>
+                    {isSel && <div className="absolute inset-0 bg-[#cc1133]/10 pointer-events-none"/>}
+                    <div className="absolute bottom-0 left-0 right-0 bg-[linear-gradient(to_top,rgba(4,1,10,0.98)_0%,rgba(4,1,10,0.65)_45%,transparent_85%)] pointer-events-none h-full"/>
 
                     {/* SELECTED badge */}
                     {isSel && (
-                      <motion.div className="gallery-badge" initial={{y:-20,opacity:0}} animate={{y:0,opacity:1}}>
-                        <span className="font-pixel gallery-badge-text">SELECTED</span>
+                      <motion.div className="absolute top-0 left-1/2 -translate-x-1/2 bg-[#cc1133] p-[4px_18px] [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))] shadow-[0_0_18px_#cc1133,0_2px_8px_rgba(204,17,51,0.4)] z-10" initial={{y:-20,opacity:0}} animate={{y:0,opacity:1}}>
+                        <span className="font-pixel text-[7px] text-white tracking-[0.1em]">SELECTED</span>
                       </motion.div>
                     )}
 
                     {/* Card labels */}
-                    <div className="gallery-card-labels">
+                    <div className="absolute bottom-0 left-0 right-0 p-[12px_12px] z-[4]">
                       {isSel ? (
                         <motion.div initial={{opacity:0,y:6}} animate={{opacity:1,y:0}}>
                           <div className="font-pixel text-[12px] text-white" style={{textShadow:`0 0 10px ${R}`,letterSpacing:'0.05em'}}>
@@ -1067,10 +1117,10 @@ function GallerySection() {
         </div>
 
         {/* Diamond dot row */}
-        <div className="gallery-dots">
+        <div className="flex justify-center items-center gap-[12px] p-[12px_16px_14px]">
           {items.map((_,i)=>(
-            <button key={i} onClick={()=>setSelected(i)} className="gallery-dot-btn">
-              <motion.div className="gallery-dot-shape"
+            <button key={i} onClick={()=>setSelected(i)} className="w-[20px] h-[20px] flex items-center justify-center bg-transparent border-none cursor-pointer p-0">
+              <motion.div className="border-[1.5px] border-[#cc1133]/30 block"
                 animate={{
                   width:  i===selected?'12px':'8px', height: i===selected?'12px':'8px',
                   background: i===selected?R:'transparent', borderColor: i===selected?R:`${R}44`,
@@ -1094,7 +1144,7 @@ function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.78, duration: 0.5 }}
-      className="nav-dots-bar flex items-center justify-center gap-4"
+      className="flex items-center justify-center gap-4 pb-[30px] mt-[15px]"
     >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('hero')} side="left" />
 
@@ -1167,8 +1217,8 @@ function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>
 
 function Panel({children,style={},className=''}:{children:React.ReactNode;style?:React.CSSProperties;className?:string}) {
   return (
-    <div className={`kai-panel ${className}`} style={style}>
-      <div className="panel-highlight"/>
+    <div className={`relative border border-[#3d0f1a]/85 bg-[#070205]/92 shadow-[0_0_0_1px_rgba(204,17,51,0.05),0_0_24px_rgba(204,17,51,0.08),inset_0_0_28px_rgba(0,0,0,0.55)] backdrop-blur-[6px] h-auto flex flex-col ${className}`} style={style}>
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-[linear-gradient(90deg,transparent,#cc113344,transparent)] pointer-events-none"/>
       {children}
     </div>
   );
@@ -1176,15 +1226,15 @@ function Panel({children,style={},className=''}:{children:React.ReactNode;style?
 
 function PanelHeader({icon,label}:{icon:string;label:string}) {
   return (
-    <div className="panel-header-root">
-      <img src={icon} alt="" className="panel-header-icon"/>
-      <span className="font-pixel text-[9px] tracking-widest" style={{color:R}}>{label}</span>
-      <motion.span className="font-pixel text-[7px] ml-0.5" style={{color:`${R}55`}}
+    <div className="flex items-center gap-[8px] p-[10px_14px_8px] border-b border-[#3d0f1a]/60 mb-[2px]">
+      <img src={icon} alt="" className="w-[16px] h-[16px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_5px_#cc1133]"/>
+      <span className="font-pixel text-[9px] tracking-widest text-[#cc1133]">{label}</span>
+      <motion.span className="font-pixel text-[7px] ml-0.5 text-[#cc1133]/55"
         animate={{opacity:[0.3,0.8,0.3]}} transition={{duration:2.5,repeat:Infinity}}>✕</motion.span>
-      <div style={{flex:1,height:'1px',background:`linear-gradient(90deg,${R}33,transparent)`,marginLeft:'4px'}}/>
-      <div style={{display:'flex',gap:'3px'}}>
+      <div className="flex-1 h-[1px] bg-[linear-gradient(90deg,#cc113333,transparent)] ml-[4px]"/>
+      <div className="flex gap-[3px]">
         {[0.4,0.7,1].map((o,i)=>(
-          <div key={i} style={{width:'4px',height:'4px',borderRadius:'50%',background:R,opacity:o,boxShadow:`0 0 4px ${R}`}}/>
+          <div key={i} className="w-[4px] h-[4px] rounded-full bg-[#cc1133]" style={{opacity:o,boxShadow:'0 0 4px #cc1133'}}/>
         ))}
       </div>
     </div>
@@ -1196,9 +1246,9 @@ function SegBar({value,color,segs=18,inView,delay=0,active=false}:{
 }) {
   const filled = Math.round((value/100)*segs);
   return (
-    <div className="seg-bar">
+    <div className="flex gap-[2px] w-full">
       {Array.from({length:segs}).map((_,i)=>(
-        <motion.div key={i} className="seg-chunk"
+        <motion.div key={i} className="flex-1 h-[7px] transition-shadow duration-150"
           initial={{opacity:0,scaleY:0.3}}
           animate={inView!==undefined
             ?(inView&&i<filled?{opacity:1,scaleY:1}:{opacity:i<filled?0.15:0.07,scaleY:1})
@@ -1217,7 +1267,7 @@ function SegBar({value,color,segs=18,inView,delay=0,active=false}:{
 function GalleryArrow({dir,onClick,className=''}:{dir:'left'|'right';onClick:()=>void;className?:string}) {
   return (
     <motion.button onClick={onClick} whileHover={{scale:1.14,boxShadow:`0 0 20px ${R}77`}} whileTap={{scale:0.9}}
-      className={`font-pixel gallery-nav-arrow ${className}`}>
+      className={`font-pixel absolute top-1/2 -translate-y-1/2 z-20 w-[36px] h-[36px] flex items-center justify-center border-[1.5px] border-[#cc1133]/40 text-[#cc1133] bg-[#060208]/95 text-[12px] cursor-pointer [clip-path:polygon(4px_0,100%_0,100%_calc(100%-4px),calc(100%-4px)_100%,0_100%,0_4px)] shadow-[0_0_10px_#cc113333] ${className}`}>
       {dir==='left'?'◀':'▶'}
     </motion.button>
   );
