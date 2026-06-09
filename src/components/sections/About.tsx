@@ -36,9 +36,6 @@ const R2  = '#ff2244';
 const R3  = '#ff6688';
 const DIM = '#3d0f1a';
 
-/* ══════════════════════════════════════════════════
-   ROOT
-══════════════════════════════════════════════════ */
 export function About({ onNavigate }: AboutProps) {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
@@ -78,9 +75,6 @@ export function About({ onNavigate }: AboutProps) {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   BACKGROUND
-══════════════════════════════════════════════════ */
 function BG() {
   return (
     <div className="bg-root">
@@ -101,9 +95,6 @@ function BG() {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   OUTER FRAME
-══════════════════════════════════════════════════ */
 function OuterFrame() {
   return (
     <div className="outer-frame-root">
@@ -131,9 +122,6 @@ function OuterFrame() {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   PROFILE CARD
-══════════════════════════════════════════════════ */
 function ProfileCard({inView}:{inView:boolean}) {
   const [glitch,setGlitch] = useState(false);
   useEffect(()=>{
@@ -314,9 +302,6 @@ function ProfileCard({inView}:{inView:boolean}) {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   BIOGRAPHY PANEL
-══════════════════════════════════════════════════ */
 function BiographyPanel({inView}:{inView:boolean}) {
   return (
     <Panel>
@@ -448,9 +433,6 @@ function BiographyPanel({inView}:{inView:boolean}) {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   CORE STATS PANEL
-══════════════════════════════════════════════════ */
 function CoreStatsPanel({inView}:{inView:boolean}) {
   const [hov,setHov] = useState<number|null>(null);
   return (
@@ -564,17 +546,9 @@ function StatIcon({type,active=false}:{type:string;active?:boolean}) {
   }
 }
 
-/* ══════════════════════════════════════════════════
-   SKILL TREE PANEL
-══════════════════════════════════════════════════ */
 function SkillTreePanel({inView}:{inView:boolean}) {
   const [hov,setHov] = useState<number|null>(null);
 
-  // Row 1 — core disciplines (2)
-  // Row 2 — JS ecosystem (3)
-  // Row 3 — TypeScript / Next.js / Node.js (3 NEW)
-  // Row 4 — HTML5 / GSAP / Git (3 NEW)
-  // Row 5 — locked (3)
   const skills = [
     { label:'FRONTEND',   icon:<SkillCodeIcon/>,    locked:false, color:R,         id:0  },
     { label:'DESIGN',     icon:<SkillPenIcon/>,     locked:false, color:R,         id:1  },
@@ -605,7 +579,7 @@ function SkillTreePanel({inView}:{inView:boolean}) {
             <span className="font-pixel text-[7px]" style={{color:`${R}88`}}>◄</span>
             <div className="skill-connector-line"/>
             <motion.div className="skill-heart-node"
-              animate={{ scale:[1,1.15,1], boxShadow:[`0 0 8px ${R}66`,`0 0 22px ${R}cc`,`0 0 8px ${R}66`] }}
+              animate={{ scale:[1,1.15,1]}}
               transition={{ duration:1.8, repeat:Infinity, ease:'easeInOut' }}
             >
               <svg viewBox="0 0 24 24" fill={R} style={{filter:`drop-shadow(0 0 6px ${R})`}}>
@@ -807,9 +781,6 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
   );
 }
 
-/* ──────────────────────────────────────────────────
-   SKILL ICONS — existing
-────────────────────────────────────────────────── */
 function SkillCodeIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
@@ -851,9 +822,6 @@ function SkillJSIcon() {
   );
 }
 
-/* ──────────────────────────────────────────────────
-   SKILL ICONS — new (rows 3 & 4)
-────────────────────────────────────────────────── */
 function SkillTSIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
@@ -922,9 +890,6 @@ function SkillGitIcon() {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   GALLERY / DIGITAL LOGS
-══════════════════════════════════════════════════ */
 function AboutRailStack({inView}: {onNavigate:(id:SectionId)=>void;inView:boolean}) {
   const broadcastNotes = [
     { label: 'MODE', value: 'ACTIVE', color: '#22c55e' },
@@ -1121,9 +1086,6 @@ function GallerySection() {
   );
 }
 
-/* ══════════════════════════════════════════════════
-   NAV DOTS BAR
-══════════════════════════════════════════════════ */
 function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
   const sections: SectionId[] = ['hero','about','skills','projects','contact'];
   const labels: Record<SectionId,string> = {hero:'INTRO',about:'PROFILE',skills:'INVENTOR',projects:'QUEST BOARD',contact:'PORTAL'};
@@ -1203,9 +1165,6 @@ function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>
   );
 }
 
-/* ══════════════════════════════════════════════════
-   PRIMITIVES
-══════════════════════════════════════════════════ */
 function Panel({children,style={},className=''}:{children:React.ReactNode;style?:React.CSSProperties;className?:string}) {
   return (
     <div className={`kai-panel ${className}`} style={style}>

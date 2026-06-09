@@ -655,7 +655,7 @@
 .skill-row { display: flex; justify-content: center; align-items: center; gap: 0; margin-bottom: 0; position: relative; }
 .skill-connector-h { display: flex; align-items: center; flex: 1; padding: 0 4px; margin-bottom: 22px; }
 .skill-connector-line { flex: 1; height: 1px; background: linear-gradient(90deg, #cc113355, #cc113388, #cc113355); }
-.skill-heart-node { width: 16px; height: 16px; flex-shrink: 0; margin: 0 4px; position: relative; }
+.skill-heart-node { width: 20px; height: 20px; flex-shrink: 0; margin: 0 4px; position: relative; }
 .skill-connector-v { display: flex; justify-content: space-between; height: 14px; padding: 0 26px; }
 .skill-v-line { width: 1px; height: 100%; background: linear-gradient(to bottom, #cc113355, #cc113322); }
 .skill-v-line-dim { width: 1px; height: 100%; background: linear-gradient(to bottom, #3d0f1a88, #3d0f1a22); }
@@ -745,16 +745,12 @@
   }
 }
 
-/* ──────────────────────────────────────────────────
-   MISSING UTILITIES
-────────────────────────────────────────────────── */
 .stats-overall-label-right {
   margin-left: auto;
   display: flex;
   align-items: center;
 }
 
-/* Skill tree — scrollable when many rows */
 .skill-tree-content {
   scrollbar-width: thin;
   scrollbar-color: #cc113344 transparent;
@@ -762,13 +758,11 @@
 .skill-tree-content::-webkit-scrollbar { width: 3px; }
 .skill-tree-content::-webkit-scrollbar-thumb { background: #cc113366; border-radius: 2px; }
 
-/* Skill hex glitch border animation */
 @keyframes hexBorderGlitch {
   0%, 100% { border-color: inherit; }
   50% { border-color: #ff2244; }
 }
 
-/* Row-4 connector accent */
 .skill-row-4-bg {
   position: absolute;
   top: 30px; left: 26px; right: 26px; height: 1px;
@@ -776,16 +770,9 @@
   pointer-events: none;
 }
 
-/* SegBar */
 .seg-bar { display: flex; gap: 2px; }
 .seg-chunk { flex: 1; height: 7px; transition: box-shadow 0.15s; }
 
-
-/* ══════════════════════════════════════════════════
-   NEW ELEMENTS — PROFILE CARD ADDITIONS
-══════════════════════════════════════════════════ */
-
-/* Social Platforms Section */
 .profile-socials-section {
   padding: 0 14px 10px;
 }
