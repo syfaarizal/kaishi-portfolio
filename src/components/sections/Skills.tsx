@@ -4,60 +4,119 @@ import { motion } from 'framer-motion';
 // Import komponen PixelGrid (sesuaikan path jika berbeda folder)
 import { PixelGrid } from '../ui/PixelGrid';
 
-const ICON_MAP: Record<string, string> = {
-  code: '⌨️',
-  'file-code': '📄',
-  brush: '🖌️',
-  'file-json': '🧾',
-  'file-type': '🗂️',
-  boxes: '📦',
-  atom: '⚛️',
-  'arrow-right': '➡️',
-  triangle: '🔺',
-  mountain: '⛰️',
-  wind: '🌬️',
-  move: '🔀',
-  hexagon: '⬢',
-  'message-square': '💬',
-  wrench: '🔧',
-  cursor: '🖱️',
-  zap: '⚡',
-  box: '🗃️',
-  'git-branch': '🌿',
-  github: '🐙',
-  server: '🖥️',
-  book: '📚',
-  scissors: '✂️',
-  'pen-tool': '🖊️',
-  paintbrush: '🖌️',
-  banana: '🍌',
-  cpu: '🧠',
-  'message-circle': '💭',
-  brain: '🧠',
-  sparkles: '✨',
-  eye: '👁️',
-  target: '🎯',
-  'monitor-smartphone': '📱',
-  layout: '🗔',
-  'app-window': '🪟',
-  'layout-dashboard': '📊',
-  bot: '🤖',
-  network: '🌐',
-  cat: '🐈',
-};
-
 type IconProps = {
   name: string;
   className?: string;
   strokeWidth?: number;
 };
 
-function Icon({ name, className }: IconProps) {
+type SvgIconProps = React.PropsWithChildren<Omit<IconProps, 'name'>>;
+
+function SvgGlyph({ children, className, strokeWidth = 1.75 }: SvgIconProps) {
   return (
-    <span className={`inline-flex items-center justify-center ${className ?? ''}`}>
-      {ICON_MAP[name] ?? '❔'}
-    </span>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
   );
+}
+
+const makeGlyph = (children: React.ReactNode) => (props: Omit<IconProps, 'name'>) => (
+  <SvgGlyph {...props}>{children}</SvgGlyph>
+);
+
+const CodeGlyph = makeGlyph(<><polyline points="10 6 4 12 10 18" /><polyline points="14 6 20 12 14 18" /></>);
+const FileGlyph = makeGlyph(<><path d="M7 3h6l4 4v14H7z" /><path d="M13 3v5h5" /><path d="M9 12h6" /></>);
+const BrushGlyph = makeGlyph(<><path d="M15 4c-2 1-3 3-3 5 0 1 .2 2 .7 2.8L6 18l-2 2 2-2 6.2-6.2c.8.5 1.8.7 2.8.7 2 0 4-1 5-3l-5-5Z" /><path d="M16.5 12.5 20 16" /><path d="M7 17c0 1.7-1 3-2.5 3" /></>);
+const BoxesGlyph = makeGlyph(<><path d="M7 7 12 4l5 3-5 3-5-3Z" /><path d="M7 7v6l5 3 5-3V7" /><path d="M12 10v6" /></>);
+const AtomGlyph = makeGlyph(<><circle cx="12" cy="12" r="1.5" /><ellipse cx="12" cy="12" rx="7" ry="3.5" /><ellipse cx="12" cy="12" rx="7" ry="3.5" transform="rotate(60 12 12)" /><ellipse cx="12" cy="12" rx="7" ry="3.5" transform="rotate(-60 12 12)" /></>);
+const ArrowGlyph = makeGlyph(<><circle cx="12" cy="12" r="8" /><path d="M10 8l4 4-4 4" /><path d="M8 12h6" /></>);
+const TriangleGlyph = makeGlyph(<path d="M12 5 19 17H5L12 5Z" />);
+const MountainGlyph = makeGlyph(<><path d="M4 18 10 8l4 6 2-3 4 7H4Z" /><path d="M10 8l2.5 4" /></>);
+const WindGlyph = makeGlyph(<><path d="M4 8h10c1.7 0 3-1.3 3-3s-1.3-3-3-3" /><path d="M4 12h14c1.7 0 3 1.3 3 3s-1.3 3-3 3" /><path d="M4 16h7" /></>);
+const MoveGlyph = makeGlyph(<><path d="M12 3v18" /><path d="M3 12h18" /><path d="M12 3 9 6" /><path d="M12 3 15 6" /><path d="M12 21 9 18" /><path d="M12 21 15 18" /><path d="M3 12 6 9" /><path d="M3 12 6 15" /><path d="M21 12 18 9" /><path d="M21 12 18 15" /></>);
+const HexagonGlyph = makeGlyph(<path d="M7 5h10l4 7-4 7H7l-4-7 4-7Z" />);
+const MessageSquareGlyph = makeGlyph(<path d="M5 5h14v10H9l-4 4V5Z" />);
+const WrenchGlyph = makeGlyph(<path d="M14.5 6.5a4.5 4.5 0 0 0-6 6L4 17v3h3l4.5-4.5a4.5 4.5 0 0 0 6-6l-3 3-2-2 3-3Z" />);
+const CursorGlyph = makeGlyph(<path d="M5 4l11 11-4 .5L14 20l-3.5-4.5L8 19 5 4Z" />);
+const ZapGlyph = makeGlyph(<path d="M13 2 5 13h6l-1 9 8-11h-6l1-9Z" />);
+const BoxGlyph = makeGlyph(<><path d="M5 8 12 4l7 4-7 4-7-4Z" /><path d="M5 8v8l7 4 7-4V8" /></>);
+const GitBranchGlyph = makeGlyph(<><path d="M7 5v10c0 2-1 3-3 3" /><circle cx="7" cy="5" r="1.5" /><circle cx="17" cy="7" r="1.5" /><circle cx="17" cy="19" r="1.5" /><path d="M7 10c3 0 4-3 10-3" /><path d="M7 15c3 0 4 4 10 4" /></>);
+const GithubGlyph = makeGlyph(<path d="M12 4a8 8 0 0 0-2.5 15.6c.4.1.6-.2.6-.5v-1.8c-2.3.5-2.8-1-2.8-1-.4-1-.9-1.3-.9-1.3-.8-.5.1-.5.1-.5.9.1 1.3 1 1.3 1 .8 1.3 2.1.9 2.6.7.1-.6.3-1 .6-1.2-1.9-.2-3.9-1-3.9-4.3 0-.9.3-1.6.8-2.2-.1-.2-.4-1 .1-2 0 0 .7-.2 2.3.8a8 8 0 0 1 4.2 0c1.6-1 2.3-.8 2.3-.8.5 1 .2 1.8.1 2 .5.6.8 1.3.8 2.2 0 3.3-2 4.1-3.9 4.3.3.3.6.8.6 1.6v2.3c0 .3.2.6.6.5A8 8 0 0 0 12 4Z" />);
+const ServerGlyph = makeGlyph(<><rect x="5" y="4" width="14" height="5" rx="1" /><rect x="5" y="11" width="14" height="5" rx="1" /><path d="M8 6h.01M8 13h.01" /><path d="M11 6h5M11 13h5" /></>);
+const BookGlyph = makeGlyph(<><path d="M6 4h10a2 2 0 0 1 2 2v14H8a2 2 0 0 0-2 2V4Z" /><path d="M8 6h8" /><path d="M8 10h8" /></>);
+const ScissorsGlyph = makeGlyph(<><circle cx="6" cy="8" r="2" /><circle cx="6" cy="16" r="2" /><path d="M7.5 9.5 18 4" /><path d="M7.5 14.5 18 20" /></>);
+const PenGlyph = makeGlyph(<><path d="M4 20c4-1 7-4 8-8l8-8-4-4-8 8c-4 1-7 4-8 8l4 4Z" /><path d="M12 12 8 8" /></>);
+const PaintbrushGlyph = makeGlyph(<><path d="M14 4c-2 1-3 3-3 5 0 1 .2 2 .7 2.8L6 18l-2 2 2-2 5.2-5.2C12 13.3 13 13 14 13c2 0 4-1 5-3l-5-6Z" /><path d="M16 12l3 3" /></>);
+const BananaGlyph = makeGlyph(<><path d="M6 8c2 6 8 9 12 7 1-.5 2-1.4 2-2.7 0-1.4-1-2.2-2.5-2.2-2 0-4-1-5.5-2.5C10 6 8.5 5 6.5 5 5 5 4 5.8 4 7c0 .7.4 1.3 1 1.5" /><path d="M6 8c2 2 5 3 8 2" /></>);
+const CpuGlyph = makeGlyph(<><rect x="7" y="7" width="10" height="10" rx="1.5" /><path d="M9 3v3M12 3v3M15 3v3M9 21v-3M12 21v-3M15 21v-3M21 9h-3M21 12h-3M21 15h-3M3 9h3M3 12h3M3 15h3" /><rect x="10" y="10" width="4" height="4" rx="0.5" /></>);
+const MessageCircleGlyph = makeGlyph(<><circle cx="12" cy="12" r="8" /><path d="M8 13h6" /><path d="M8 10h4" /></>);
+const BrainGlyph = makeGlyph(<><path d="M9 6c-2 0-3 1.5-3 3 0 .8.3 1.5.8 2-.5.5-.8 1.2-.8 2 0 1.5 1 3 3 3 0 1.7 1.3 3 3 3h1c1.7 0 3-1.3 3-3 2 0 3-1.5 3-3 0-.8-.3-1.5-.8-2 .5-.5.8-1.2.8-2 0-1.5-1-3-3-3 0-1.7-1.3-3-3-3h-1C10.3 3 9 4.3 9 6Z" /><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M12 16h.01" /></>);
+const SparklesGlyph = makeGlyph(<><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z" /><path d="M19 13l.8 2.2L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13Z" /><path d="M5 14l.7 2.3L8 17l-2.3.7L5 20l-.7-2.3L2 17l2.3-.7L5 14Z" /></>);
+const EyeGlyph = makeGlyph(<><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" /><circle cx="12" cy="12" r="2.5" /></>);
+const TargetGlyph = makeGlyph(<><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><circle cx="12" cy="12" r="1.5" /></>);
+const DeviceGlyph = makeGlyph(<><rect x="3" y="5" width="13" height="12" rx="1.5" /><path d="M8 19h3" /><rect x="17" y="8" width="4" height="10" rx="1" /><path d="M18.5 10h1" /></>);
+const LayoutGlyph = makeGlyph(<><rect x="4" y="4" width="16" height="16" rx="1.5" /><path d="M4 9h16M9 9v11" /></>);
+const AppWindowGlyph = makeGlyph(<><rect x="4" y="5" width="16" height="14" rx="1.5" /><path d="M4 9h16" /><path d="M8 13h3M13 13h3M8 16h8" /></>);
+const DashboardGlyph = makeGlyph(<><rect x="4" y="4" width="6" height="7" rx="1" /><rect x="12" y="4" width="8" height="4" rx="1" /><rect x="12" y="10" width="8" height="10" rx="1" /><rect x="4" y="13" width="6" height="7" rx="1" /></>);
+const BotGlyph = makeGlyph(<><rect x="6" y="7" width="12" height="10" rx="2" /><path d="M12 3v4" /><circle cx="9" cy="12" r="1" /><circle cx="15" cy="12" r="1" /><path d="M8 17h8" /></>);
+const NetworkGlyph = makeGlyph(<><circle cx="6" cy="6" r="1.5" /><circle cx="18" cy="6" r="1.5" /><circle cx="12" cy="18" r="1.5" /><path d="M7.3 7.3 10.8 10.8" /><path d="M16.7 7.3 13.2 10.8" /><path d="M12 16.5V13" /></>);
+const CatGlyph = makeGlyph(<><path d="M6 9 5 4l4 2 3-2 3 2 4-2-1 5" /><path d="M7 8c-1.3 1-2 2.6-2 4.5C5 17 8.1 20 12 20s7-3 7-7.5c0-1.9-.7-3.5-2-4.5" /><path d="M9 13h.01M15 13h.01" /><path d="M10 16c1.3.8 2.7.8 4 0" /></>);
+const QuestionGlyph = makeGlyph(<><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .4-1.5 1-1.5 2.2" /><path d="M12 18h.01" /></>);
+
+const ICON_MAP: Record<string, React.ComponentType<Omit<IconProps, 'name'>>> = {
+  code: CodeGlyph,
+  'file-code': FileGlyph,
+  brush: BrushGlyph,
+  'file-json': FileGlyph,
+  'file-type': FileGlyph,
+  boxes: BoxesGlyph,
+  atom: AtomGlyph,
+  'arrow-right': ArrowGlyph,
+  triangle: TriangleGlyph,
+  mountain: MountainGlyph,
+  wind: WindGlyph,
+  move: MoveGlyph,
+  hexagon: HexagonGlyph,
+  'message-square': MessageSquareGlyph,
+  wrench: WrenchGlyph,
+  cursor: CursorGlyph,
+  zap: ZapGlyph,
+  box: BoxGlyph,
+  'git-branch': GitBranchGlyph,
+  github: GithubGlyph,
+  server: ServerGlyph,
+  book: BookGlyph,
+  scissors: ScissorsGlyph,
+  'pen-tool': PenGlyph,
+  paintbrush: PaintbrushGlyph,
+  banana: BananaGlyph,
+  cpu: CpuGlyph,
+  'message-circle': MessageCircleGlyph,
+  brain: BrainGlyph,
+  sparkles: SparklesGlyph,
+  eye: EyeGlyph,
+  target: TargetGlyph,
+  'monitor-smartphone': DeviceGlyph,
+  layout: LayoutGlyph,
+  'app-window': AppWindowGlyph,
+  'layout-dashboard': DashboardGlyph,
+  bot: BotGlyph,
+  network: NetworkGlyph,
+  cat: CatGlyph,
+};
+
+function Icon({ name, className, strokeWidth }: IconProps) {
+  const Glyph = ICON_MAP[name] ?? QuestionGlyph;
+  return <Glyph className={className} strokeWidth={strokeWidth} />;
 }
 
 const makeIcon = (name: string) => (props: Omit<IconProps, 'name'>) => <Icon name={name} {...props} />;
