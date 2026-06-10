@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 // ─────────────────────────────────────────────
@@ -536,10 +536,32 @@ interface NodeProps {
 
 const chamfer = 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)';
 
+function getGlitchShift(seed: string) {
+  let hash = 0;
+
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 31 + seed.charCodeAt(i)) | 0;
+  }
+
+  return hash % 2 === 0 ? 2 : -2;
+}
+
+function getIconJitter(seed: string) {
+  let hash = 0;
+
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash * 33 + seed.charCodeAt(i)) | 0;
+  }
+
+  return ((Math.abs(hash) % 3) - 1) * 1.5;
+}
+
 function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave }: NodeProps) {
   const glitch = useGlitch(isHighlighted);
   const leftPx = (node.x / 100) * COL_W;
   const topPx  = node.y * ROW_H;
+  const glitchShift = getGlitchShift(node.id);
+  const iconJitter = getIconJitter(node.id);
 
   return (
     <div
@@ -581,7 +603,7 @@ function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave }: Node
               className="absolute inset-0 pointer-events-none z-20"
               style={{
                 backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,0,60,0.15) 2px, rgba(255,0,60,0.15) 3px)',
-                transform: `translateX(${Math.random() > 0.5 ? 2 : -2}px)`,
+                transform: `translateX(${glitchShift}px)`,
                 mixBlendMode: 'screen',
               }}
             />
@@ -591,7 +613,7 @@ function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave }: Node
           <div
             style={{
               filter: isHighlighted ? 'drop-shadow(0 0 6px rgba(255,0,60,0.9)) drop-shadow(0 0 12px rgba(255,0,60,0.5))' : 'none',
-              transform: glitch ? `translate(${(Math.random() - 0.5) * 3}px, 0)` : 'none',
+              transform: glitch ? `translate(${iconJitter}px, 0)` : 'none',
               transition: 'filter 0.2s',
             }}
           >
@@ -628,8 +650,6 @@ interface EdgesProps {
 }
 
 function TreeEdges({ edges, nodes, hoveredNode }: EdgesProps) {
-  const animRef = useRef<number>(0);
-
   return (
     <svg
       className="absolute inset-0 pointer-events-none z-0 overflow-visible"
