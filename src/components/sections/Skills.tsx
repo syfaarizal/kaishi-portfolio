@@ -343,6 +343,14 @@ type SkillColumn = {
   HeaderIcon: React.FC;
   nodes: SkillNode[];
   edges: SkillEdge[];
+  layout?: Partial<SkillLayout>;
+};
+
+type SkillLayout = {
+  width: number;
+  rowHeight: number;
+  nodeWidth: number;
+  nodeHeight: number;
 };
 
 const COLUMNS: SkillColumn[] = [
@@ -379,6 +387,12 @@ const COLUMNS: SkillColumn[] = [
   },
   {
     id: 'devtools', title: 'DEV TOOLS', subtitle: 'Tools & Platforms', HeaderIcon: DevToolsGlyph,
+    layout: {
+      width: 292,
+      rowHeight: 122,
+      nodeWidth: 68,
+      nodeHeight: 80,
+    },
     nodes: [
       { id: 'vscode',  title: 'VS Code',     Icon: VSCodeIcon,    x: 50, y: 0 },
       { id: 'cursor',  title: 'Cursor',      Icon: CursorAppIcon, x: 30, y: 1 },
@@ -402,6 +416,12 @@ const COLUMNS: SkillColumn[] = [
   },
   {
     id: 'design', title: 'DESIGN ARMORY', subtitle: 'Design Tools', HeaderIcon: DesignGlyph,
+    layout: {
+      width: 220,
+      rowHeight: 104,
+      nodeWidth: 64,
+      nodeHeight: 78,
+    },
     nodes: [
       { id: 'canva', title: 'Canva',       Icon: CanvaIcon,      x: 50, y: 0 },
       { id: 'nano',  title: 'Nano Banana', Icon: NanoBananaIcon, x: 50, y: 2 },
@@ -451,6 +471,13 @@ const COL_W  = 250;
 const ROW_H  = 116;
 const NODE_W = 72;
 const NODE_H = 84;
+
+const DEFAULT_LAYOUT: SkillLayout = {
+  width: COL_W,
+  rowHeight: ROW_H,
+  nodeWidth: NODE_W,
+  nodeHeight: NODE_H,
+};
 
 /* ─────────────────────────────────────────────────────────────
    HOOKS
@@ -503,14 +530,15 @@ interface NodeProps {
   onMouseLeave: () => void;
   onClick: () => void;
   isSelected: boolean;
+  layout: SkillLayout;
 }
 
-function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave, onClick, isSelected }: NodeProps) {
+function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave, onClick, isSelected, layout }: NodeProps) {
   const glitch = useNodeGlitch(isHighlighted);
   const active = isHighlighted || isSelected;
 
-  const leftPx = (node.x / 100) * COL_W;
-  const topPx  = node.y * ROW_H;
+  const leftPx = (node.x / 100) * layout.width;
+  const topPx  = node.y * layout.rowHeight;
 
   // deterministic shift per node id
   const shift = node.id.charCodeAt(0) % 2 === 0 ? 2 : -2;
@@ -518,13 +546,13 @@ function SkillNodeCard({ node, isHighlighted, onMouseEnter, onMouseLeave, onClic
   return (
     <div
       className="absolute z-10 cursor-pointer select-none"
-      style={{
-        left: leftPx,
-        top: topPx,
-        transform: 'translateX(-50%)',
-        width: NODE_W,
-        height: NODE_H,
-      }}
+        style={{
+          left: leftPx,
+          top: topPx,
+          transform: 'translateX(-50%)',
+          width: layout.nodeWidth,
+          height: layout.nodeHeight,
+        }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
@@ -640,9 +668,10 @@ interface EdgesProps {
   edges: SkillEdge[];
   nodes: SkillNode[];
   activeNode: string | null;
+  layout: SkillLayout;
 }
 
-function TreeEdges({ edges, nodes, activeNode }: EdgesProps) {
+function TreeEdges({ edges, nodes, activeNode, layout }: EdgesProps) {
   return (
     <svg
       className="absolute inset-0 pointer-events-none overflow-visible"
@@ -671,10 +700,10 @@ function TreeEdges({ edges, nodes, activeNode }: EdgesProps) {
 
         const isActive = activeNode === edge.from || activeNode === edge.to;
 
-        const x1 = (from.x / 100) * COL_W;
-        const y1 = from.y * ROW_H + NODE_H;
-        const x2 = (to.x  / 100) * COL_W;
-        const y2 = to.y   * ROW_H;
+        const x1 = (from.x / 100) * layout.width;
+        const y1 = from.y * layout.rowHeight + layout.nodeHeight;
+        const x2 = (to.x  / 100) * layout.width;
+        const y2 = to.y   * layout.rowHeight;
 
         // Bus routing: drop vertically, then horizontal, then up
         const busY = y1 + 18;
@@ -744,8 +773,9 @@ interface ColumnProps {
 function Column({ data, activeNode, setActiveNode, animDelay }: ColumnProps) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
+  const layout = { ...DEFAULT_LAYOUT, ...(data.layout ?? {}) };
   const maxRow = Math.max(...data.nodes.map(n => n.y));
-  const treeH  = maxRow * ROW_H + NODE_H + 16;
+  const treeH  = maxRow * layout.rowHeight + layout.nodeHeight + 16;
 
   return (
     <motion.div
@@ -754,7 +784,7 @@ function Column({ data, activeNode, setActiveNode, animDelay }: ColumnProps) {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: animDelay, ease: [0.22, 1, 0.36, 1] }}
       className="flex-shrink-0 flex flex-col items-center"
-      style={{ width: COL_W }}
+      style={{ width: layout.width }}
     >
       {/* Column header */}
       <div className="w-full mb-5 relative z-20 group">
@@ -808,7 +838,7 @@ function Column({ data, activeNode, setActiveNode, animDelay }: ColumnProps) {
 
       {/* Tree canvas */}
       <div className="relative w-full" style={{ height: treeH }}>
-        <TreeEdges edges={data.edges} nodes={data.nodes} activeNode={activeNode} />
+        <TreeEdges edges={data.edges} nodes={data.nodes} activeNode={activeNode} layout={layout} />
         {data.nodes.map(node => {
           const isHovered = activeNode === node.id;
           const isConnected = activeNode
@@ -823,6 +853,7 @@ function Column({ data, activeNode, setActiveNode, animDelay }: ColumnProps) {
               node={node}
               isHighlighted={isHovered || isConnected}
               isSelected={isHovered}
+              layout={layout}
               onMouseEnter={() => setActiveNode(node.id)}
               onMouseLeave={() => setActiveNode(null)}
               onClick={() => setActiveNode(activeNode === node.id ? null : node.id)}
@@ -993,7 +1024,7 @@ export function Skills() {
 
         {/* ── SKILL COLUMNS ── */}
         <div
-          className="flex flex-col xl:flex-row xl:justify-center gap-8 xl:gap-2 overflow-x-auto pb-12 px-2 xl:px-0"
+          className="flex flex-col xl:flex-row xl:justify-center gap-8 xl:gap-4 overflow-x-auto pb-12 px-2 xl:px-0"
           style={{ scrollbarWidth: 'none' }}
         >
           {COLUMNS.map((col, idx) => (
