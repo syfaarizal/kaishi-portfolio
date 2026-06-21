@@ -890,10 +890,6 @@ const GLOBAL_CSS = `
 @keyframes skillPulse {
   to { stroke-dashoffset: -26; }
 }
-@keyframes scanDown {
-  0%   { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
 @keyframes cornerBlink {
   0%, 90%, 100% { opacity: 1; }
   95% { opacity: 0.3; }
@@ -942,19 +938,6 @@ export function Skills() {
         style={{
           background: 'radial-gradient(ellipse 85% 55% at 50% 38%, rgba(255,0,60,0.055) 0%, transparent 68%)',
           zIndex: 0,
-        }}
-      />
-
-      {/* Background: slow scan line */}
-      <div
-        aria-hidden
-        className="absolute left-0 right-0 pointer-events-none"
-        style={{
-          top: 0,
-          height: '2px',
-          background: 'linear-gradient(90deg, transparent, rgba(255,0,60,0.18), transparent)',
-          animation: 'scanDown 8s linear infinite',
-          zIndex: 1,
         }}
       />
 
