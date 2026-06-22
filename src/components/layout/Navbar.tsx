@@ -95,7 +95,7 @@ export function Navbar({ activeSection, onNavigate }: NavbarProps) {
             {/* Hamburger — mobile only */}
             <button
               onClick={() => setMobileOpen(v => !v)}
-              className="md:hidden flex flex-col items-center justify-center gap-[5px] w-9 h-9 border border-[#3d0f1a] bg-[#0d0408]/80 hover:border-[#cc1133] transition-colors"
+              className="md:hidden flex flex-col items-center justify-center gap-[5px] w-11 h-11 border border-[#3d0f1a] bg-[#0d0408]/80 hover:border-[#cc1133] transition-colors touch-manipulation"
             >
               <span className="block w-5 h-[1.5px] bg-[#cc1133]" />
               <span className="block w-3.5 h-[1.5px] bg-[#cc1133]" />
@@ -119,7 +119,7 @@ export function Navbar({ activeSection, onNavigate }: NavbarProps) {
                   <button
                     key={item.id}
                     onClick={() => { onNavigate(item.id); setMobileOpen(false); }}
-                    className="flex items-center gap-2 py-2.5 px-3 text-left transition-colors"
+                    className="flex items-center gap-2 py-3.5 px-3 text-left transition-colors min-h-[44px] w-full touch-manipulation"
                     style={{ borderBottom: '1px solid rgba(61,15,26,0.4)' }}
                   >
                     <span
@@ -197,7 +197,7 @@ function HUDIcon({ src, alt, onClick }: { src: string; alt: string; onClick?: ()
       onClick={onClick}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="w-10 h-10 flex items-center justify-center border border-[#3d0f1a] bg-[#0d0408]/80 transition-all hover:border-[#cc1133] group"
+      className="w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center border border-[#3d0f1a] bg-[#0d0408]/80 transition-all hover:border-[#cc1133] group touch-manipulation"
       style={{ clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)' }}
     >
       <img

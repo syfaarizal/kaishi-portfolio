@@ -147,24 +147,24 @@ export function Hero({ onNavigate }: HeroProps) {
 
       {/* TOP TEXT BLOCK — fully centered */}
       <div
-        className="absolute left-0 right-0 z-[10] flex flex-col items-center"
-        style={{ top: '300px', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
+        className="absolute left-0 right-0 z-[10] flex flex-col items-center px-3 sm:px-0"
+        style={{ top: 'clamp(150px, 32vh, 300px)', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
       >
         {/* Welcome label */}
         <motion.div
           initial={{ opacity: 0, y: -14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="flex items-center gap-2 mb-2"
+          className="flex items-center gap-1.5 sm:gap-2 mb-2 px-2 text-center"
         >
           <img src="/assets/icon-kai-pedang.png" alt=""
-            style={{ width: '13px', height: '13px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', opacity: 0.8 }}
+            style={{ width: '13px', height: '13px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', opacity: 0.8, flexShrink: 0 }}
           />
-          <span className="font-pixel uppercase tracking-[0.22em]"
-            style={{ fontSize: '10px', color: '#fff' }}>
+          <span className="font-pixel uppercase tracking-[0.16em] sm:tracking-[0.22em]"
+            style={{ fontSize: 'clamp(8px, 2vw, 10px)', color: '#fff' }}>
             Welcome to my portfolio
           </span>
-          <span className="font-mono" style={{ fontSize: '12px', color: '#fff' }}>～～～</span>
+          <span className="font-mono hidden sm:inline" style={{ fontSize: '12px', color: '#fff' }}>～～～</span>
         </motion.div>
 
         {/* ── NAME: KAI SHI (centered, huge) ── */}
@@ -202,7 +202,7 @@ export function Hero({ onNavigate }: HeroProps) {
           <h1
             className="font-pixel text-white text-center relative"
             style={{
-              fontSize: 'clamp(4rem, 11vw, 8rem)',
+              fontSize: 'clamp(2.75rem, 15vw, 8rem)',
               lineHeight: 0.92,
               letterSpacing: '0.06em',
               wordSpacing: '-0.5em',
@@ -226,7 +226,7 @@ export function Hero({ onNavigate }: HeroProps) {
                 >
                   <span className="font-pixel text-center"
                     style={{
-                      fontSize: 'clamp(4rem, 11vw, 8rem)', lineHeight: 0.92, letterSpacing: '0.06em',
+                      fontSize: 'clamp(2.75rem, 15vw, 8rem)', lineHeight: 0.92, letterSpacing: '0.06em',
                       color: '#ff2255', transform: 'translateX(6px)', opacity: 0.8, whiteSpace: 'nowrap',
                     }}>
                     KAI SHI
@@ -242,9 +242,9 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.34, duration: 0.44 }}
-          className="mb-4"
+          className="mb-4 px-3 max-w-full"
         >
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5" style={{
+          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-2 sm:py-2.5 max-w-full" style={{
             background: 'rgba(8,2,6,0.82)',
             border: '1px solid rgba(61,15,26,0.9)',
             clipPath: 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))',
@@ -253,7 +253,7 @@ export function Hero({ onNavigate }: HeroProps) {
             <img src="/assets/icon-kai-cat2.png" alt=""
               style={{ width: '14px', height: '14px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', flexShrink: 0 }}
             />
-            <span className="font-pixel tracking-[0.16em] whitespace-nowrap" style={{ fontSize: '10px', color: '#e8e0e3' }}>
+            <span className="font-pixel tracking-[0.1em] sm:tracking-[0.16em] whitespace-nowrap overflow-hidden" style={{ fontSize: 'clamp(8px, 2.4vw, 10px)', color: '#e8e0e3' }}>
               {typedText}
               <span className="animate-blink ml-0.5" style={{ color: '#cc1133' }}>_</span>
             </span>
@@ -268,7 +268,7 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.48, duration: 0.44 }}
-          className="flex flex-col items-center gap-1 text-center px-6 py-3 mx-4"
+          className="flex flex-col items-center gap-1 text-center px-4 sm:px-6 py-2.5 sm:py-3 mx-3 sm:mx-4 max-w-[94vw] sm:max-w-none"
           style={{
             background: 'rgba(4,1,10,0.62)',
             border: '1px solid rgba(61,15,26,0.5)',
@@ -277,9 +277,9 @@ export function Hero({ onNavigate }: HeroProps) {
           }}
         >
           <p className="font-display text-center" style={{
-            fontSize: 'clamp(14px, 1.5vw, 17px)',
+            fontSize: 'clamp(12.5px, 3.2vw, 17px)',
             color: 'rgba(232,224,227,0.88)',
-            lineHeight: 1.65,
+            lineHeight: 1.6,
             textShadow: '0 1px 8px rgba(0,0,0,0.8)',
           }}>
             <span style={{ color: '#cc1133', marginRight: '7px' }}>◆</span>
@@ -287,7 +287,7 @@ export function Hero({ onNavigate }: HeroProps) {
             creativity, and anime-powered vibes.
           </p>
           <p className="font-mono" style={{
-            fontSize: 'clamp(13px, 1.2vw, 15px)',
+            fontSize: 'clamp(11.5px, 2.8vw, 15px)',
             color: '#cc1133',
             textShadow: '0 0 12px rgba(204,17,51,0.65)',
             letterSpacing: '0.04em',
@@ -301,14 +301,14 @@ export function Hero({ onNavigate }: HeroProps) {
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.62, duration: 0.55 }}
-        className="absolute inset-x-0 z-[14] flex flex-col items-center gap-3"
+        className="absolute inset-x-0 z-[14] flex flex-col items-center gap-2.5 sm:gap-3 px-3 pb-5"
         style={{
           /* START JOURNEY + AI CTA sit above the nav strip */
           bottom: 'calc(-10px + clamp(88px, 11vh, 110px) + 35px)',
         }}
       >
         {/* Hint */}
-        <span className="font-pixel" style={{ fontSize: '7px', color: 'rgba(160,144,152,1)', letterSpacing: '0.22em' }}>
+        <span className="font-pixel" style={{ fontSize: 'clamp(6px, 1.6vw, 7px)', color: 'rgba(160,144,152,1)', letterSpacing: '0.22em' }}>
           ◆ TAP TO BEGIN ◆
         </span>
 
@@ -328,9 +328,9 @@ export function Hero({ onNavigate }: HeroProps) {
 
           <button
             onClick={() => onNavigate('about')}
-            className="relative flex items-center gap-3 overflow-hidden group"
+            className="relative flex items-center gap-2 sm:gap-3 overflow-hidden group"
             style={{
-              padding: '15px 44px',
+              padding: 'clamp(11px, 3vw, 15px) clamp(24px, 8vw, 44px)',
               background: btnGlitch ? '#ff2244' : '#cc1133',
               clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))',
               boxShadow: btnGlitch
@@ -338,20 +338,20 @@ export function Hero({ onNavigate }: HeroProps) {
                 : '0 0 30px rgba(204,17,51,0.52), 5px 5px 0 rgba(0,0,0,0.7)',
               transform: btnGlitch ? `translateX(${buttonGlitchShift}px)` : 'none',
               transition: 'background 0.05s, box-shadow 0.05s, transform 0.05s',
-              minWidth: '240px',
+              minWidth: 'min(240px, 78vw)',
               justifyContent: 'center',
             }}
           >
             <img src="/assets/icon-kai-pedang.png" alt=""
               style={{
-                width: '30px', height: '30px', objectFit: 'contain', imageRendering: 'pixelated',
+                width: 'clamp(22px, 6vw, 30px)', height: 'clamp(22px, 6vw, 30px)', objectFit: 'contain', imageRendering: 'pixelated',
                 filter: btnGlitch ? 'brightness(1.9) hue-rotate(150deg)' : 'drop-shadow(0 0 5px rgba(255,200,200,0.5))',
                 transition: 'filter 0.05s', flexShrink: 0, position: 'relative', zIndex: 1,
               }}
             />
-            <span className="font-pixel tracking-widest relative"
+            <span className="font-pixel tracking-widest relative whitespace-nowrap"
               style={{
-                fontSize: '11px', color: '#fff', zIndex: 1,
+                fontSize: 'clamp(9px, 2.6vw, 11px)', color: '#fff', zIndex: 1,
                 textShadow: btnGlitch ? '3px 0 #ff4466, -3px 0 #0088ff' : '0 1px 4px rgba(0,0,0,0.5)',
                 transition: 'text-shadow 0.05s',
               }}>
@@ -385,13 +385,13 @@ export function Hero({ onNavigate }: HeroProps) {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.78, duration: 0.5 }}
-        className="absolute inset-x-0 z-[14] flex items-center justify-center gap-4"
+        className="absolute inset-x-0 z-[14] flex items-center justify-center gap-2 sm:gap-4 px-2"
         style={{ bottom: 'calc(3px + clamp(88px, 11vh, 110px) - 70px)' }}
       >
         <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('contact')} side="left" />
 
         {/* Section dots */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {SECTIONS.map((s) => {
             const active = s === 'hero';
             return (
@@ -517,31 +517,31 @@ function BottomHUD() {
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.7, duration: 0.55 }}
-      className="absolute bottom-0 left-0 right-0 z-[13] flex items-end justify-between"
-      style={{ padding: '0 28px 14px' }}
+      className="absolute bottom-0 left-0 right-0 z-[13] flex items-end justify-between gap-2"
+      style={{ padding: 'clamp(8px, 3vw, 28px) clamp(8px, 4vw, 28px) clamp(8px, 2.5vh, 14px)' }}
     >
       {/* PLAYER STATUS */}
-      <HUDPanel glitch={panelGlitch} style={{width:'clamp(240px,27vw,300px)'}}>
+      <HUDPanel glitch={panelGlitch} style={{width:'clamp(132px,40vw,300px)'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
-          <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>PLAYER STATUS</span>
+          <span className="font-pixel tracking-widest whitespace-nowrap" style={{fontSize:'clamp(6.5px, 1.8vw, 8px)',color:'#cc1133'}}>PLAYER STATUS</span>
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <div className="relative shrink-0">
-            <img src="/assets/icon-kai-cat2.png" alt="" style={{width:'50px',height:'50px',objectFit:'contain',imageRendering:'pixelated',border:'1px solid #3d0f1a'}}/>
-            <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 block" style={{background:'#22c55e',borderColor:'#040108',boxShadow:'0 0 7px #22c55e'}}/>
+            <img src="/assets/icon-kai-cat2.png" alt="" style={{width:'clamp(34px, 9vw, 50px)',height:'clamp(34px, 9vw, 50px)',objectFit:'contain',imageRendering:'pixelated',border:'1px solid #3d0f1a'}}/>
+            <span className="absolute -bottom-1 -right-1 w-3 sm:w-3.5 h-3 sm:h-3.5 rounded-full border-2 block" style={{background:'#22c55e',borderColor:'#040108',boxShadow:'0 0 7px #22c55e'}}/>
           </div>
-          <div className="flex-1 min-w-0 space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="font-pixel" style={{fontSize:'8px',color:'#7a6068'}}>LVL</span>
+          <div className="flex-1 min-w-0 space-y-1 sm:space-y-1.5">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="font-pixel" style={{fontSize:'clamp(6.5px, 1.8vw, 8px)',color:'#7a6068'}}>LVL</span>
               <span className="font-pixel text-white" style={{
-                fontSize:'22px', lineHeight:1,
+                fontSize:'clamp(16px, 4.5vw, 22px)', lineHeight:1,
                 textShadow: panelGlitch ? '2px 0 #ff0044, -2px 0 #0088ff, 0 0 12px rgba(255,34,68,0.9)' : '0 0 12px rgba(204,17,51,0.8)',
                 transition: 'text-shadow 0.05s',
               }}>21</span>
-              <img src="/assets/icon-kai-shild.png"  alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
-              <img src="/assets/icon-kai-console.png" alt="" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
+              <img src="/assets/icon-kai-shild.png"  alt="" className="hidden sm:inline-block" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
+              <img src="/assets/icon-kai-console.png" alt="" className="hidden sm:inline-block" style={{width:'15px',height:'15px',objectFit:'contain',imageRendering:'pixelated'}}/>
             </div>
             <StatBar label="EXP" value={75}  color="#cc1133" display="75%"     glitch={panelGlitch} />
             <StatBar label="HP"  value={100} color="#22c55e" display="850/850" glitch={false} />
@@ -553,21 +553,21 @@ function BottomHUD() {
       <div className="flex-1" />
 
       {/* CURRENT QUEST */}
-      <HUDPanel glitch={panelGlitch} style={{width:'clamp(240px,30vw,290px)'}}>
+      <HUDPanel glitch={panelGlitch} style={{width:'clamp(132px,40vw,290px)'}}>
         <div className="flex items-center gap-1.5 mb-2.5">
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
-          <span className="font-pixel tracking-widest" style={{fontSize:'8px',color:'#cc1133'}}>CURRENT QUEST</span>
+          <span className="font-pixel tracking-widest whitespace-nowrap" style={{fontSize:'clamp(6.5px, 1.8vw, 8px)',color:'#cc1133'}}>CURRENT QUEST</span>
           <span style={{color:'#cc1133',fontSize:'11px'}}>◆</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <img src="/assets/icon-kai-pedang2.png" alt="" style={{
-            width:'42px', height:'42px', objectFit:'contain', imageRendering:'pixelated', flexShrink:0,
+            width:'clamp(28px, 8vw, 42px)', height:'clamp(28px, 8vw, 42px)', objectFit:'contain', imageRendering:'pixelated', flexShrink:0,
             filter: panelGlitch ? 'drop-shadow(0 0 14px #ff2244) brightness(1.3)' : 'drop-shadow(0 0 9px #cc1133)',
             transition: 'filter 0.05s',
           }}/>
-          <div className="flex-1 min-w-0 space-y-2">
+          <div className="flex-1 min-w-0 space-y-1.5 sm:space-y-2">
             <div className="font-pixel leading-snug" style={{
-              fontSize:'9px',
+              fontSize:'clamp(7px, 2vw, 9px)',
               color: panelGlitch ? '#ff8899' : '#fff',
               transition: 'color 0.05s',
             }}>BUILD AMAZING<br/>WEBSITES</div>
@@ -603,7 +603,7 @@ function HUDPanel({ children, glitch, style }: {
       transition={{ duration: glitch ? 0.05 : 0.25, ease: 'easeOut' }}
       style={{
         ...style,
-        padding: '10px 13px 12px',
+        padding: 'clamp(7px, 2vw, 10px) clamp(8px, 2.5vw, 13px) clamp(8px, 2.2vw, 12px)',
         borderColor: hovered ? 'rgba(204,17,51,0.6)' : undefined,
         transition: 'border-color 0.2s',
       }}
@@ -670,10 +670,10 @@ function AIChatButton({ onClick }: { onClick: () => void }) {
       onHoverEnd={() => setHovered(false)}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      className="relative flex items-center gap-2.5 overflow-hidden group"
+      className="relative flex items-center gap-2 sm:gap-2.5 overflow-hidden group"
       style={{
-        padding: '11px 22px',
-        minWidth: '240px',
+        padding: 'clamp(9px, 2.6vw, 11px) clamp(16px, 5vw, 22px)',
+        minWidth: 'min(240px, 78vw)',
         width: 'fit-content',
         justifyContent: 'center',
         background: hovered ? 'rgba(204,17,51,0.12)' : 'rgba(10,2,8,0.85)',
@@ -712,9 +712,9 @@ function AIChatButton({ onClick }: { onClick: () => void }) {
       />
 
       {/* Label */}
-      <span className="font-pixel tracking-widest"
+      <span className="font-pixel tracking-widest whitespace-nowrap"
         style={{
-          fontSize: '8px',
+          fontSize: 'clamp(7px, 2vw, 8px)',
           color: hovered ? '#ff8899' : '#cc1133',
           textShadow: hovered ? '0 0 12px rgba(204,17,51,0.8)' : '0 0 6px rgba(204,17,51,0.4)',
           transition: 'color 0.15s, text-shadow 0.15s',
@@ -752,8 +752,8 @@ function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>
     : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
   return (
     <motion.button onClick={onClick} whileHover={{scale:1.06}} whileTap={{scale:0.94}}
-      className="flex items-center gap-2 font-pixel transition-all"
-      style={{fontSize:'9px',color:'#7a6068',border:'1px solid rgba(61,15,26,0.9)',padding:'9px 18px',background:'rgba(8,2,6,0.78)',clipPath:clip}}
+      className="flex items-center gap-1.5 sm:gap-2 font-pixel transition-all whitespace-nowrap"
+      style={{fontSize:'clamp(7px, 2vw, 9px)',color:'#7a6068',border:'1px solid rgba(61,15,26,0.9)',padding:'clamp(6px, 2vw, 9px) clamp(10px, 4vw, 18px)',background:'rgba(8,2,6,0.78)',clipPath:clip}}
       onMouseEnter={e=>{const el=e.currentTarget as HTMLElement;el.style.color='#cc1133';el.style.borderColor='#cc1133';el.style.boxShadow='0 0 12px rgba(204,17,51,0.3)';}}
       onMouseLeave={e=>{const el=e.currentTarget as HTMLElement;el.style.color='#7a6068';el.style.borderColor='rgba(61,15,26,0.9)';el.style.boxShadow='none';}}
     >

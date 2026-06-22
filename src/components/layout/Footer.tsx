@@ -5,8 +5,8 @@ export function Footer() {
     <footer className="relative border-t border-kai-border py-8">
       <div className="h-px w-full bg-gradient-to-r from-transparent via-kai-red to-transparent opacity-40 mb-8" />
 
-      <div className="max-w-screen-xl mx-auto px-6 lg:px-12">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <img
               src="/assets/icon-kai-cat1.png"
@@ -17,7 +17,7 @@ export function Footer() {
             <span className="font-pixel text-[8px] text-kai-red">KAI SHI</span>
           </div>
 
-          <div className="font-pixel text-[7px] text-kai-muted text-center">
+          <div className="font-pixel text-[7px] text-kai-muted text-center leading-relaxed">
             &copy; 2025 KAI SHI. CRAFTED WITH{' '}
             <span className="text-kai-red">♥</span>{' '}
             AND WAY TOO MUCH CAFFEINE.
