@@ -130,7 +130,6 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
   const [resolvedKey, setResolvedKey] = useState<string | undefined>(API_KEY);
   const [streamText, setStreamText]   = useState('');
   const [glitching, setGlitching]     = useState(false);
-  const [isMobile, setIsMobile]       = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
 
@@ -143,14 +142,6 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
     const t3 = setTimeout(() => setGlitching(false), 220);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [open]);
-
-  /* Mobile detection */
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
 
   /* Auto-scroll to bottom */
   useEffect(() => {
@@ -276,43 +267,33 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
             }}
           />
 
-          {/* Modal box */}
+          {/* Modal box — fixed centered, never full-screen */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, scale: isMobile ? 1 : 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{
               opacity: 1, scale: 1, y: 0,
               filter: glitching
                 ? 'brightness(2) saturate(5) hue-rotate(160deg)'
                 : 'brightness(1) saturate(1) hue-rotate(0deg)',
             }}
-            exit={{ opacity: 0, scale: isMobile ? 1 : 0.92, y: isMobile ? 20 : 16 }}
+            exit={{ opacity: 0, scale: 0.92, y: 16 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={e => e.stopPropagation()}
             style={{
               position: 'fixed',
-              ...(isMobile
-                ? {
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    width: '100%',
-                    height: '100%',
-                    maxHeight: 'none',
-                    border: 'none',
-                    borderTop: '2px solid #cc1133',
-                  }
-                : {
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 'min(96vw, 1050px)',
-                    height: 'min(88vh, 700px)',
-                    maxHeight: '700px',
-                    border: '1.5px solid #cc1133',
-                  }),
+              /* Centered, bounded — never full-screen */
+              top: '12%',
+              left: '25%',
+              transform: 'translate(-50%, -50%)',
+              width: 'min(98vw, 1050px)',
+              height: 'min(90vh, 700px)',
+              maxHeight: '700px',
               zIndex: 9001,
               display: 'flex',
               flexDirection: 'column',
               background: 'rgba(6,2,10,0.97)',
+              border: '1.5px solid #cc1133',
               boxShadow: '0 0 50px rgba(204,17,51,0.35), 0 0 100px rgba(204,17,51,0.12), inset 0 0 40px rgba(0,0,0,0.5)',
               overflow: 'hidden',
             }}
@@ -335,7 +316,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
             {/* ── HEADER ── */}
             <div style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 14px', flexShrink: 0,
+              padding: '12px 18px', flexShrink: 0,
               borderBottom: '1px solid rgba(61,15,26,0.9)',
               background: 'rgba(16,4,10,0.9)',
             }}>
@@ -422,8 +403,8 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     className="font-mono"
                     style={{
                       flex: 1, background: '#080210', border: '1px solid #2a1018',
-                      padding: '8px 12px', fontSize: '16px', color: '#e8e0e3',
-                      outline: 'none', transition: 'border-color 0.15s', minWidth: 0,
+                      padding: '8px 12px', fontSize: '12px', color: '#e8e0e3',
+                      outline: 'none', transition: 'border-color 0.15s',
                     }}
                     onFocus={e => (e.target.style.borderColor = '#cc1133')}
                     onBlur={e => (e.target.style.borderColor = '#2a1018')}
@@ -450,10 +431,9 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
             {/* ── MESSAGES ── */}
             <div
               style={{
-                flex: 1, overflowY: 'auto', padding: '14px 14px',
+                flex: 1, overflowY: 'auto', padding: '16px 18px',
                 display: 'flex', flexDirection: 'column', gap: '14px',
                 scrollbarWidth: 'thin', scrollbarColor: '#cc1133 #0a020a',
-                WebkitOverflowScrolling: 'touch',
               }}
             >
               {messages.map(msg => <ChatBubble key={msg.id} message={msg} />)}
@@ -498,11 +478,10 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
               flexShrink: 0,
               borderTop: '1px solid rgba(61,15,26,0.9)',
               background: 'rgba(8,2,8,0.92)',
-              padding: '10px 12px',
-              paddingBottom: 'max(10px, env(safe-area-inset-bottom))',
+              padding: '12px 18px',
             }}>
               {/* Main row: input + send button */}
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '26px' }}>
                 <input
                   ref={inputRef}
                   type="text"
@@ -516,14 +495,13 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     flex: 1,
                     background: '#0a0210',
                     border: '1px solid #2a1018',
-                    padding: '11px 12px',
-                    fontSize: '16px',   /* 16px prevents iOS auto-zoom on focus */
+                    padding: '11px 14px',
+                    fontSize: '13px',
                     color: '#e8e0e3',
                     outline: 'none',
                     transition: 'border-color 0.15s',
                     opacity: (loading || needsKey) ? 0.4 : 1,
                     clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)',
-                    minWidth: 0,
                   }}
                   onFocus={e => { if (!needsKey && !loading) e.target.style.borderColor = '#cc1133'; }}
                   onBlur={e => (e.target.style.borderColor = '#2a1018')}
@@ -615,7 +593,7 @@ function ChatBubble({ message, streaming }: { message: Message; streaming?: bool
 
       {/* Bubble */}
       <div style={{
-        maxWidth: '86%', padding: '10px 14px',
+        maxWidth: '76%', padding: '10px 14px',
         background: isUser ? 'rgba(204,17,51,0.1)' : 'rgba(16,4,10,0.9)',
         border: `1px solid ${isUser ? 'rgba(204,17,51,0.38)' : 'rgba(61,15,26,0.8)'}`,
         clipPath: isUser

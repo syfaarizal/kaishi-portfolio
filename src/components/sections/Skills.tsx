@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import type { SectionId } from '../../App';
 
 /* ─────────────────────────────────────────────────────────────
    SVG ICONS
@@ -941,20 +942,20 @@ function InjectCSS() {
    ROOT EXPORT
    ───────────────────────────────────────────────────────────── */
 
-export function Skills() {
+export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
   const [activeNode, setActiveNode] = useState<string | null>(null);
 
   return (
     <div
-      className="min-h-screen font-mono relative overflow-hidden"
+      className="w-full h-full font-mono relative overflow-auto"
       style={{ background: '#040000', color: '#ff003c' }}
     >
       <InjectCSS />
 
-      {/* Background: dot grid */}
+      {/* Background: dot grid - fixed position */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="fixed inset-0 pointer-events-none"
         style={{
           backgroundImage: 'radial-gradient(circle, rgba(255,0,60,0.16) 1px, transparent 1px)',
           backgroundSize: '30px 30px',
@@ -962,22 +963,22 @@ export function Skills() {
         }}
       />
 
-      {/* Background: radial glow center */}
+      {/* Background: radial glow center - fixed position */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="fixed inset-0 pointer-events-none"
         style={{
           background: 'radial-gradient(ellipse 85% 55% at 50% 38%, rgba(255,0,60,0.055) 0%, transparent 68%)',
           zIndex: 0,
         }}
       />
 
-      {/* Corner decorations */}
+      {/* Corner decorations - fixed position */}
       {(['top-0 left-0', 'top-0 right-0', 'bottom-0 left-0', 'bottom-0 right-0'] as const).map((pos, i) => (
         <div
           key={i}
           aria-hidden
-          className={`absolute ${pos} w-6 h-6 pointer-events-none`}
+          className={`fixed ${pos} w-6 h-6 pointer-events-none`}
           style={{
             borderTop:    i < 2 ? '1px solid rgba(255,0,60,0.4)' : undefined,
             borderBottom: i >= 2 ? '1px solid rgba(255,0,60,0.4)' : undefined,
@@ -991,7 +992,7 @@ export function Skills() {
         />
       ))}
 
-      <main className="relative z-10 max-w-[1720px] mx-auto px-4 py-8 flex flex-col min-h-screen">
+      <main className="relative z-10 max-w-[1720px] mx-auto px-4 py-8 flex flex-col min-h-full">
 
         {/* ── HEADER ── */}
         <header className="flex flex-col items-center mt-14 mb-10 relative gap-2">
@@ -1085,10 +1086,109 @@ export function Skills() {
             </span>
             <span style={{ color: 'rgba(255,0,60,0.5)', marginLeft: '10px' }}>◆</span>
           </div>
+
+          {/* ── NAVIGATION ── */}
+          <NavDotsBar onNavigate={onNavigate} />
         </div>
 
       </main>
     </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION DOTS BAR
+   ───────────────────────────────────────────────────────────── */
+
+function NavDotsBar({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
+  const sections: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
+  const labels: Record<SectionId, string> = { hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR', projects: 'QUEST BOARD', contact: 'PORTAL' };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.78, duration: 0.5 }}
+      className="flex items-center justify-center gap-4 pb-[10px] mt-[25px]"
+    >
+      <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('about')} side="left" />
+
+      <div className="flex items-center gap-2.5">
+        {sections.map((s) => {
+          const active = s === 'skills';
+          return (
+            <button
+              key={s}
+              onClick={() => onNavigate(s)}
+              title={labels[s]}
+              className="group relative flex items-center justify-center"
+              style={{ width: '22px', height: '22px' }}
+            >
+              <motion.span
+                className="block border"
+                animate={{
+                  width: active ? '14px' : '10px',
+                  height: active ? '14px' : '10px',
+                  background: active ? '#ff003c' : 'transparent',
+                  borderColor: active ? '#ff003c' : 'rgba(255,0,60,0.5)',
+                  boxShadow: active ? '0 0 12px #ff003c, 0 0 24px rgba(255,0,60,0.4)' : 'none',
+                  rotate: 45,
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <span
+                className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                style={{ fontSize: '6px', color: '#ff003c', textShadow: '0 0 8px #ff003c', fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.1em' }}
+              >
+                {labels[s]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate('projects')} side="right" />
+    </motion.div>
+  );
+}
+
+function NavBtn({ label, icon, onClick, side }: { label: string; icon: string; onClick: () => void; side: 'left' | 'right' }) {
+  const clip = side === 'left'
+    ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
+    : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      className="flex items-center gap-2 transition-all"
+      style={{
+        fontSize: '15px',
+        fontFamily: 'monospace',
+        fontWeight: 700,
+        letterSpacing: '0.12em',
+        color: 'rgba(255,0,60,0.5)',
+        border: '1px solid rgba(255,0,60,0.3)',
+        padding: '9px 18px',
+        background: 'rgba(6,0,1,0.78)',
+        clipPath: clip,
+      }}
+      onMouseEnter={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.color = '#ff003c';
+        el.style.borderColor = '#ff003c';
+        el.style.boxShadow = '0 0 12px rgba(255,0,60,0.3)';
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.color = 'rgba(255,0,60,0.5)';
+        el.style.borderColor = 'rgba(255,0,60,0.3)';
+        el.style.boxShadow = 'none';
+      }}
+    >
+      <span style={{ fontSize: '10px' }}>{icon}</span>
+      <span>{label}</span>
+    </motion.button>
   );
 }
 

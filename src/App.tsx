@@ -68,7 +68,7 @@ function App() {
     switch (activeSection) {
       case 'hero':     return <Hero onNavigate={navigate} />;
       case 'about':    return <About onNavigate={navigate} />;
-      case 'skills':   return <Skills />;
+      case 'skills':   return <Skills onNavigate={navigate} />;
       case 'projects': return <Projects />;
       case 'contact':  return <Contact />;
       default:         return <Hero onNavigate={navigate} />;
