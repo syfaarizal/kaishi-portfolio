@@ -5,7 +5,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
-import { Projects } from './components/sections/Projects';
+import { QuestBoard } from './components/sections/QuestBoard/QuestBoard';
 import { Contact } from './components/sections/Contact';
 
 export type SectionId = 'hero' | 'about' | 'skills' | 'projects' | 'contact';
@@ -69,7 +69,7 @@ function App() {
       case 'hero':     return <Hero onNavigate={navigate} />;
       case 'about':    return <About onNavigate={navigate} />;
       case 'skills':   return <Skills onNavigate={navigate} />;
-      case 'projects': return <Projects />;
+      case 'projects': return <QuestBoard />;
       case 'contact':  return <Contact />;
       default:         return <Hero onNavigate={navigate} />;
     }
