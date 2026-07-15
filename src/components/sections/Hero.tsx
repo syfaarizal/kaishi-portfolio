@@ -74,7 +74,6 @@ export function Hero({ onNavigate }: HeroProps) {
 
   return (
     <div ref={ref} className="relative w-full h-screen overflow-hidden select-none">
-
       {/* BG — slow parallax */}
       <motion.div
         className="absolute inset-0 z-0"
@@ -148,7 +147,7 @@ export function Hero({ onNavigate }: HeroProps) {
       {/* TOP TEXT BLOCK — fully centered */}
       <div
         className="absolute left-0 right-0 z-[10] flex flex-col items-center px-3 sm:px-0"
-        style={{ top: 'clamp(150px, 32vh, 300px)', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
+        style={{ top: 'clamp(120px, 26vw, 300px)', paddingTop: 'clamp(14px, 2.8vh, 32px)' }}
       >
         {/* Welcome label */}
         <motion.div
@@ -161,7 +160,7 @@ export function Hero({ onNavigate }: HeroProps) {
             style={{ width: '13px', height: '13px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', opacity: 0.8, flexShrink: 0 }}
           />
           <span className="font-pixel uppercase tracking-[0.16em] sm:tracking-[0.22em]"
-            style={{ fontSize: 'clamp(8px, 2vw, 10px)', color: '#fff' }}>
+            style={{ fontSize: 'clamp(7px, 2vw, 10px)', color: '#fff' }}>
             Welcome to my portfolio
           </span>
           <span className="font-mono hidden sm:inline" style={{ fontSize: '12px', color: '#fff' }}>～～～</span>
@@ -202,7 +201,7 @@ export function Hero({ onNavigate }: HeroProps) {
           <h1
             className="font-pixel text-white text-center relative"
             style={{
-              fontSize: 'clamp(2.75rem, 15vw, 8rem)',
+              fontSize: 'clamp(2.25rem, 16vw, 8rem)',
               lineHeight: 0.92,
               letterSpacing: '0.06em',
               wordSpacing: '-0.5em',
@@ -226,7 +225,7 @@ export function Hero({ onNavigate }: HeroProps) {
                 >
                   <span className="font-pixel text-center"
                     style={{
-                      fontSize: 'clamp(2.75rem, 15vw, 8rem)', lineHeight: 0.92, letterSpacing: '0.06em',
+                      fontSize: 'clamp(2.25rem, 16vw, 8rem)', lineHeight: 0.92, letterSpacing: '0.06em',
                       color: '#ff2255', transform: 'translateX(6px)', opacity: 0.8, whiteSpace: 'nowrap',
                     }}>
                     KAI SHI
@@ -242,9 +241,9 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.34, duration: 0.44 }}
-          className="mb-4 px-3 max-w-full"
+          className="mb-3 sm:mb-4 px-3 max-w-full"
         >
-          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-2 sm:py-2.5 max-w-full" style={{
+          <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3 sm:px-5 py-2 sm:py-2.5 max-w-[95vw] sm:max-w-none" style={{
             background: 'rgba(8,2,6,0.82)',
             border: '1px solid rgba(61,15,26,0.9)',
             clipPath: 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px))',
@@ -253,7 +252,7 @@ export function Hero({ onNavigate }: HeroProps) {
             <img src="/assets/icon-kai-cat2.png" alt=""
               style={{ width: '14px', height: '14px', objectFit: 'contain', imageRendering: 'pixelated', filter: 'drop-shadow(0 0 4px #cc1133)', flexShrink: 0 }}
             />
-            <span className="font-pixel tracking-[0.1em] sm:tracking-[0.16em] whitespace-nowrap overflow-hidden" style={{ fontSize: 'clamp(8px, 2.4vw, 10px)', color: '#e8e0e3' }}>
+            <span className="font-pixel tracking-[0.1em] sm:tracking-[0.16em] whitespace-nowrap overflow-hidden text-ellipsis" style={{ fontSize: 'clamp(7px, 2.4vw, 10px)', color: '#e8e0e3', maxWidth: '80vw' }}>
               {typedText}
               <span className="animate-blink ml-0.5" style={{ color: '#cc1133' }}>_</span>
             </span>
@@ -268,7 +267,7 @@ export function Hero({ onNavigate }: HeroProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.48, duration: 0.44 }}
-          className="flex flex-col items-center gap-1 text-center px-4 sm:px-6 py-2.5 sm:py-3 mx-3 sm:mx-4 max-w-[94vw] sm:max-w-none"
+          className="flex flex-col items-center gap-1 text-center px-4 sm:px-6 py-2 sm:py-3 mx-2 sm:mx-4 max-w-[94vw] sm:max-w-[580px]"
           style={{
             background: 'rgba(4,1,10,0.62)',
             border: '1px solid rgba(61,15,26,0.5)',
@@ -277,17 +276,17 @@ export function Hero({ onNavigate }: HeroProps) {
           }}
         >
           <p className="font-display text-center" style={{
-            fontSize: 'clamp(12.5px, 3.2vw, 17px)',
+            fontSize: 'clamp(11px, 3.2vw, 17px)',
             color: 'rgba(232,224,227,0.88)',
             lineHeight: 1.6,
             textShadow: '0 1px 8px rgba(0,0,0,0.8)',
           }}>
             <span style={{ color: '#cc1133', marginRight: '7px' }}>◆</span>
-            Crafting immersive web experiences with code,<br />
+            Crafting immersive web experiences with code,<br className="hidden sm:inline" />
             creativity, and anime-powered vibes.
           </p>
           <p className="font-mono" style={{
-            fontSize: 'clamp(11.5px, 2.8vw, 15px)',
+            fontSize: 'clamp(10px, 2.8vw, 15px)',
             color: '#cc1133',
             textShadow: '0 0 12px rgba(204,17,51,0.65)',
             letterSpacing: '0.04em',
@@ -301,14 +300,13 @@ export function Hero({ onNavigate }: HeroProps) {
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.62, duration: 0.55 }}
-        className="absolute inset-x-0 z-[14] flex flex-col items-center gap-2.5 sm:gap-3 px-3 pb-5"
+        className="absolute inset-x-0 z-[14] flex flex-col items-center gap-2 sm:gap-3 px-3 pb-4 sm:pb-5"
         style={{
-          /* START JOURNEY + AI CTA sit above the nav strip */
-          bottom: 'calc(-10px + clamp(88px, 11vh, 110px) + 35px)',
+          bottom: 'calc(-10px + clamp(80px, 10vh, 110px) + 35px)',
         }}
       >
         {/* Hint */}
-        <span className="font-pixel" style={{ fontSize: 'clamp(6px, 1.6vw, 7px)', color: 'rgba(160,144,152,1)', letterSpacing: '0.22em' }}>
+        <span className="font-pixel hidden sm:block" style={{ fontSize: 'clamp(6px, 1.6vw, 7px)', color: 'rgba(160,144,152,1)', letterSpacing: '0.22em' }}>
           ◆ TAP TO BEGIN ◆
         </span>
 
@@ -316,7 +314,7 @@ export function Hero({ onNavigate }: HeroProps) {
         <div className="relative">
           {/* Pulsing outer ring */}
           <motion.div
-            className="absolute pointer-events-none"
+            className="absolute pointer-events-none hidden sm:block"
             style={{
               inset: '-6px',
               border: '1px solid rgba(204,17,51,0.35)',
@@ -330,7 +328,7 @@ export function Hero({ onNavigate }: HeroProps) {
             onClick={() => onNavigate('about')}
             className="relative flex items-center gap-2 sm:gap-3 overflow-hidden group"
             style={{
-              padding: 'clamp(11px, 3vw, 15px) clamp(24px, 8vw, 44px)',
+              padding: 'clamp(11px, 3vw, 15px) clamp(24px, 6vw, 44px)',
               background: btnGlitch ? '#ff2244' : '#cc1133',
               clipPath: 'polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))',
               boxShadow: btnGlitch
@@ -338,26 +336,26 @@ export function Hero({ onNavigate }: HeroProps) {
                 : '0 0 30px rgba(204,17,51,0.52), 5px 5px 0 rgba(0,0,0,0.7)',
               transform: btnGlitch ? `translateX(${buttonGlitchShift}px)` : 'none',
               transition: 'background 0.05s, box-shadow 0.05s, transform 0.05s',
-              minWidth: 'min(240px, 78vw)',
+              minWidth: 'min(220px, 80vw)',
               justifyContent: 'center',
             }}
           >
             <img src="/assets/icon-kai-pedang.png" alt=""
               style={{
-                width: 'clamp(22px, 6vw, 30px)', height: 'clamp(22px, 6vw, 30px)', objectFit: 'contain', imageRendering: 'pixelated',
+                width: 'clamp(18px, 5vw, 30px)', height: 'clamp(18px, 5vw, 30px)', objectFit: 'contain', imageRendering: 'pixelated',
                 filter: btnGlitch ? 'brightness(1.9) hue-rotate(150deg)' : 'drop-shadow(0 0 5px rgba(255,200,200,0.5))',
                 transition: 'filter 0.05s', flexShrink: 0, position: 'relative', zIndex: 1,
               }}
             />
             <span className="font-pixel tracking-widest relative whitespace-nowrap"
               style={{
-                fontSize: 'clamp(9px, 2.6vw, 11px)', color: '#fff', zIndex: 1,
+                fontSize: 'clamp(8px, 2.6vw, 11px)', color: '#fff', zIndex: 1,
                 textShadow: btnGlitch ? '3px 0 #ff4466, -3px 0 #0088ff' : '0 1px 4px rgba(0,0,0,0.5)',
                 transition: 'text-shadow 0.05s',
               }}>
               START JOURNEY
             </span>
-            <span className="font-pixel relative" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', zIndex: 1 }}>&gt;</span>
+            <span className="font-pixel relative hidden sm:inline" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', zIndex: 1 }}>&gt;</span>
 
             {/* Shine sweep on hover */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 pointer-events-none"
@@ -385,8 +383,8 @@ export function Hero({ onNavigate }: HeroProps) {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.78, duration: 0.5 }}
-        className="absolute inset-x-0 z-[14] flex items-center justify-center gap-2 sm:gap-4 px-2"
-        style={{ bottom: 'calc(3px + clamp(88px, 11vh, 110px) - 70px)' }}
+        className="absolute inset-x-0 z-[14] flex items-center justify-center gap-1.5 sm:gap-4 px-2"
+        style={{ bottom: 'calc(3px + clamp(80px, 10vh, 110px) - 60px)' }}
       >
         <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('contact')} side="left" />
 
@@ -408,7 +406,7 @@ export function Hero({ onNavigate }: HeroProps) {
                   }}
                   transition={{ duration: 0.2 }}
                 />
-                <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                <span className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 hidden sm:block"
                   style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}>
                   {LABELS[s]}
                 </span>
@@ -517,7 +515,7 @@ function BottomHUD() {
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.7, duration: 0.55 }}
-      className="absolute bottom-0 left-0 right-0 z-[13] flex items-end justify-between gap-2"
+      className="absolute bottom-0 left-0 right-0 z-[13] hidden sm:flex items-end justify-between gap-2"
       style={{ padding: 'clamp(8px, 3vw, 28px) clamp(8px, 4vw, 28px) clamp(8px, 2.5vh, 14px)' }}
     >
       {/* PLAYER STATUS */}

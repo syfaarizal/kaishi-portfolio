@@ -141,3 +141,24 @@ body {
 @media (max-width: 640px) {
   .glitch-text::before, .glitch-text::after { display: none; }
 }
+
+/* Mobile responsive helpers */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+}
+
+/* Ensure touch targets are large enough on mobile */
+@media (max-width: 480px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Prevent text selection on UI elements */
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+}

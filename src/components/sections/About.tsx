@@ -90,16 +90,16 @@ export function About({ onNavigate }: AboutProps) {
     <>
       <style>{injectedStyles}</style>
       <div ref={ref} className="relative w-full h-full overflow-y-auto overflow-x-hidden overscroll-contain bg-[#060408] text-[#e8e0e3]">
-        <div className="relative z-10 flex flex-col pt-[80px] px-[40px] pb-0 min-h-full gap-[14px]">
+        <div className="relative z-10 flex flex-col pt-[70px] sm:pt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[40px] pb-0 min-h-full gap-3 sm:gap-[14px]">
           <BG />
           <OuterFrame />
-          
+
           {/* ── TOP FOUR PANELS ── */}
           <motion.div
             initial={{opacity:0,y:16}}
             animate={inView?{opacity:1,y:0}:{}}
             transition={{duration:0.55,delay:0.05}}
-            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_1fr_270px_270px] gap-[14px] items-stretch"
+            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_1fr_270px_270px] gap-3 sm:gap-[14px] items-stretch"
           >
             <ProfileCard inView={inView}/>
             <BiographyPanel inView={inView}/>
@@ -109,7 +109,7 @@ export function About({ onNavigate }: AboutProps) {
 
           {/* ── LOWER CONTENT / GALLERY ── */}
           <motion.div
-            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_minmax(0,1fr)] gap-[14px] items-stretch"
+            className="grid grid-cols-1 min-[1100px]:grid-cols-[290px_minmax(0,1fr)] gap-3 sm:gap-[14px] items-stretch"
             initial={{opacity:0,y:20}}
             animate={inView?{opacity:1,y:0}:{}}
             transition={{duration:0.55,delay:0.2}}
@@ -199,46 +199,53 @@ function ProfileCard({inView}:{inView:boolean}) {
       </div>
 
       {/* Character image in glowing circular frame */}
-      <div className="relative flex items-center justify-center h-[226px] overflow-hidden">
-        <motion.div animate={{rotate:360}} transition={{duration:22,repeat:Infinity,ease:'linear'}} className="w-[196px] h-[196px] rounded-full border border-dashed border-[#cc1133]/20 absolute"/>
-        <div className="w-[208px] h-[208px] rounded-full border border-transparent absolute">
+      <div className="relative flex items-center justify-center overflow-hidden" style={{ height: 'clamp(160px, 28vw, 226px)' }}>
+        <motion.div animate={{rotate:360}} transition={{duration:22,repeat:Infinity,ease:'linear'}} className="rounded-full border border-dashed border-[#cc1133]/20 absolute"
+          style={{width:'clamp(140px, 38vw, 196px)', height:'clamp(140px, 38vw, 196px)'}}/>
+        <div className="rounded-full border border-transparent absolute" style={{width:'clamp(148px, 42vw, 208px)', height:'clamp(148px, 42vw, 208px)'}}>
           {[0,60,120,180,240,300].map((deg,i)=>(
             <div key={i} style={{
               position:'absolute',top:'50%',left:'50%', width:'6px',height:'3px',
               background: i%2===0 ? R : `${R}55`,
-              transform:`translate(-50%,-50%) rotate(${deg}deg) translateX(104px)`,
+              transform:`translate(-50%,-50%) rotate(${deg}deg) translateX(clamp(74px, 21vw, 104px))`,
               boxShadow: i%2===0 ? `0 0 6px ${R}` : 'none',
             }}/>
           ))}
         </div>
-        <motion.div animate={{rotate:-360}} transition={{duration:35,repeat:Infinity,ease:'linear'}} className="w-[182px] h-[182px] rounded-full border border-dashed border-[#cc1133]/20 absolute"/>
-        <div className="w-[176px] h-[176px] rounded-full shadow-[0_0_22px_#cc113399,0_0_55px_#cc113344,inset_0_0_30px_rgba(0,0,0,0.6)] border-2 border-[#cc1133] absolute"/>
-        <div className="w-[156px] h-[156px] rounded-full border border-[#cc1133]/30 shadow-[inset_0_0_14px_#cc113322] absolute"/>
-        
+        <motion.div animate={{rotate:-360}} transition={{duration:35,repeat:Infinity,ease:'linear'}} className="rounded-full border border-dashed border-[#cc1133]/20 absolute"
+          style={{width:'clamp(130px, 36vw, 182px)', height:'clamp(130px, 36vw, 182px)'}}/>
+        <div className="rounded-full shadow-[0_0_22px_#cc113399,0_0_55px_#cc113344,inset_0_0_30px_rgba(0,0,0,0.6)] border-2 border-[#cc1133] absolute"
+          style={{width:'clamp(125px, 34vw, 176px)', height:'clamp(125px, 34vw, 176px)'}}/>
+        <div className="rounded-full border border-[#cc1133]/30 shadow-[inset_0_0_14px_#cc113322] absolute"
+          style={{width:'clamp(110px, 30vw, 156px)', height:'clamp(110px, 30vw, 156px)'}}/>
+
         {/* Character image */}
-        <div className="absolute overflow-hidden w-[160px] h-[160px] rounded-full bg-[#10040a]/90">
+        <div className="overflow-hidden w-full h-full rounded-full bg-[#10040a]/90 absolute inset-0 flex items-center justify-center">
           <img src="/assets/kai-icon-anime-wink.png" alt="Kai Shi" className="w-full h-full object-cover object-top transition-transform duration-75"
             style={{
               filter: glitch
                 ? `drop-shadow(0 0 12px ${R}) brightness(1.1) saturate(1.3)`
                 : `drop-shadow(0 0 8px ${R}88) brightness(0.95) saturate(1.2)`,
               transform: glitch ? 'translateX(2px)' : 'none',
+              maxWidth: 'clamp(110px, 30vw, 160px)',
+              maxHeight: 'clamp(110px, 30vw, 160px)',
             }}
           />
         </div>
-        
+
         {/* Pixel heart icon */}
-        <motion.img src="/assets/icon-kai-love.png" alt="" className="absolute top-[12px] right-[18px] w-[30px] h-[30px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_8px_#cc1133]"
+        <motion.img src="/assets/icon-kai-love.png" alt="" className="absolute object-contain [image-rendering:pixelated] drop-shadow-[0_0_8px_#cc1133]"
+          style={{width:'clamp(20px, 6vw, 30px)', height:'clamp(20px, 6vw, 30px)', top:'8px', right:'12px'}}
           animate={{scale:[1,1.18,1],opacity:[0.85,1,0.85]}}
           transition={{duration:2,repeat:Infinity}}
         />
-        
+
         {/* Bottom arc label tick marks */}
         {[-40,-20,0,20,40].map((deg,i)=>(
           <div key={i} style={{
             position:'absolute',top:'50%',left:'50%',
             width:'2px',height: i===2?'8px':'5px', background: i===2?R:`${R}55`,
-            transform:`translate(-50%,-50%) rotate(${90+deg}deg) translateY(90px)`,
+            transform:`translate(-50%,-50%) rotate(${90+deg}deg) translateY(clamp(64px, 17vw, 90px))`,
             boxShadow: i===2?`0 0 4px ${R}`:'none',
           }}/>
         ))}
@@ -246,13 +253,14 @@ function ProfileCard({inView}:{inView:boolean}) {
 
       {/* Name + title */}
       <div className="text-center px-[12px] mt-[4px]">
-        <div className="font-pixel text-[22px] text-white leading-none flex items-center justify-center gap-[8px] tracking-[0.05em] transition-all"
+        <div className="font-pixel text-white leading-none flex items-center justify-center gap-[8px] tracking-[0.05em] transition-all"
           style={{
+            fontSize: 'clamp(16px, 5vw, 22px)',
             textShadow: glitch
               ? `3px 0 #ff0044,-3px 0 #0088ff,0 0 24px ${R}`
               : `0 0 18px ${R}88,2px 2px 0 rgba(204,17,51,0.4)`,
           }}>
-          <span className="text-[#cc1133] text-[14px]">✦</span> KAI SHI <span className="text-[#cc1133] text-[14px]">✦</span>
+          <span className="text-[#cc1133]" style={{fontSize:'clamp(10px, 3vw, 14px)'}}>✦</span> KAI SHI <span className="text-[#cc1133]" style={{fontSize:'clamp(10px, 3vw, 14px)'}}>✦</span>
         </div>
         <div className="font-pixel text-[9px] tracking-[0.22em] mt-[10px] text-[#8a6878]">
           FRONTEND BUILDER <br></br> CONTENT CREATOR
@@ -270,7 +278,7 @@ function ProfileCard({inView}:{inView:boolean}) {
             <div className="absolute w-[8px] h-[8px] border-b border-r border-[#ff6688]/55 bottom-[3px] right-[3px] pointer-events-none" />
 
             <span className="font-pixel text-[7px]" style={{color:R}}>Lv.</span>
-            <span className="font-pixel text-[20px] text-white" style={{textShadow:`0 0 12px ${R}`,lineHeight:1}}>21</span>
+            <span className="font-pixel text-white" style={{textShadow:`0 0 12px ${R}`,lineHeight:1, fontSize:'clamp(16px, 5vw, 20px)'}}>21</span>
           </motion.div>
           <div className="flex-1 flex flex-col gap-[7px]">
             <div className="flex justify-between items-center px-[2px]">
@@ -362,17 +370,18 @@ function BiographyPanel({inView}:{inView:boolean}) {
       <Corners c={R} s={9} />
       <PanelHeader icon="/assets/icon-kai-cat1.png" label="BIOGRAPHY"/>
 
-      <div className="p-[18px_17px_14px]">
+      <div className="p-3 sm:p-[18px_17px_14px]">
         {/* Main quote row */}
-        <motion.div className="relative flex gap-[14px] my-[14px] min-h-[88px]"
+        <motion.div className="relative flex gap-[14px] my-[14px] min-h-[88px] flex-col sm:flex-row"
           initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.2,duration:0.5}}
         >
           {/* Quote text side */}
           <div className="relative flex-1">
             <img src="/assets/kai-icon-kutip-atas.png" className="absolute top-[6px] -left-[4px] w-[30px] h-[30px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
-            <p className="font-display text-[20px] leading-[1.7] text-[#e8e0e3]/90 pl-[30px] pt-[8px]">
-              A digital builder crafting immersive<br/>
-              web experiences through code,<br/>
+            <p className="font-display leading-[1.7] text-[#e8e0e3]/90 pl-[30px] pt-[8px]"
+              style={{ fontSize: 'clamp(13px, 3.5vw, 20px)' }}>
+              A digital builder crafting immersive<br className="hidden sm:inline"/>
+              web experiences through code,<br className="hidden sm:inline"/>
               creativity, and{' '}
               <span className="font-bold text-[#ff2244] animate-neon-flicker">anime-powered vibes.</span>
               <img src="/assets/kai-icon-kutip-bawah.png" className="ml-[6px] align-bottom inline-block relative -top-[2px] w-[26px] h-[26px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
@@ -380,8 +389,8 @@ function BiographyPanel({inView}:{inView:boolean}) {
           </div>
 
           {/* Floating mascot */}
-          <div className="relative w-[110px] top-[10px] shrink-0">
-            <motion.div className="w-full h-[114px] relative animate-float-y">
+          <div className="relative shrink-0 mx-auto sm:mx-0 sm:relative sm:top-[10px]" style={{width:'clamp(80px, 22vw, 110px)'}}>
+            <motion.div className="w-full animate-float-y" style={{height:'clamp(80px, 22vw, 114px)'}}>
               <img src="/assets/icon-kai-cat1.png" alt="" className="w-full h-full object-cover object-top drop-shadow-[0_0_16px_#cc113388] brightness-90 rounded-[4px]" />
               <div className="absolute inset-0 rounded-[4px] shadow-[inset_0_0_20px_rgba(204,17,51,0.3),0_0_20px_#cc113344] pointer-events-none" />
               <Corners c={R} s={6}/>
@@ -391,32 +400,32 @@ function BiographyPanel({inView}:{inView:boolean}) {
         </motion.div>
 
         {/* Code block quote card */}
-        <motion.div className="border border-[#cc1133]/30 bg-[#cc1133]/10 p-[5px_8px] mt-[40px] mb-[14px] flex gap-[14px] items-center relative overflow-hidden"
+        <motion.div className="border border-[#cc1133]/30 bg-[#cc1133]/10 p-[5px_8px] mt-[30px] sm:mt-[40px] mb-[14px] flex gap-[14px] items-center relative overflow-hidden flex-col sm:flex-row"
           initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.38,duration:0.48}}
         >
           <motion.div className="absolute top-0 bottom-0 w-[40%] bg-[linear-gradient(90deg,transparent,#cc113311,transparent)] pointer-events-none"
             animate={{x:['-120%','120%']}} transition={{duration:3.5,repeat:Infinity,repeatDelay:4,ease:'easeInOut'}}
           />
-          <div className="w-[70px] h-[70px] border border-[#cc1133]/40 bg-[#cc1133]/10 flex mx-[14px] items-center justify-center shadow-[0_0_14px_#cc113344] rotate-45 shrink-0">
+          <div className="w-[70px] h-[70px] border border-[#cc1133]/40 bg-[#cc1133]/10 flex mx-auto sm:mx-[14px] items-center justify-center shadow-[0_0_14px_#cc113344] rotate-45 shrink-0 hidden sm:flex">
             <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} className="-rotate-45" style={{filter:`drop-shadow(0 0 6px ${R})`}} />
           </div>
-          <div className="flex-1 flex items-center gap-[12px] justify-between">
-            <div className="flex-1 min-w-0">
-              <div className="font-pixel text-[16px] mb-1.5" style={{color:R,letterSpacing:'0.1em'}}>
+          <div className="flex-1 flex items-center gap-[12px] justify-between flex-col sm:flex-row">
+            <div className="flex-1 min-w-0 text-center sm:text-left">
+              <div className="font-pixel mb-1.5" style={{color:R,letterSpacing:'0.1em',fontSize:'clamp(12px, 3vw, 16px)'}}>
                 CODE IS MY WEAPON
               </div>
-              <div className="font-mono text-[14px]" style={{color:'rgba(232,224,227,0.7)',lineHeight:1.625}}>
+              <div className="font-mono" style={{color:'rgba(232,224,227,0.7)',lineHeight:1.625,fontSize:'clamp(11px, 2.8vw, 14px)'}}>
                 Creativity is my power.<br/>The web is my playground.
               </div>
             </div>
-            <div className="ml-auto w-[100px] h-[100px] shrink-0 flex items-center justify-end">
+            <div className="w-[70px] sm:w-[100px] h-[70px] sm:h-[100px] shrink-0 flex items-center justify-center">
               <img src="/assets/kai-icon-chibi.png" alt="code" width={28} height={28} style={{filter:`drop-shadow(0 0 6px ${R})`}} className="w-full h-full object-contain [image-rendering:pixelated]" />
             </div>
           </div>
         </motion.div>
 
         {/* Tag chips */}
-        <motion.div className="flex flex-wrap gap-[12px] mt-[30px]"
+        <motion.div className="flex flex-wrap gap-[12px] mt-[24px] sm:mt-[30px]"
           initial={{opacity:0,y:8}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.5,duration:0.45}}
         >
           {TAGS.map((tag,i) => (
@@ -425,16 +434,16 @@ function BiographyPanel({inView}:{inView:boolean}) {
             >
               <img src={['/assets/icon-kai-code.png','/assets/icon-kai-mekanik.png','/assets/kai-icon-cat-cyber.png','/assets/icon-kai-target.png'][i]}
                 alt="" className="w-[14px] h-[14px] object-contain [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc113388]" />
-              <span className="font-pixel text-[11px] tracking-[0.05em] text-[#c0a8b4]">{tag}</span>
+              <span className="font-pixel tracking-[0.05em] text-[#c0a8b4]" style={{fontSize:'clamp(9px, 2.5vw, 11px)'}}>{tag}</span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* ─── Current Mission Terminal ─── */}
-        <motion.div className="mt-[30px] border border-[#cc1133]/30 bg-[#030106]/95 relative overflow-hidden"
+        <motion.div className="mt-[24px] sm:mt-[30px] border border-[#cc1133]/30 bg-[#030106]/95 relative overflow-hidden"
           initial={{opacity:0,y:12}} animate={inView?{opacity:1,y:0}:{}} transition={{delay:0.65,duration:0.48}}
         >
-          <div className="flex items-center gap-[10px] p-[10px_12px] border-b border-[#cc1133]/15 bg-[#cc1133]/5">
+          <div className="flex items-center gap-[10px] p-[10px_12px] border-b border-[#cc1133]/15 bg-[#cc1133]/5 flex-wrap gap-y-[4px]">
             <div className="flex gap-[5px] items-center">
               {[R,'#ffcc33','#22c55e'].map((c,i)=>(
                 <div key={i} style={{width:8,height:8,borderRadius:'50%',background:c,opacity:0.75}}/>
@@ -446,11 +455,12 @@ function BiographyPanel({inView}:{inView:boolean}) {
           </div>
           <div className="p-[10px_14px_12px] flex flex-col gap-[5px]">
             {([
-              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'13px'},
-              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'13px'},
-              {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'13px'},
+              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'clamp(10px, 2.5vw, 13px)'},
+              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'clamp(10px, 2.5vw, 13px)'},
+              {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'clamp(10px, 2.5vw, 13px)'},
             ]).map((ln,i)=>(
-              <motion.div key={i} className="font-mono text-[12px] flex gap-[6px] items-baseline whitespace-nowrap"
+              <motion.div key={i} className="font-mono flex gap-[6px] items-baseline whitespace-nowrap overflow-x-auto"
+                style={{fontSize:'clamp(10px, 2.5vw, 12px)'}}
                 initial={{opacity:0,x:-12}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.76+i*0.14}}
               >
                 <span className="text-[#cc1133] font-bold shrink-0">{ln.prompt}</span>
@@ -465,17 +475,17 @@ function BiographyPanel({inView}:{inView:boolean}) {
         </motion.div>
 
         {/* ─── Activity Mini Metrics ─── */}
-        <motion.div className="flex mt-[30px] border border-[#cc1133]/15 bg-[#080206]/70 overflow-hidden"
+        <motion.div className="flex mt-[24px] sm:mt-[30px] border border-[#cc1133]/15 bg-[#080206]/70 overflow-hidden"
           initial={{opacity:0}} animate={inView?{opacity:1}:{}} transition={{delay:0.85}}
         >
           {([
-            {label:'PROJECTS', val:'12', icon:'◈', fsz:'11px'},
-            {label:'COMMITS',  val:'340', icon:'◉', fsz:'11px'},
-            {label:'STREAK',   val:'28D', icon:'▲', fsz:'11px'},
+            {label:'PROJECTS', val:'12', icon:'◈', fsz:'clamp(9px, 2.2vw, 11px)'},
+            {label:'COMMITS',  val:'340', icon:'◉', fsz:'clamp(9px, 2.2vw, 11px)'},
+            {label:'STREAK',   val:'28D', icon:'▲', fsz:'clamp(9px, 2.2vw, 11px)'},
           ]).map((m,i)=>(
             <div key={m.label} className="flex-1 flex flex-col items-center p-[8px_6px] gap-[10px] border-r border-[#cc1133]/10 relative last:border-r-0">
-              <span className="font-pixel text-[10px]" style={{color:i===2?'#22c55e':R, fontSize:m.fsz}}>{m.icon}</span>
-              <span className="font-pixel text-[16px] text-[#e8e0e3] leading-none tracking-[-0.01em]" style={{fontSize:m.fsz}}>{m.val}</span>
+              <span className="font-pixel" style={{color:i===2?'#22c55e':R, fontSize:m.fsz}}>{m.icon}</span>
+              <span className="font-pixel text-[#e8e0e3] leading-none tracking-[-0.01em]" style={{fontSize:m.fsz}}>{m.val}</span>
               <span className="font-pixel text-[6px] text-[#4a3040] tracking-[0.1em]" style={{fontSize:m.fsz}}>{m.label}</span>
             </div>
           ))}

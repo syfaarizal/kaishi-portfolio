@@ -785,7 +785,7 @@ function Column({ data, activeNode, setActiveNode, animDelay }: ColumnProps) {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: animDelay, ease: [0.22, 1, 0.36, 1] }}
       className="flex-shrink-0 flex flex-col items-center"
-      style={{ width: layout.width }}
+      style={{ width: 'clamp(200px, 70vw, 250px)' }}
     >
       {/* Column header */}
       <div className="w-full mb-5 relative z-20 group">
@@ -992,10 +992,10 @@ export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) 
         />
       ))}
 
-      <main className="relative z-10 max-w-[1720px] mx-auto px-4 py-8 flex flex-col min-h-full">
+      <main className="relative z-10 max-w-[1720px] mx-auto px-2 sm:px-4 py-6 sm:py-8 flex flex-col min-h-full">
 
         {/* ── HEADER ── */}
-        <header className="flex flex-col items-center mt-14 mb-10 relative gap-2">
+        <header className="flex flex-col items-center mt-12 sm:mt-14 mb-6 sm:mb-10 relative gap-2">
           <div
             className="absolute left-0 top-1/2 -translate-y-1/2 hidden xl:flex items-center gap-2"
             style={{ color: 'rgba(255,0,60,0.38)', fontSize: '9px', letterSpacing: '0.22em' }}
@@ -1025,17 +1025,18 @@ export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) 
 
         {/* ── SKILL COLUMNS ── */}
         <div
-          className="flex flex-col xl:flex-row xl:justify-center gap-8 xl:gap-4 overflow-x-auto pb-12 px-2 xl:px-0"
+          className="flex flex-col md:flex-row md:justify-center gap-6 md:gap-4 overflow-x-auto pb-12 px-1 sm:px-0 snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none' }}
         >
           {COLUMNS.map((col, idx) => (
-            <Column
-              key={col.id}
-              data={col}
-              activeNode={activeNode}
-              setActiveNode={setActiveNode}
-              animDelay={idx * 0.07}
-            />
+            <div key={col.id} className="snap-center shrink-0">
+              <Column
+                data={col}
+                activeNode={activeNode}
+                setActiveNode={setActiveNode}
+                animDelay={idx * 0.07}
+              />
+            </div>
           ))}
         </div>
 
@@ -1046,7 +1047,7 @@ export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) 
             style={{
               border: '1px solid rgba(255,0,60,0.38)',
               background: 'rgba(255,0,60,0.04)',
-              padding: '14px 24px',
+              padding: '12px 16px sm:14px 24px',
               textAlign: 'center',
             }}
           >
@@ -1075,11 +1076,11 @@ export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) 
             ))}
             <span style={{ color: 'rgba(255,0,60,0.5)', marginRight: '10px' }}>◆</span>
             <span
-              className="relative font-bold tracking-[0.26em]"
+              className="relative font-bold tracking-[0.16em] sm:tracking-[0.26em]"
               style={{
                 color: '#ff003c',
                 textShadow: '0 0 12px rgba(255,0,60,0.5)',
-                fontSize: 'clamp(10px, 2vw, 15px)',
+                fontSize: 'clamp(8px, 2.5vw, 15px)',
               }}
             >
               LEVEL UP YOUR SKILLS. UNLOCK NEW POSSIBILITIES.
