@@ -7,6 +7,7 @@ import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
 import { QuestBoard } from './components/sections/QuestBoard/QuestBoard';
 import { Contact } from './components/sections/Contact';
+import { useAudio } from './hooks/useAudio';
 
 export type SectionId = 'hero' | 'about' | 'skills' | 'projects' | 'contact';
 
@@ -55,14 +56,16 @@ function App() {
   const [activeSection, setActiveSection] = useState<SectionId>('hero');
   const [direction, setDirection] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { playSwap } = useAudio();
 
   const navigate = useCallback((to: SectionId) => {
     if (to === activeSection || isTransitioning) return;
     setDirection(getDirection(activeSection, to));
     setIsTransitioning(true);
     setActiveSection(to);
+    playSwap();
     setTimeout(() => setIsTransitioning(false), 700);
-  }, [activeSection, isTransitioning]);
+  }, [activeSection, isTransitioning, playSwap]);
 
   const renderSection = () => {
     switch (activeSection) {

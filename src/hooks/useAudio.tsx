@@ -3,11 +3,13 @@ import type { ReactNode } from 'react';
 
 const HOVER_SFX = '/assets/audio/hover-sfx.mp3';
 const CLICK_SFX = '/assets/audio/click-sfx.mp3';
+const SWAP_SFX = '/assets/audio/swap-glitch.mp3';
 const BACKSOUND = '/assets/audio/backsound.mp3';
 
 interface AudioCtxValue {
   musicOn: boolean;
   toggleMusic: () => void;
+  playSwap: () => void;
 }
 
 const AudioCtx = createContext<AudioCtxValue | null>(null);
@@ -34,6 +36,16 @@ function playSfx(kind: 'hover' | 'click') {
     void audio.play().catch(() => {
       /* autoplay/permission errors are silent — UI shouldn't depend on them */
     });
+  } catch {
+    /* ignore */
+  }
+}
+
+function playSwap() {
+  try {
+    const audio = new Audio(SWAP_SFX);
+    audio.volume = 0.7;
+    void audio.play().catch(() => undefined);
   } catch {
     /* ignore */
   }
@@ -111,7 +123,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AudioCtx.Provider value={{ musicOn, toggleMusic }}>
+    <AudioCtx.Provider value={{ musicOn, toggleMusic, playSwap }}>
       {children}
     </AudioCtx.Provider>
   );
