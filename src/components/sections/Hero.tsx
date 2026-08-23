@@ -40,12 +40,12 @@ function useGlitchShift(active: boolean, options: number[]) {
   return shift;
 }
 
-const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
+const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
 const NAME_GLITCH_SHIFTS = [-3, 2, -2, 3];
 const BUTTON_GLITCH_SHIFTS = [-3, 2, -2];
 const LABELS: Record<SectionId, string> = {
   hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
-  projects: 'QUEST BOARD', contact: 'PORTAL',
+  projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
 };
 
 interface HeroProps { onNavigate: (id: SectionId) => void; }

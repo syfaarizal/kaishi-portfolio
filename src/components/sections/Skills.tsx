@@ -1102,8 +1102,11 @@ export function Skills({ onNavigate }: { onNavigate: (id: SectionId) => void }) 
    ───────────────────────────────────────────────────────────── */
 
 function NavDotsBar({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
-  const sections: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
-  const labels: Record<SectionId, string> = { hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR', projects: 'QUEST BOARD', contact: 'PORTAL' };
+  const sections: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
+  const labels: Record<SectionId, string> = {
+    hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
+    projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
+  };
 
   return (
     <motion.div

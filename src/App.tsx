@@ -6,12 +6,13 @@ import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
 import { QuestBoard } from './components/sections/QuestBoard/QuestBoard';
+import { Loadout } from './components/sections/Loadout';
 import { Contact } from './components/sections/Contact';
 import { useAudio } from './hooks/useAudio';
 
-export type SectionId = 'hero' | 'about' | 'skills' | 'projects' | 'contact';
+export type SectionId = 'hero' | 'about' | 'skills' | 'projects' | 'loadout' | 'contact';
 
-const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'contact'];
+const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
 
 function getDirection(from: SectionId, to: SectionId) {
   return SECTIONS.indexOf(to) > SECTIONS.indexOf(from) ? 1 : -1;
@@ -73,6 +74,7 @@ function App() {
       case 'about':    return <About onNavigate={navigate} />;
       case 'skills':   return <Skills onNavigate={navigate} />;
       case 'projects': return <QuestBoard />;
+      case 'loadout':  return <Loadout onNavigate={navigate} />;
       case 'contact':  return <Contact />;
       default:         return <Hero onNavigate={navigate} />;
     }
@@ -112,7 +114,7 @@ function SectionDots({ active, onNavigate }: {
 }) {
   const labels: Record<SectionId, string> = {
     hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
-    projects: 'QUEST BOARD', contact: 'PORTAL',
+    projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
   };
 
   return (

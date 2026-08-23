@@ -8,6 +8,7 @@ const NAV_ITEMS: { label: string; id: SectionId }[] = [
   { label: 'PROFILE',     id: 'about'    },
   { label: 'INVENTOR',    id: 'skills'   },
   { label: 'QUEST BOARD', id: 'projects' },
+  { label: 'LOADOUT',     id: 'loadout'  },
   { label: 'PORTAL',      id: 'contact'  },
 ];
 
