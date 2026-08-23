@@ -16,8 +16,6 @@ export function QuestBoard() {
     isQuestCompleted,
   } = useQuest();
 
-  const completedCount = quests.filter(q => q.status === 'COMPLETED').length;
-
   return (
     <section id="projects" className="relative py-24 overflow-hidden min-h-screen">
       <PixelGrid />
@@ -37,10 +35,10 @@ export function QuestBoard() {
           </div>
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="font-pixel text-xl text-white" style={{ textShadow: '0 0 20px rgba(204,17,51,0.4)' }}>
-              COMPLETED & ACTIVE QUESTS
+              EXPERIMENTS & PLAYABLE ARCADE
             </h2>
             <span className="font-pixel text-[8px] text-kai-muted border border-kai-border px-3 py-1">
-              {completedCount} / {quests.length} DONE
+              {quests.filter(q => q.status === 'PLAYABLE').length} PLAYABLE
             </span>
           </div>
         </motion.div>

@@ -1,4 +1,4 @@
-export type QuestStatus = 'COMPLETED' | 'IN_PROGRESS' | 'PLANNING';
+export type QuestStatus = 'COMPLETED' | 'IN_PROGRESS' | 'PLANNING' | 'PLAYABLE';
 
 export interface Quest {
   id: string;

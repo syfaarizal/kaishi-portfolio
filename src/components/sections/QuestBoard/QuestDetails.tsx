@@ -12,6 +12,7 @@ const statusColor: Record<string, string> = {
   COMPLETED: '#22c55e',
   IN_PROGRESS: '#f59e0b',
   PLANNING: '#6b7280',
+  PLAYABLE: '#cc1133',
 };
 
 export function QuestDetails({ quest, onClose, onLaunchGame, isCompleted }: QuestDetailsProps) {
