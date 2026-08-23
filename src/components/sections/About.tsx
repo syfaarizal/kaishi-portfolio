@@ -200,8 +200,10 @@ function ProfileCard({inView}:{inView:boolean}) {
 
       {/* Character image in glowing circular frame */}
       <div className="relative flex items-center justify-center overflow-hidden" style={{ height: 'clamp(160px, 28vw, 226px)' }}>
+        {/* Rotating outer ring (dashed) */}
         <motion.div animate={{rotate:360}} transition={{duration:22,repeat:Infinity,ease:'linear'}} className="rounded-full border border-dashed border-[#cc1133]/20 absolute"
           style={{width:'clamp(140px, 38vw, 196px)', height:'clamp(140px, 38vw, 196px)'}}/>
+        {/* Tick marks ring */}
         <div className="rounded-full border border-transparent absolute" style={{width:'clamp(148px, 42vw, 208px)', height:'clamp(148px, 42vw, 208px)'}}>
           {[0,60,120,180,240,300].map((deg,i)=>(
             <div key={i} style={{
@@ -212,26 +214,36 @@ function ProfileCard({inView}:{inView:boolean}) {
             }}/>
           ))}
         </div>
+        {/* Rotating inner ring (dashed) */}
         <motion.div animate={{rotate:-360}} transition={{duration:35,repeat:Infinity,ease:'linear'}} className="rounded-full border border-dashed border-[#cc1133]/20 absolute"
           style={{width:'clamp(130px, 36vw, 182px)', height:'clamp(130px, 36vw, 182px)'}}/>
-        <div className="rounded-full shadow-[0_0_22px_#cc113399,0_0_55px_#cc113344,inset_0_0_30px_rgba(0,0,0,0.6)] border-2 border-[#cc1133] absolute"
-          style={{width:'clamp(125px, 34vw, 176px)', height:'clamp(125px, 34vw, 176px)'}}/>
-        <div className="rounded-full border border-[#cc1133]/30 shadow-[inset_0_0_14px_#cc113322] absolute"
-          style={{width:'clamp(110px, 30vw, 156px)', height:'clamp(110px, 30vw, 156px)'}}/>
 
-        {/* Character image */}
-        <div className="overflow-hidden w-full h-full rounded-full bg-[#10040a]/90 absolute inset-0 flex items-center justify-center">
-          <img src="/assets/kai-icon-anime-wink.png" alt="Kai Shi" className="w-full h-full object-cover object-top transition-transform duration-75"
+        {/* Character image — clipped to a circle smaller than the neon border so the
+            border sits OVER the image and the image edges are hidden behind it */}
+        <div className="absolute rounded-full overflow-hidden bg-[#10040a]/90 flex items-center justify-center"
+          style={{
+            width: 'clamp(110px, 30vw, 156px)',
+            height: 'clamp(110px, 30vw, 156px)',
+          }}
+        >
+          <img
+            src="/assets/kai-icon-anime-wink.png"
+            alt="Kai Shi"
+            className="w-full h-full object-cover object-top transition-transform duration-75"
             style={{
               filter: glitch
                 ? `drop-shadow(0 0 12px ${R}) brightness(1.1) saturate(1.3)`
                 : `drop-shadow(0 0 8px ${R}88) brightness(0.95) saturate(1.2)`,
               transform: glitch ? 'translateX(2px)' : 'none',
-              maxWidth: 'clamp(110px, 30vw, 160px)',
-              maxHeight: 'clamp(110px, 30vw, 160px)',
             }}
           />
         </div>
+
+        {/* Neon border ring — rendered AFTER the image so it appears ON TOP */}
+        <div className="rounded-full shadow-[0_0_22px_#cc113399,0_0_55px_#cc113344,inset_0_0_30px_rgba(0,0,0,0.6)] border-2 border-[#cc1133] absolute"
+          style={{width:'clamp(125px, 34vw, 176px)', height:'clamp(125px, 34vw, 176px)'}}/>
+        <div className="rounded-full border border-[#cc1133]/30 shadow-[inset_0_0_14px_#cc113322] absolute"
+          style={{width:'clamp(110px, 30vw, 156px)', height:'clamp(110px, 30vw, 156px)'}}/>
 
         {/* Pixel heart icon */}
         <motion.img src="/assets/icon-kai-love.png" alt="" className="absolute object-contain [image-rendering:pixelated] drop-shadow-[0_0_8px_#cc1133]"

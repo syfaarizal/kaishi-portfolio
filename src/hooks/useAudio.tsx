@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 const HOVER_SFX = '/assets/audio/hover-sfx.mp3';
 const CLICK_SFX = '/assets/audio/click-sfx.mp3';
 const SWAP_SFX = '/assets/audio/swap-glitch.mp3';
+const TYPING_SFX = '/assets/audio/typing-sfx.mp3';
 const BACKSOUND = '/assets/audio/backsound.mp3';
 
 interface AudioCtxValue {
@@ -49,6 +50,42 @@ function playSwap() {
   } catch {
     /* ignore */
   }
+}
+
+// Throttle typing SFX so a fast typist doesn't machine-gun the audio.
+let lastTypeAt = 0;
+const TYPING_THROTTLE_MS = 65;
+
+function playTyping() {
+  try {
+    const now = performance.now();
+    if (now - lastTypeAt < TYPING_THROTTLE_MS) return;
+    lastTypeAt = now;
+    const audio = new Audio(TYPING_SFX);
+    audio.volume = 0.45;
+    void audio.play().catch(() => undefined);
+  } catch {
+    /* ignore */
+  }
+}
+
+// Keys we want to skip — pure modifiers and navigation shouldn't trigger typing SFX.
+const SKIP_KEYS = new Set([
+  'Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'NumLock', 'ScrollLock',
+  'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight',
+  'Home', 'End', 'PageUp', 'PageDown',
+  'Insert', 'Delete',
+  'Escape', 'Tab',
+  'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
+  'ContextMenu', 'PrintScreen', 'Pause',
+]);
+
+function isTextInput(el: Element | null): boolean {
+  if (!el) return false;
+  const tag = el.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return true;
+  if ((el as HTMLElement).isContentEditable) return true;
+  return false;
 }
 
 export function AudioProvider({ children }: { children: ReactNode }) {
@@ -103,6 +140,38 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       document.removeEventListener('pointerover', handlePointerOver, true);
       document.removeEventListener('pointerout', handlePointerOut, true);
       document.removeEventListener('click', handleClick, true);
+    };
+  }, []);
+
+  // Global typing SFX — fires whenever the user types into any
+  // <input>, <textarea>, or [contenteditable] anywhere in the app.
+  // Modifier-only and navigation keys are filtered out so it only
+  // sounds on real character/destructive input.
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as Element | null;
+      if (!isTextInput(target)) return;
+      if (e.key && SKIP_KEYS.has(e.key)) return;
+      playTyping();
+    };
+
+    // contentEditable elements fire `input` for every change including
+    // those that don't generate a keydown (e.g. IME composition finalise,
+    // paste, drag-drop). Listen to that too so we still get a tick.
+    const handleInput = (e: Event) => {
+      const target = e.target as Element | null;
+      if (!target || !isTextInput(target)) return;
+      // Skip if it's a regular input/textarea — keydown already handled it.
+      const tag = target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      playTyping();
+    };
+
+    document.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('input', handleInput, true);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('input', handleInput, true);
     };
   }, []);
 
