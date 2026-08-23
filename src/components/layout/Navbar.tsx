@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { SectionId } from '../../App';
+import { useAudio } from '../../hooks/useAudio';
 
 const NAV_ITEMS: { label: string; id: SectionId }[] = [
   { label: 'INTRO',       id: 'hero'     },
@@ -17,6 +18,7 @@ interface NavbarProps {
 
 export function Navbar({ activeSection, onNavigate }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { musicOn, toggleMusic } = useAudio();
 
   return (
     <>
@@ -82,6 +84,7 @@ export function Navbar({ activeSection, onNavigate }: NavbarProps) {
 
           {/* ── Right icons ── */}
           <div className="flex items-center gap-2 shrink-0">
+            <MusicToggle on={musicOn} onToggle={toggleMusic} />
             <HUDIcon
               src="/assets/icon-kai-love.png"
               alt="messages"
@@ -208,6 +211,55 @@ function HUDIcon({ src, alt, onClick }: { src: string; alt: string; onClick?: ()
         onMouseEnter={e => (e.currentTarget.style.filter = 'drop-shadow(0 0 7px #cc1133) brightness(1.3)')}
         onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
       />
+    </motion.button>
+  );
+}
+
+/* ─── Music on/off toggle ─── */
+function MusicToggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+  return (
+    <motion.button
+      onClick={onToggle}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      title={on ? 'MUSIC: ON' : 'MUSIC: OFF'}
+      aria-label={on ? 'Mute backsound' : 'Play backsound'}
+      aria-pressed={on}
+      className="relative w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center border bg-[#0d0408]/80 transition-all touch-manipulation"
+      style={{
+        clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)',
+        borderColor: on ? '#cc1133' : '#3d0f1a',
+        boxShadow: on ? '0 0 10px rgba(204,17,51,0.55)' : 'none',
+      }}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        style={{
+          imageRendering: 'pixelated',
+          filter: on
+            ? 'drop-shadow(0 0 6px #cc1133) brightness(1.3)'
+            : 'none',
+          transition: 'filter 0.2s',
+        }}
+      >
+        {on ? (
+          // Speaker with sound waves
+          <g fill="none" stroke="#cc1133" strokeWidth="2" strokeLinecap="square">
+            <path d="M3 9 H7 L12 4 V20 L7 15 H3 Z" fill="#cc1133" />
+            <path d="M15 9 Q18 12 15 15" />
+            <path d="M17 6 Q22 12 17 18" />
+          </g>
+        ) : (
+          // Speaker with X
+          <g fill="none" stroke="#7a6068" strokeWidth="2" strokeLinecap="square">
+            <path d="M3 9 H7 L12 4 V20 L7 15 H3 Z" fill="#7a6068" />
+            <line x1="16" y1="8" x2="22" y2="14" />
+            <line x1="22" y1="8" x2="16" y2="14" />
+          </g>
+        )}
+      </svg>
     </motion.button>
   );
 }
