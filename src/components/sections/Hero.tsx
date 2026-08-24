@@ -62,7 +62,7 @@ export function Hero({ onNavigate }: HeroProps) {
   const [chatOpen, setChatOpen] = useState(false);
 
   const typedText = useTypingEffect(
-    ['FRONTEND BUILDER', 'CONTENT CREATOR', 'ANIME ENJOYER', 'WEB ADVENTURER', 'CODE WEAVER'],
+    ['FRONTEND BUILDER', 'CONTENT CREATOR', 'FULLSTACK EXPLORER', 'SYSTEM FORGER', 'CODE WEAVER'],
     68, 34, 2000
   );
 
@@ -282,8 +282,8 @@ export function Hero({ onNavigate }: HeroProps) {
             textShadow: '0 1px 8px rgba(0,0,0,0.8)',
           }}>
             <span style={{ color: '#cc1133', marginRight: '7px' }}>◆</span>
-            Crafting immersive web experiences with code,<br className="hidden sm:inline" />
-            creativity, and anime-powered vibes.
+            I build digital experiences through code,<br className="hidden sm:inline" />
+            curiosity, and endless exploration.
           </p>
           <p className="font-mono" style={{
             fontSize: 'clamp(10px, 2.8vw, 15px)',

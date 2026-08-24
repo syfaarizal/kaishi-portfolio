@@ -23,12 +23,12 @@ const CORE_STATS = [
   { label:'CODING POWER',    value:86, icon:'code'     },
   { label:'PROBLEM SOLVING', value:92, icon:'puzzle'   },
   { label:'DESIGN SENSE',    value:78, icon:'palette'  },
-  { label:'CREATIVITY',      value:89, icon:'lightning'},
+  { label:'CREATIVE POWER',      value:89, icon:'lightning'},
   { label:'LOGIC',           value:90, icon:'brain'    },
   { label:'ADAPTABILITY',    value:87, icon:'cycle'    },
 ];
 
-const TAGS = ['FRONTEND BUILDER','CONTENT CREATOR','ANIME ENTHUSIAST','PROBLEM SOLVER'];
+const TAGS = ['FRONTEND BUILDER','CONTENT CREATOR','FULLSTACK EXPLORER','CODE WEAVER'];
 
 const R   = '#cc1133';
 const R2  = '#ff2244';
@@ -275,7 +275,7 @@ function ProfileCard({inView}:{inView:boolean}) {
           <span className="text-[#cc1133]" style={{fontSize:'clamp(10px, 3vw, 14px)'}}>✦</span> KAI SHI <span className="text-[#cc1133]" style={{fontSize:'clamp(10px, 3vw, 14px)'}}>✦</span>
         </div>
         <div className="font-pixel text-[9px] tracking-[0.22em] mt-[10px] text-[#8a6878]">
-          FRONTEND BUILDER <br></br> CONTENT CREATOR
+          DIGITAL BUILDER <br></br> CONTENT CREATOR
         </div>
       </div>
 
@@ -344,8 +344,8 @@ function ProfileCard({inView}:{inView:boolean}) {
           <div className="flex flex-col gap-[5px]">
             {([
               {label:'YOUTUBE', color:R},
-              {label:'TIKTOK',  color:R3},
-              {label:'GITHUB',  color:'#9090b8'},
+              {label:'TIKTOK',  color:'#7a6068'}, //gray color
+              {label:'INSTAGRAM',  color:'#ff6688'},
             ] as const).map((s,i)=>(
               <motion.div key={s.label} className="flex items-center gap-[8px] p-[5px_10px] border bg-[#0a0208]/80 cursor-pointer relative [clip-path:polygon(0_0,calc(100%-6px)_0,100%_6px,100%_100%,6px_100%,0_calc(100%-6px))] transition-all duration-200"
                 initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}
@@ -392,10 +392,10 @@ function BiographyPanel({inView}:{inView:boolean}) {
             <img src="/assets/kai-icon-kutip-atas.png" className="absolute top-[6px] -left-[4px] w-[30px] h-[30px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
             <p className="font-display leading-[1.7] text-[#e8e0e3]/90 pl-[30px] pt-[8px]"
               style={{ fontSize: 'clamp(13px, 3.5vw, 20px)' }}>
-              A digital builder crafting immersive<br className="hidden sm:inline"/>
-              web experiences through code,<br className="hidden sm:inline"/>
+              A digital builder turning ideas into immersive<br className="hidden sm:inline"/>
+              digital experiences through code,<br className="hidden sm:inline"/>
               creativity, and{' '}
-              <span className="font-bold text-[#ff2244] animate-neon-flicker">anime-powered vibes.</span>
+              <span className="font-bold text-[#ff2244] animate-neon-flicker">curiosity.</span>
               <img src="/assets/kai-icon-kutip-bawah.png" className="ml-[6px] align-bottom inline-block relative -top-[2px] w-[26px] h-[26px] object-contain opacity-80 [image-rendering:pixelated] drop-shadow-[0_0_4px_#cc1133]" alt='"'/>
             </p>
           </div>
@@ -467,8 +467,8 @@ function BiographyPanel({inView}:{inView:boolean}) {
           </div>
           <div className="p-[10px_14px_12px] flex flex-col gap-[5px]">
             {([
-              {prompt:'$', pre:'project : ', val:'kai-portfolio v2.0',       col:R2, fsz:'clamp(10px, 2.5vw, 13px)'},
-              {prompt:'$', pre:'stack   : ', val:'react · tailwind · framer', col:'#88c4ff', fsz:'clamp(10px, 2.5vw, 13px)'},
+              {prompt:'$', pre:'project : ', val:'kai-shi.exe',       col:R2, fsz:'clamp(10px, 2.5vw, 13px)'},
+              {prompt:'$', pre:'stack   : ', val:'react · next.js · node', col:'#88c4ff', fsz:'clamp(10px, 2.5vw, 13px)'},
               {prompt:'$', pre:'status  : ', val:'HYPERFOCUS ENGAGED ▌',    col:'#22c55e', fsz:'clamp(10px, 2.5vw, 13px)'},
             ]).map((ln,i)=>(
               <motion.div key={i} className="font-mono flex gap-[6px] items-baseline whitespace-nowrap overflow-x-auto"
@@ -643,7 +643,7 @@ function SkillTreePanel({inView}:{inView:boolean}) {
   return (
     <Panel style={{display:'flex',flexDirection:'column'}}>
       <Corners c={R} s={9} />
-      <PanelHeader icon="/assets/icon-kai-mekanik.png" label="SKILL TREE"/>
+      <PanelHeader icon="/assets/icon-kai-mekanik.png" label="TECH TREE"/>
 
       <div className="p-[4px_14px_0] flex-1 overflow-y-auto overflow-x-hidden skill-tree-scroll">
         {/* ── ROW 1: FRONTEND ◄─── heart ───► DESIGN ── */}
@@ -981,7 +981,7 @@ function AboutRailStack({inView}: {onNavigate:(id:SectionId)=>void;inView:boolea
               <div className="absolute inset-0 shadow-[inset_0_0_24px_rgba(204,17,51,0.22),0_0_18px_rgba(204,17,51,0.12)] pointer-events-none" />
             </div>
             <div className="min-w-0 flex-1 flex flex-col justify-center gap-[8px]">
-              <div className="font-pixel text-[7px] tracking-[0.14em] text-[#cc1133]">CHANNEL NOTES</div>
+              <div className="font-pixel text-[7px] tracking-[0.14em] text-[#cc1133]">FIELD NOTES</div>
               <p className="m-0 text-[10px] leading-[1.65] text-[#c7b6bd]">
                 Built for late-night pushes, polished motion, and a clean red-signal UI that keeps the archive readable.
               </p>

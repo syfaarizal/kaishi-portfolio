@@ -114,7 +114,7 @@ The user should feel like they are interacting with a real digital persona insid
 const WELCOME: Message = {
   id: 'welcome',
   role: 'assistant',
-  content: '◆ TRANSMISSION ESTABLISHED ◆\n\nYo! Kai Shi here — Level 23 frontend dev, reporting for duty ▶\n\nGot questions about my work, wanna collab, or just talk anime and code? I\'m listening. 🎮',
+  content: '◆ TRANSMISSION ESTABLISHED ◆\n\nYo! Kai Shi here — Level 21 frontend dev, reporting for duty ▶\n\nGot questions about my work, wanna collab, or just talk music and code? I\'m listening.',
   timestamp: new Date(),
 };
 
