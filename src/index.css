@@ -20,48 +20,46 @@
   --cursor-selection:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAQzElEQVR4nHVaeZAc1Xn/vdfHzOzOXlqthNBhBEhaoXAYVxkhQNwQsEMAOxhsIKmKy8QEcHD+CVVOKi4qCQmYwtjO4UC5CgOOSUUucGGEQQEkkGQIRxAGCaRdsegWq9UeMzvT3e99qe8d3T1bTlfNbE/3O773nb/v+1Zk20ZBAARKl/tBxDdkfgszSPBDM94PLOaRuddEZhh/kRso3Dw/ztwKAWnGUP6OzDi7vdnarG/f828er4nnaF7FzAl5ATNBCgjtiOc5Zg++cQ/ct1vXfrkHpC3Rmr/8IXldt45lBlNmD8wHotKqZE7MTMpP7Bhj5/iLybOczCdDGgLcyT1NJRYb+lkSdkyJ92ZtywfDYUslhN0GiQDWf+OGr1942w33mPHSE1KWGdnfTLA5lCe7OIjZ00nF7On2yenItu+1DxyhOds6iPLLik51KigxD73KMTFNrTDvotMoIEJj84fCSIAHSqcaJcnCid0KyautZ5h7V3rMamrXcypU6HNBvKXJ8qIsfjPE3Thy7Tyzgh1XPe9UklKiQT1oSYnqBStodvseIVIFMmpacJDc4ctamXO3455XLw7kL8knFnMGF1x3onMqxk/LGxh6dcEAVQlw43fuxM0I8WithuCH96ESKTwexPjinbeKW/727iEjAWMrOQWwv50d5CpaGL0lqbDD8mVVqDTAegArvlzfvETyBYzl5sboxySkMHDhGXRUVtAdRMDMQVDvQrSTFvp1ivn1OsY2viGkUdXc1cBqruWvlNZ7GSdg+GYZnNuFe+d/C3ajVnSFCvn1jVL4g5SM2IvSMk2AMkL1wlMpjiqY0l0Ij+yG6qkjkAG0ViBF0N3zEaeTqMRdaGx6T1AkIbS2EvAOxLtQb/S5RykYxUzT7EYdLcakCl/niS+Uyvp0O9m6O+c1/GED4ISrz/7wk3AIY9F8BAd3gnp6LDtYSjKADAOEY7twMKjjQNyNgStPf0VF7NmQr5vboj+EI96wzx/E3HYqUVg2mNzPO+unskcyhuameyfOx88UZlrtFfOrdSQpoVXrQqAUaGoKUauFbGAeoDVoYADzeJ02YZbS9RQFQKIKR+MlLKTdxTMsD5zeWeRU2AMY1WGROGP2YsyVyjDcicbper6oeSyQqRRSZQhVhudfeB7tLMO+/96M23/8JJ576K9RaQtMnrgAXyZpJCYoAM2mTpqWWP7zyaVn0pKX3xVCObvTLMFcBfz5OixZpGwD3k06UVr1KwzXTu4w4SKCCqC2bpU5kg9oWZbgKdGPa6MKNmQNVCFxQ9CG1tb4GBJMvT0iwunEzpEChy4/64NFH4/qqR/8x//WL//9rxZ8dnSxBnhP2GEDzjA8Z/nEPubkJJMVn/d+uckwhJACC+YNYsWyZVi59CQolSKQIbbceQugBL40cxhfTMaNAJcuPAGrPrMcy05YDMnEB26NANCzjWWi1rVs9t3NN0l2zVb0NkDy3owGCnMuVMhz3bsz6LKHKQUrB85soGQwZV0pMo2xX26162pC9yWnUZK0EfD7iN1iaPVaaez6r5eFNIsERpVIBZh6+J5+ed7aiQVvvwVUIvReuR6NN5+hbPMbfb3fvneKMZp383PVx9pATpXHaCU/XHJiPhIWkZvA0bbDizEgdK5XysAcjvc3wVcGBQThG2WcOHpv/5vjR684Dentd2H+/f+EfX/+l1AhYdXz703ldlm2ce9v/ZY2EroBeUArIrGnTzMZeZgUmPnqVd+Z+PaNNqSUuKK0RqXShUceecTMXD68GsuXn2z0FnxgF7wMAhAspQgLtuwRR/7lhxPUTjD4V9/Fyk2/FRR6D+9RQG7KHbCBfZYDVvkJbFQs436HXTzO5/dy8eIP5ZEpICsbiyWMg1ez2TJR9cDoKA4cOFh4LxegmMvR2uX29Fpj+KVd847Pn4d5V31ZGFXJcw3LzE4EVDqAJcq5snyaE4kmaK1RO3+Y+NN1wWp6ZvsrxJG1+/5Hn+p94jmBgL0IgMBJi5diOxISbTUF0VVzSYuTpSJQNcA9a4dpdunyZMO2F7TxZpnCZFBH/eLVVF23ihAHHYlTnip0ojbIYvGC2zaAEV798B30X7yapmuL0KgtsoacacVE+yyL/xy54nTiw5p5rNzGvlOM6JZxnXxx+Dc2wodtKty3Zafo2TcWX7/ucmkkHgZYsvE3Ik0J04uG0X/uCuq7ZI0TfSGFuXIIS7lP7nH4WyttXCIlKaIaw2COoi2eQTlBZnGJhRt3WCQdcJoYINQpDsgQA1qhoXkHiW62IWZWShCx8VFovvqRsG7b7RpKaJ0h1sriHa1NlicV218J2pTOYIBhGWnaAQK9l66hP7jtZpqKB5GN74VgdFmtQmc6LCawmtmD8G113UrKlMJRHaBfJdjcvwB9SRPPkYIiZVSxHdLP2aU6CzSX3ZOASoAwjEBj76JRW4A3VB96LlhDrHaGQzyt04YZTo+6IOFiQS1E/ZxhekiG+GNdQ625HyQldHQiuoNJY6B+BQ/YmINBECJNE0yLGGdThtG4guYLG9Bz8RfQUgqtShdqyaxBqJ0UCEN8EMZIk1msEQHeajVMrpv94heQt96BWjKOY2/ufbHaTC7P0WgZzFkpCBsZ202cSIQ/6RtEZagf2mAlAgaquLCnDp0ptCUQHDiERprgnTAwNDyahbiGNPqrErGSOKoyiHWX4mAUoEJALWlih4ywAwK3GnerzJ5X99Yxu2olppI2KpUI39rxvo0hHGd6eqD7ulA7OgGKpIZktZId0N5gIZ/EdK9f2VaZilvxEMKJUVCl4hILAX36GRDX/iFEHIM4Y3/wRxhPEyzJJkDdPZjMYvRTA+OqDlQj1Kf2QfHKbPNSIqkOoUfOQqmMPQd6IZAS4dhZZ0A+8TNQFAFJG2rtFQiPf2yIYw8ogwC6Zyn6GgeQRiGam3cKi6mcBIpYxxNsBOUnf/fgA0iSBFdcfgXOXXceaGQCdP8jIJnZaK0E+qMKWuEQftCYgaxUINI2zhUpqCWwacWpWLB7D/ad8zk0J6fxNT1jAGFEGluIcGYw33hv/cF+0NkXgiSHhJBFY9R069atmJiYwPbfvI572fUan2/y0XLCgNBWE2xKt3BwvmDLX3TsGPbf9328eNFaJBesN8HiyfYkXr/tViCUyLIM4/v3Y3xyCi+/+hpEKPHzZAKTfUPomT6OKAowOfoJFmiNw++PYLo9g3dkhDNJ4zVU0BtoaJoAKYW77rgLKksNLOEovvyff4K7ZYBMZWgcn8R37/9XfCObRlzvQa1SLVJYf3FKyXkx/01fG0G6bQRxWKGBao3+XVbpgZtuokxrGhMRRWFMQRhTGETmE0UVCkP+xCRlSDWA7oMwz1lLm2HdPJNC0oMionbcQ1FcpUCGFAR2nSAIzfjA3T8mYtJa04+uup6OB1U6R9rnM2+O/podTrZtL5JtI2hv3WM+zgYYb2vrjXhnRei5aDXVlML3qIpbuwdM/trV3I/H/+HHB667+LLFBgY7XGMDt0Bt/TB9ogUCtLGQrHGzoT5EwPWCcBIEPt34zhPd9a6bfcHKXBL4dOY4ll6znmZ1DRoST6YNfACFB6VCc9P7wscOY1Yur3BTS2kiXxwzpMCmnz2z4/v3PvDQw6KNIyoxuhkEAaJadQHjH4c7i+SbCG89/cJTnwkElpLAtAhwKoAZIfBNAZwcRNi24bnHa3H8aF7xEDaic0lTVmPI2YZZ6ygpPCxSPCsIW5/61ZMyZvdYrtjNAXNMdV5rci/PWbTyjKVLTrr7t2GIX7UbgFTQSkEELmc1sV0avGQ4LQSGexd/hUghEyH6dIJnSaFPpai55OesectvCeLgJU90/6W/RwY3mYsxUpdZf2PWwg6dYiyS+OyiU75mybKZ3NzLJfUWkBUJC1cbBC5YeSYaL78nauevoG+mCRDFaE83AgMXFWHy/FOob9uIhRG8TMBegg/IBw0xRCGkSDkxY3BidjMExwHq551MjWaDat11am7eJVSzDSiFCh2DDCQaW0YElyXzYrOvXIvfcQATh10xqDBwqx4BBWj+z14hGinQFcEk3Iqw5+rPb4iWLkU9loFsaZWXUlmazOEsRS2sgzLGT5F7afNfLjHObNst6r191HztIzNzqHcQM1t2Wq8uBWTmo63L5F2J3T/KVShPFU3eWVT9XOZoJoZthSCSkO0MkgmsSURTk9ctH/t4eveNXxhBd2jzBzMhMMFKV2ogGYMqsYUfDA4ywuRf3IJD150/yxw9/soHeZ2daeAAJwmmLOPrrL4a0pETlG3A5jLeEAsJ2NjgEKTT4ezwHoxf/bl9WFan5YkxuJ7ht7ctE0OBPnbNWpP6B4KxkcYdt/0pZByjPTVlMJJRoUqA2WMTf6SnJqosyYDLLLkxl5MpV2ovN0XmZH65ClkY57JeFq/LxCzcKC0sJcJFp2Dw6TeWfHztjdTY/grWtFvY2deHnq/8mVj89HbB0VQ56BGY3EHltUwGezSb4YTHfvmfDO+N05C+SDZHufMalc8ELf/nVuWsDWhfd+EJTn/ntAhYJ22WZXV42T/+mzh42bDOQDjlhferYTVKzOI5UOU2hyuA8BQpkaYtoCsA2soYe15WhG9c+MpIUUArN06Kkr7zgv6sprjrkhGTPbmc1/cH/Cn8b1/MQjvD+EUraHD7XlFffxqlWdvBa14rwOPUjS9FNYTHR6ACie6uHqgsQVTpQtJqYub1UREpFzxZVd26eXWQ7ZaTqFzn6f9pcLjyXrmJUfQ85iRxniNsGmGAeS99xG4KadrGEiLU4iqSyHLzxNRFzt0fQVarWKw0orgLqt3CWBhBRBJImXCrcr455O2hQ6t+Vzaf24Avkftk0vneopdWdGA8M0yZj39whGxrhGEFuytDUIoQH3oPSDO7qcqASgVoJ9h99BAag6eiq68Xlemjef0/vzqI7MzTix6ErwsV7zgJzRtp5SJX7p2cxnXk/b52YWxCYtfzr06tmj2Mk1sH0FpzBo7MNHF4dhafasLRVgvjIDTO/Dw+K2awaOoIPvr1a8Mxcx9Fobvj3vgz11j0e5a6OGU3GvrqV67vHii56jAT6G3Cb1Kq45nvJdWBvn0yIK5S//3Yfly0832oLDP4ncNRkiW48vAhcC8ojGMsrQ7tsiVM5C68UBerC+UuVGefuTOrF9nWkc7npm3kGjt5s8+PLnVwOkUCUkAaE/rWraZjso6qBF7c8Bho/Bgu+/q30JVO44SBQYw8vVWYNlKZkcJL2npAyyhXo/X7+tqQ85a5i+UDdNQgyyt7HFLaqEOp8l6XV0gJ1U7Re8kwcfU/CQYwW+/C4ORBzGzaIWQUlwoCJWkKH3PyFmipzVWKrq6X3Flez7vixWKeorwr6Yt1eYR2epqL36mh5uqCRFypIuI8GAKzzcSAM4bLeX8h7xpRh1oaU/TNc//bBpJcAi5255fpD9gTF8aal3bZBvJ/A/AbluzBz807Nnb8xKb3xLafPiv69XEswwxmGPO4rkuOvfLupyipTKnu4zllaqedNli+RLp11D52iYlPNDpxSGdFMscvZn1/SNuq8qIyt5EwyLXs18vwBD4GudKNUWWXuBQhoNTidsU0rpR3dilL4bzsurxO5Z1KrwJ+eUO8+XcLS7xrBZnNeGVDvNXrTp/vOCpcdO1oahftdGe6Remx0N9Chax79bruTNSE6lK/IL9323gcUxpvGyPeTcy1Ix9nHOZxgK9Ii0vOwOXRZWnnNpM31gte/B/HA4Dm/giiYAAAAABJRU5ErkJggg==') 24 24, default;
 }
 
-/* Reset cascade: everything gets its own cursor, no forced inheritance */
+/* ── Custom cursor specificity boost ────────────────────────────────── */
+/* Tailwind utilities (cursor-default, cursor-pointer) are defined AFTER
+   @tailwind directives, so they win over :root vars normally.
+   Use layered @layer + specificity hacks to always win. */
+
+body {
+  cursor: var(--cursor-pointer) !important;
+}
+
+/* Force every interactive element to respect custom cursor */
+body button,
+body a,
+body [role="button"],
+body [role="link"],
+body input[type="button"],
+body input[type="submit"],
+body input[type="reset"],
+body select {
+  cursor: var(--cursor-selection) !important;
+}
+
+/* Text fields */
+body input[type="text"],
+body input[type="email"],
+body input[type="password"],
+body input[type="search"],
+body input[type="url"],
+body input[type="number"],
+body textarea,
+body [contenteditable] {
+  cursor: var(--cursor-text) !important;
+}
+
+/* ── Reset cascade ─────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
-  cursor: inherit;
+  /* No cursor: inherit here — each element must carry its own */
 }
 
-/* Body — arrow cursor */
-body {
-  background-color: var(--kai-bg);
-  color: #e8e0e3;
-  font-family: 'Share Tech Mono', monospace;
-  overflow-x: hidden;
-  cursor: var(--cursor-pointer);
-}
-
-/* Interactive / clickable elements — hero crosshair cursor */
-button,
-a[href],
-[role="button"],
-[role="link"],
-.pointer,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-select {
-  cursor: var(--cursor-selection);
-}
-
-/* Text-editing regions — I-beam cursor */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-input[type="url"],
-input[type="number"],
-input:not([type]),
-textarea,
-[contenteditable="true"],
-[contenteditable=""],
-[contenteditable="plaintext-only"] {
-  cursor: var(--cursor-text);
-}
+html { scroll-behavior: smooth; }
 
 ::selection {
   background: rgba(204, 17, 51, 0.55);
