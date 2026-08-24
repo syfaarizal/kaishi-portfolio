@@ -100,6 +100,23 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     audio.volume = 0.35;
     audio.preload = 'auto';
     backsoundRef.current = audio;
+
+    // DEBUG: surface loading / playback failures so we can actually see them
+    // in DevTools. Browsers fail silently here otherwise.
+    audio.addEventListener('error', () => {
+      const err = audio.error;
+      console.warn('[backsound] load error', {
+        code: err?.code,
+        message: err?.message ?? 'unknown',
+        src: audio.src,
+      });
+    });
+    audio.addEventListener('loadedmetadata', () => {
+      console.info('[backsound] loaded', { duration: audio.duration, src: audio.src });
+    });
+    audio.addEventListener('stalled', () => console.warn('[backsound] stalled (network)'));
+    audio.addEventListener('suspend', () => console.warn('[backsound] suspend'));
+
     return () => {
       audio.pause();
       backsoundRef.current = null;
@@ -183,7 +200,9 @@ export function AudioProvider({ children }: { children: ReactNode }) {
       if (next) {
         // Start from the beginning each time the user enables it.
         audio.currentTime = 0;
-        void audio.play().catch(() => undefined);
+        audio.play().catch(err => {
+          console.warn('[backsound] play() rejected', err?.message ?? err);
+        });
       } else {
         audio.pause();
       }
