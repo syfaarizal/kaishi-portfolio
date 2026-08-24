@@ -11,6 +11,11 @@
   --kai-bg: #080808;
   --kai-panel: #110a0d;
   --kai-border: #3d0f1a;
+
+  /* Custom cursors. Adjust --cursor-hot-x/y if PNG tip isn't at top-left. */
+  --cursor-pointer:    url('/assets/cursor/pointer-cursor.png')    0 0, auto;
+  --cursor-text:       url('/assets/cursor/text-cursor.png')       0 0, text;
+  --cursor-selection:  url('/assets/cursor/selection-cursor.png')  0 0, default;
 }
 
 * { box-sizing: border-box; }
@@ -21,7 +26,31 @@ body {
   color: #e8e0e3;
   font-family: 'Share Tech Mono', monospace;
   overflow-x: hidden;
-  cursor: crosshair;
+  cursor: var(--cursor-pointer);
+}
+
+/* Interactive elements swap to pointer cursor (image-based). */
+button,
+a[href],
+[role="button"],
+[role="link"],
+.pointer {
+  cursor: var(--cursor-pointer);
+}
+
+/* Text-editing regions use the I-beam image. */
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable=""],
+[contenteditable="plaintext-only"] {
+  cursor: var(--cursor-text);
+}
+
+/* Plain selectable text uses the selection image. */
+::selection {
+  background: rgba(204, 17, 51, 0.55);
+  color: #fff;
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -145,6 +174,15 @@ body {
 /* Mobile responsive helpers */
 @media (max-width: 768px) {
   body {
+    cursor: auto;
+  }
+  button,
+  a[href],
+  [role="button"],
+  [role="link"],
+  .pointer,
+  input,
+  textarea {
     cursor: auto;
   }
 }

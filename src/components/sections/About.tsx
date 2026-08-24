@@ -791,7 +791,7 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
       transition={{delay,duration:0.38,type:'spring',stiffness:200}}
       onMouseEnter={()=>!skill.locked&&setHov(skill.id)}
       onMouseLeave={()=>setHov(null)}
-      style={{cursor:skill.locked?'default':'pointer'}}
+      style={{cursor:skill.locked?'var(--cursor-selection)':'var(--cursor-pointer)'}}
     >
       <motion.div className="w-[56px] h-[56px] relative flex items-center justify-center transition-colors duration-200 [clip-path:polygon(50%_0%,93%_25%,93%_75%,50%_100%,7%_75%,7%_25%)]"
         animate={{

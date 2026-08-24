@@ -355,7 +355,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                   style={{
                     fontSize: '7px', color: '#4a3040', padding: '5px 10px',
                     border: '1px solid #2a1018', background: 'transparent',
-                    cursor: 'pointer', letterSpacing: '0.1em', transition: 'color 0.15s, border-color 0.15s',
+                    cursor: 'var(--cursor-pointer)', letterSpacing: '0.1em', transition: 'color 0.15s, border-color 0.15s',
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#cc1133'; (e.currentTarget as HTMLElement).style.borderColor = '#cc1133'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#4a3040'; (e.currentTarget as HTMLElement).style.borderColor = '#2a1018'; }}
@@ -369,7 +369,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     width: '30px', height: '30px', fontSize: '12px',
                     color: '#4a3040', border: '1px solid #2a1018', background: 'transparent',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    cursor: 'pointer', transition: 'color 0.15s, border-color 0.15s',
+                    cursor: 'var(--cursor-pointer)', transition: 'color 0.15s, border-color 0.15s',
                     clipPath: 'polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)',
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#cc1133'; (e.currentTarget as HTMLElement).style.borderColor = '#cc1133'; }}
@@ -414,7 +414,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     className="font-pixel"
                     style={{
                       fontSize: '8px', color: '#fff', padding: '8px 16px',
-                      background: '#cc1133', border: 'none', cursor: 'pointer',
+                      background: '#cc1133', border: 'none', cursor: 'var(--cursor-pointer)',
                       letterSpacing: '0.1em', whiteSpace: 'nowrap',
                       clipPath: 'polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))',
                     }}
@@ -517,7 +517,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     fontSize: '10px', letterSpacing: '0.12em',
                     color: '#fff', padding: '11px 22px',
                     background: loading ? '#5a0012' : '#cc1133',
-                    border: 'none', cursor: (loading || !input.trim() || needsKey) ? 'not-allowed' : 'pointer',
+                    border: 'none', cursor: (loading || !input.trim() || needsKey) ? 'not-allowed' : 'var(--cursor-pointer)',
                     opacity: (loading || !input.trim() || needsKey) ? 0.45 : 1,
                     transition: 'background 0.15s, opacity 0.15s',
                     whiteSpace: 'nowrap', flexShrink: 0,
