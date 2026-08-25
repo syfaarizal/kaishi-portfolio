@@ -12,11 +12,13 @@
   --kai-panel: #110a0d;
   --kai-border: #3d0f1a;
 
-/* Custom cursors — using actual PNG files from public/assets/cursor/
+/* Custom cursors — using SVG files from public/assets/cursor/
+   SVG cursors must use <svg xmlns cursor="none"> + hotspot rect to work.
    image-rendering: pixelated preserves the pixel-art look without blurring. */
-  --cursor-pointer:    url('/assets/cursor/pointer-cursor.png') 0 0, auto;
-  --cursor-text:       url('/assets/cursor/text-cursor.png') 24 24, text;
-  --cursor-selection:  url('/assets/cursor/selection-cursor.png') 24 24, default;
+  --cursor-pointer:    url('/assets/cursor/default.svg') 0 0, auto;
+  --cursor-text:       url('/assets/cursor/text.svg') 14 14, text;
+  --cursor-selection:  url('/assets/cursor/pointer.svg') 8 2, pointer;
+  --cursor-grab:       url('/assets/cursor/unavaible.svg') 8 8, not-allowed;
 }
 
 /* Ensure pixel-art cursor images don't get anti-aliased/blurred */
