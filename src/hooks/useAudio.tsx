@@ -123,39 +123,51 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Global event delegation for hover/click SFX on every button.
+  // Global event delegation for hover/click SFX on every interactive element.
   useEffect(() => {
-    const isButton = (el: Element | null): boolean => {
+    const isHoverable = (el: Element | null): boolean => {
       if (!el) return false;
       const tag = el.tagName;
       if (tag === 'BUTTON') return true;
       if (tag === 'A' && (el as HTMLAnchorElement).hasAttribute('href')) return true;
-      // Anything explicitly tagged as interactive via role/aria.
       const role = el.getAttribute('role');
-      return role === 'button' || role === 'link';
+      if (role === 'button' || role === 'link') return true;
+      if (el.hasAttribute('data-hoverable')) return true;
+      return false;
     };
 
-    const handlePointerOver = (e: PointerEvent) => {
-      const target = e.target as Element | null;
-      if (isButton(target)) playSfx('hover');
+    // Walk up the DOM tree from the event target to find a hoverable ancestor.
+    // This handles clicks on child elements (icons, text spans, images) inside buttons.
+    const findHoverable = (el: Element | null): Element | null => {
+      while (el && el !== document.body) {
+        if (isHoverable(el)) return el;
+        el = el.parentElement;
+      }
+      return null;
     };
 
-    const handlePointerOut = (e: PointerEvent) => {
-      // No-op for now; hover only fires once when entering a button.
-      void e;
+    const handlePointerEnter = (e: PointerEvent) => {
+      if (isHoverable(e.target as Element | null)) {
+        playSfx('hover');
+      }
     };
+
+    // Note: pointerleave fires when leaving to a child element too, but since
+    // we use pointerenter (not pointerover), we don't need pointerleave at all.
+    // No exit-sound needed — hover SFX only fires on enter.
 
     const handleClick = (e: MouseEvent) => {
-      const target = e.target as Element | null;
-      if (isButton(target)) playSfx('click');
+      // Walk up to find the nearest hoverable ancestor (handles clicks on child icons/spans)
+      const el = findHoverable(e.target as Element | null);
+      if (el) playSfx('click');
     };
 
-    document.addEventListener('pointerover', handlePointerOver, true);
-    document.addEventListener('pointerout', handlePointerOut, true);
+    // pointerenter/pointerleave don't bubble — only fires when entering/leaving the element
+    // itself, NOT when moving between child/parent in the same element.
+    document.addEventListener('pointerenter', handlePointerEnter, true);
     document.addEventListener('click', handleClick, true);
     return () => {
-      document.removeEventListener('pointerover', handlePointerOver, true);
-      document.removeEventListener('pointerout', handlePointerOut, true);
+      document.removeEventListener('pointerenter', handlePointerEnter, true);
       document.removeEventListener('click', handleClick, true);
     };
   }, []);

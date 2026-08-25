@@ -588,6 +588,7 @@ function HUDPanel({ children, glitch, style }: {
   return (
     <motion.div
       className="pixel-border hud-panel shrink-0 cursor-pointer"
+      data-hoverable
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       animate={{

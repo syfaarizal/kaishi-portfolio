@@ -21,6 +21,7 @@ export function QuestGrid({ quests, onSelectQuest, onLaunchGame, isQuestComplete
       {quests.map((quest, i) => (
         <motion.div
           key={quest.id}
+          data-hoverable
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: i * 0.08 }}

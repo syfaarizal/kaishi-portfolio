@@ -348,6 +348,7 @@ function ProfileCard({inView}:{inView:boolean}) {
               {label:'INSTAGRAM',  color:'#ff6688'},
             ] as const).map((s,i)=>(
               <motion.div key={s.label} className="flex items-center gap-[8px] p-[5px_10px] border bg-[#0a0208]/80 cursor-pointer relative [clip-path:polygon(0_0,calc(100%-6px)_0,100%_6px,100%_100%,6px_100%,0_calc(100%-6px))] transition-all duration-200"
+                data-hoverable
                 initial={{opacity:0,x:-10}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.72+i*0.08}}
                 whileHover={{scale:1.04, boxShadow:`0 0 12px ${s.color}44`}}
                 style={{borderColor:`${s.color}33`, color:s.color}}
@@ -442,6 +443,7 @@ function BiographyPanel({inView}:{inView:boolean}) {
         >
           {TAGS.map((tag,i) => (
             <motion.div key={tag} className="flex items-center gap-[7px] border border-[#cc1133]/30 rounded-[10px_0_10px_0] bg-[#0a0208]/85 p-[7px] cursor-pointer w-fit shadow-[0_0_6px_#cc113322] relative overflow-hidden"
+              data-hoverable
               whileHover={{scale:1.06,boxShadow:`0 0 18px ${R}66`}}
             >
               <img src={['/assets/icon-kai-code.png','/assets/icon-kai-mekanik.png','/assets/kai-icon-cat-cyber.png','/assets/icon-kai-target.png'][i]}
@@ -517,6 +519,7 @@ function CoreStatsPanel({inView}:{inView:boolean}) {
       <div className="p-[20px_14px_14px] flex flex-col gap-[30px]">
         {CORE_STATS.map((s,i) => (
           <motion.div key={s.label}
+            data-hoverable
             initial={{opacity:0,x:14}} animate={inView?{opacity:1,x:0}:{}} transition={{delay:0.1+i*0.07,duration:0.4}}
             onMouseEnter={()=>setHov(i)} onMouseLeave={()=>setHov(null)}
           >
@@ -786,6 +789,7 @@ function SkillHex({skill,hov,setHov,inView,delay}:{
 
   return (
     <motion.div className="flex flex-col items-center gap-[5px]"
+      data-hoverable
       initial={{opacity:0,scale:0.6}}
       animate={inView?{opacity:1,scale:1}:{}}
       transition={{delay,duration:0.38,type:'spring',stiffness:200}}
@@ -1083,6 +1087,7 @@ function GallerySection() {
                 const isSel = i===selected;
                 return (
                   <motion.div key={`${filter}-${item.id}`} className="relative overflow-hidden cursor-pointer min-w-0 shrink-0 transition-all duration-300"
+                    data-hoverable
                     layout onClick={()=>setSelected(i)}
                     initial={{opacity:0,scale:0.88}} animate={{opacity:1,scale:1,flex:isSel?2.8:1}} exit={{opacity:0,scale:0.88}}
                     transition={{duration:0.35,ease:[0.16,1,0.3,1]}}
