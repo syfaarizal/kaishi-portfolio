@@ -252,6 +252,22 @@ const EXPERIMENT_PROJECTS: Project[] = [
     ],
     accent: '#fbbf24',
   },
+  {
+    id: 'biocard',
+    title: 'BioCard — Profile Link',
+    category: 'APP',
+    year: '2026',
+    status: 'EXPERIMENT',
+    description: 'Link-in-bio card creator with URL-encoded sharing — no backend needed.',
+    longDescription: 'A digital profile card creator where all data is encoded into the URL itself — no database required. Users pick a theme color, add Spotify links, images, and social handles (Instagram, TikTok, X, YouTube), then share a single URL. Three modes: Edit, Published, and View-only. Mobile-responsive and deployable anywhere. An exploration of stateful URL design.',
+    stack: ['React', 'TypeScript', 'Vite', 'Tailwind'],
+    tools: ['React', 'TypeScript', 'Tailwind', 'Vite'],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/biocard' },
+      { label: 'LIVE DEMO', href: 'https://biocard-ten.vercel.app' },
+    ],
+    accent: '#10b981',
+  },
 ];
 
 const PROJECTS = [...MAIN_PROJECTS, ...EXPERIMENT_PROJECTS];
