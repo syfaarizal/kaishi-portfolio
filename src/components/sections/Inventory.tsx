@@ -113,6 +113,7 @@ interface Project {
   title: string;
   category: 'WEB' | 'APP' | 'UI KIT' | 'GAME';
   year: string;
+  status: 'SHIPPED' | 'WIP';
   description: string;
   longDescription: string;
   stack: string[];
@@ -123,76 +124,66 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
-    id: 'p1',
-    title: 'Anime Tracker Pro',
+    id: 'kichi',
+    title: 'Kichi — Discord Bot',
     category: 'APP',
     year: '2025',
-    description: 'Full-stack anime tracker with lists, reviews, and social features.',
-    longDescription: 'A personal anime-tracking platform built end-to-end — schema design, auth, list management, review system, and real-time social feed. Optimized for fast keyboard-first navigation.',
-    stack: ['React', 'TypeScript', 'Supabase', 'Tailwind'],
-    tools: ['React', 'TypeScript', 'Supabase', 'Tailwind'],
-    links: [{ label: 'LIVE', href: '#' }, { label: 'GITHUB', href: '#' }],
-    accent: '#cc1133',
+    status: 'SHIPPED',
+    description: 'Sarcastic AI companion for Discord — memory, reminders, voice, lyrics.',
+    longDescription: 'A Gen-Z style AI companion for Discord servers. Per-user memory (up to 20 messages), auto reminders (built-in + custom), voice TTS via Piper and STT via Whisper, lyrics search with cache, and 15 Hijri/Gregorian holiday events. Slash commands, modals, PM2 deployment.',
+    stack: ['Node.js', 'Discord.js', 'OpenRouter API', 'Piper TTS'],
+    tools: ['Node'],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/pirate-discord-bot' },
+      { label: 'WEBSITE', href: 'https://kichi.web.id' },
+    ],
+    accent: '#22c55e',
   },
   {
-    id: 'p2',
-    title: 'CyberDash UI Kit',
-    category: 'UI KIT',
-    year: '2024',
-    description: '50+ components, cyberpunk theme, ready for production use.',
-    longDescription: 'A component library themed around terminal UIs and pixel grids. Includes HUD frames, glitch text, scanline overlays, and a set of base primitives that survive dark mode stress tests.',
-    stack: ['Tailwind', 'Figma', 'Storybook'],
-    tools: ['Tailwind', 'Figma'],
-    links: [{ label: 'PREVIEW', href: '#' }, { label: 'DOCS', href: '#' }],
+    id: 'aegis',
+    title: 'Aegis — Anti-Spam',
+    category: 'APP',
+    year: '2025',
+    status: 'WIP',
+    description: 'Discord security bot — auto-detects cross-channel duplicate spam.',
+    longDescription: 'Multi-type detector (text, images, links) with auto-delete + timeout enforcement. Per-guild config via slash command, anti-false-positive (admin/mod role bypass), and dual-channel logging. Guild-scoped in-memory cache to avoid cross-server interference.',
+    stack: ['Node.js', 'Discord.js', 'JSON config'],
+    tools: ['Node'],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/aegis' },
+    ],
+    accent: '#f59e0b',
+  },
+  {
+    id: 'darknes',
+    title: 'DARKNES — VN Engine',
+    category: 'GAME',
+    year: '2025',
+    status: 'WIP',
+    description: 'Visual novel engine + dark-luxury mafia story. Monorepo, reusable.',
+    longDescription: 'Cinematic visual novel built as a reusable engine. 13 engines (Story, Scene, Dialogue, Choice, Character, Background, Camera, Audio, Save, Animation, plus reserved Effect/Voice/Input). Monorepo with packages/engine, packages/ui, packages/assets. JSON-driven scenes with variable interpolation like {playerName}.',
+    stack: ['React', 'TypeScript', 'Vite', 'Zustand', 'Howler.js', 'Turborepo'],
+    tools: ['React', 'TypeScript', 'Vite', 'Three'],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/darknes-game' },
+    ],
     accent: '#9c27b0',
   },
   {
-    id: 'p3',
-    title: 'Portfolio v3',
+    id: 'kaishi',
+    title: 'Kaishi Portfolio v3',
     category: 'WEB',
-    year: '2025',
+    year: '2026',
+    status: 'SHIPPED',
     description: 'This very site — pixel-infused cyberpunk with audio-reactive UI.',
-    longDescription: 'Built as a love letter to retro arcade aesthetics. Glitch-swap page transitions, SFX on every interaction, hands-free navigation via dot-nav, and a custom audio system.',
-    stack: ['React', 'Framer Motion', 'TypeScript', 'Vite'],
+    longDescription: 'Built as a love letter to retro arcade aesthetics. Glitch-swap page transitions, SFX on every interaction, hands-free navigation via dot-nav, custom audio system, and an AI chat companion. The page you are reading this on.',
+    stack: ['React', 'TypeScript', 'Vite', 'Framer Motion', 'Tailwind'],
     tools: ['React', 'TypeScript', 'Framer', 'Tailwind', 'Vite'],
-    links: [{ label: 'YOU ARE HERE', href: '#' }],
+    links: [
+      { label: 'YOU ARE HERE', href: '#' },
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/kaishi-portfolio' },
+    ],
     accent: '#cc1133',
-  },
-  {
-    id: 'p4',
-    title: 'AniBot Discord',
-    category: 'APP',
-    year: '2023',
-    description: 'Discord bot for anime communities — recommendations and polls.',
-    longDescription: 'A multi-guild Discord bot built on Discord.js. Slash commands, scheduled drops, MyAnimeList integration, and a moderation layer for community managers.',
-    stack: ['Node.js', 'Discord.js', 'PostgreSQL'],
-    tools: ['Node', 'Postgres'],
-    links: [{ label: 'INVITE', href: '#' }],
-    accent: '#7289da',
-  },
-  {
-    id: 'p5',
-    title: 'WorldBuilder RPG',
-    category: 'GAME',
-    year: '2025',
-    description: 'Browser RPG world builder with procedural terrain generation.',
-    longDescription: 'Prototype for an in-browser RPG toolkit. Three.js scene graph, seeded terrain, JSON-driven quest hooks. Still iterating; latest demo on request.',
-    stack: ['Three.js', 'WebGL', 'Vite'],
-    tools: ['Three', 'Vite'],
-    links: [{ label: 'DEMO', href: '#' }],
-    accent: '#3ecf8e',
-  },
-  {
-    id: 'p6',
-    title: 'NekoStream',
-    category: 'WEB',
-    year: '2024',
-    description: 'Live streaming platform built for anime creators.',
-    longDescription: 'Low-latency RTMP→WebRTC pipeline, chat overlay system, and a creator dashboard. Designed to handle VTuber-style layered avatars as a native concern.',
-    stack: ['React', 'Node.js', 'WebRTC'],
-    tools: ['React', 'Node', 'TypeScript'],
-    links: [{ label: 'CASE STUDY', href: '#' }],
-    accent: '#ff6900',
   },
 ];
 
@@ -202,9 +193,9 @@ type Filter = typeof CATEGORY_FILTERS[number];
 const R = '#cc1133';
 const DIM = '#3d0f1a';
 
-interface InventorProps { onNavigate: (id: SectionId) => void; }
+interface InventoryProps { onNavigate: (id: SectionId) => void; }
 
-export function Skills({ onNavigate }: InventorProps) {
+export function Inventory({ onNavigate }: InventoryProps) {
   const [filter, setFilter] = useState<Filter>('ALL');
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -234,10 +225,10 @@ export function Skills({ onNavigate }: InventorProps) {
               textShadow: '0 0 18px rgba(204,17,51,0.55), 0 0 36px rgba(204,17,51,0.25)',
             }}
           >
-            INVENTOR ARCHIVE
+            INVENTORY ARCHIVE
           </h1>
           <p className="mt-2 text-[11px] md:text-[12px] tracking-[0.22em] text-[#7a6068] max-w-[640px]">
-            Builds I've shipped. Click a record to inspect tools, stack, and entry points.
+            Builds I've shipped and the ones still in the forge. Click a record to inspect tools, stack, and entry points.
           </p>
         </header>
 
@@ -269,6 +260,7 @@ export function Skills({ onNavigate }: InventorProps) {
           <div className="flex flex-col gap-2.5 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 320px)' }}>
             {visible.map((p, idx) => {
               const isActive = active?.id === p.id;
+              const statusColor = p.status === 'SHIPPED' ? '#22c55e' : '#f59e0b';
               return (
                 <motion.button
                   key={p.id}
@@ -286,12 +278,24 @@ export function Skills({ onNavigate }: InventorProps) {
                   }}
                 >
                   <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <span
-                      className="font-pixel text-[9px] tracking-widest"
-                      style={{ color: p.accent }}
-                    >
-                      {p.category}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span
+                        className="font-pixel text-[9px] tracking-widest"
+                        style={{ color: p.accent }}
+                      >
+                        {p.category}
+                      </span>
+                      <span
+                        className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+                        style={{
+                          border: `1px solid ${statusColor}`,
+                          color: statusColor,
+                          boxShadow: p.status === 'SHIPPED' ? `0 0 6px ${statusColor}66` : 'none',
+                        }}
+                      >
+                        {p.status}
+                      </span>
+                    </div>
                     <span className="font-pixel text-[8px] text-[#7a6068]">{p.year}</span>
                   </div>
                   <div className="font-pixel text-[12px] tracking-wider text-[#e8d8dc] mb-1">
@@ -323,7 +327,7 @@ export function Skills({ onNavigate }: InventorProps) {
         <div className="mt-8 pt-6 flex items-center justify-between gap-3">
           <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('about')} side="left" />
           <span className="font-pixel text-[8px] tracking-widest text-[#7a6068]">
-            [ INVENTOR v2.0 ]
+            [ INVENTORY v2.0 ]
           </span>
           <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('projects')} side="right" />
         </div>
@@ -333,6 +337,7 @@ export function Skills({ onNavigate }: InventorProps) {
 }
 
 function ProjectDetail({ project }: { project: Project }) {
+  const statusColor = project.status === 'SHIPPED' ? '#22c55e' : '#f59e0b';
   return (
     <motion.div
       key={project.id}
@@ -361,15 +366,27 @@ function ProjectDetail({ project }: { project: Project }) {
         <h2 className="font-pixel text-[14px] md:text-[16px] tracking-wider text-[#e8d8dc]">
           {project.title}
         </h2>
-        <span
-          className="font-pixel text-[8px] tracking-widest px-2 py-1"
-          style={{
-            border: `1px solid ${project.accent}`,
-            color: project.accent,
-          }}
-        >
-          {project.category} · {project.year}
-        </span>
+        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          <span
+            className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+            style={{
+              border: `1px solid ${statusColor}`,
+              color: statusColor,
+              boxShadow: project.status === 'SHIPPED' ? `0 0 6px ${statusColor}66` : 'none',
+            }}
+          >
+            {project.status}
+          </span>
+          <span
+            className="font-pixel text-[8px] tracking-widest px-2 py-1"
+            style={{
+              border: `1px solid ${project.accent}`,
+              color: project.accent,
+            }}
+          >
+            {project.category} · {project.year}
+          </span>
+        </div>
       </div>
 
       {/* Long description */}
@@ -478,4 +495,4 @@ function FooterNav({ label, icon, onClick, side }: { label: string; icon: string
   );
 }
 
-export default Skills;
+export default Inventory;

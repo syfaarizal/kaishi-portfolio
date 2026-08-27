@@ -44,7 +44,7 @@ const SECTIONS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout',
 const NAME_GLITCH_SHIFTS = [-3, 2, -2, 3];
 const BUTTON_GLITCH_SHIFTS = [-3, 2, -2];
 const LABELS: Record<SectionId, string> = {
-  hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
+  hero: 'INTRO', about: 'PROFILE', skills: 'INVENTORY',
   projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
 };
 

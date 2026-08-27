@@ -57,7 +57,7 @@ This portfolio is designed like a game interface.
 Sections are part of the world:
 - Intro
 - Profile
-- Inventor
+- Inventory
 - Quest Board
 - Portal
 

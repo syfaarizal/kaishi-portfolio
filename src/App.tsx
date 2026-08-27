@@ -4,7 +4,7 @@ import { ScanlineOverlay } from './components/ui/ScanlineOverlay';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
-import { Skills } from './components/sections/Inventor';
+import { Inventory } from './components/sections/Inventory';
 import { QuestBoard } from './components/sections/QuestBoard/QuestBoard';
 import { Loadout } from './components/sections/Loadout';
 import { Contact } from './components/sections/Contact';
@@ -72,7 +72,7 @@ function App() {
     switch (activeSection) {
       case 'hero':     return <Hero onNavigate={navigate} />;
       case 'about':    return <About onNavigate={navigate} />;
-      case 'skills':   return <Skills onNavigate={navigate} />;
+      case 'skills':   return <Inventory onNavigate={navigate} />;
       case 'projects': return <QuestBoard />;
       case 'loadout':  return <Loadout onNavigate={navigate} />;
       case 'contact':  return <Contact />;
@@ -113,7 +113,7 @@ function SectionDots({ active, onNavigate }: {
   onNavigate: (s: SectionId) => void;
 }) {
   const labels: Record<SectionId, string> = {
-    hero: 'INTRO', about: 'PROFILE', skills: 'INVENTOR',
+    hero: 'INTRO', about: 'PROFILE', skills: 'INVENTORY',
     projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
   };
 

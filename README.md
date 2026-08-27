@@ -33,7 +33,7 @@ src/
 │   ├── sections/
 │   │   ├── Hero.tsx         # Hero with parallax character + HUD panels
 │   │   ├── About.tsx        # Character profile + stat attributes
-│   │   ├── Skills.tsx       # Skill tree with animated progress bars
+│   │   ├── Inventory.tsx    # Project showcase archive with status badges
 │   │   ├── Projects.tsx     # Quest board with project cards + modal
 │   │   └── Contact.tsx      # Message portal + social links
 │   └── ui/

@@ -6,7 +6,7 @@ import { useAudio } from '../../hooks/useAudio';
 const NAV_ITEMS: { label: string; id: SectionId }[] = [
   { label: 'INTRO',       id: 'hero'     },
   { label: 'PROFILE',     id: 'about'    },
-  { label: 'INVENTOR',    id: 'skills'   },
+  { label: 'INVENTORY',   id: 'skills'   },
   { label: 'QUEST BOARD', id: 'projects' },
   { label: 'LOADOUT',     id: 'loadout'  },
   { label: 'PORTAL',      id: 'contact'  },
