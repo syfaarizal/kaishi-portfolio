@@ -111,9 +111,9 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
 interface Project {
   id: string;
   title: string;
-  category: 'WEB' | 'BOT' | 'GAME';
+  category: 'WEB' | 'BOT' | 'GAME' | 'APP';
   year: string;
-  status: 'SHIPPED' | 'WIP';
+  status: 'SHIPPED' | 'WIP' | 'EXPERIMENT';
   description: string;
   longDescription: string;
   stack: string[];
@@ -122,7 +122,7 @@ interface Project {
   accent: string;
 }
 
-const PROJECTS: Project[] = [
+const MAIN_PROJECTS: Project[] = [
   {
     id: 'kichi',
     title: 'Kichi — Discord Bot',
@@ -187,7 +187,76 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const CATEGORY_FILTERS = ['ALL', 'WEB', 'BOT', 'GAME'] as const;
+const EXPERIMENT_PROJECTS: Project[] = [
+  {
+    id: 'prodraw',
+    title: 'Pro Draw — Canvas App',
+    category: 'APP',
+    year: '2025',
+    status: 'EXPERIMENT',
+    description: 'Browser-based drawing with multi-layer system, brush engine, and PNG/JSON export.',
+    longDescription: 'A full-featured canvas drawing app that rivals desktop tools. Multi-layer system with reorder and visibility controls, 5 brush presets (Pen, Marker, Soft, Airbrush, Pencil), adjustable size/opacity/smoothing, eraser, shape tools, zoom/pan, unlimited undo/redo, PNG export, and project save/load as JSON. Built as an exploration of what the browser Canvas API can achieve.',
+    stack: ['React', 'TypeScript', 'Vite', 'Tailwind', 'HTML Canvas'],
+    tools: ['React', 'TypeScript', 'Tailwind', 'Vite'],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/pro-draw-app' },
+      { label: 'LIVE DEMO', href: 'https://pro-draw-app.vercel.app' },
+    ],
+    accent: '#a855f7',
+  },
+  {
+    id: 'cyberpunkcard',
+    title: 'Cyberpunk Friendship Card',
+    category: 'APP',
+    year: '2025',
+    status: 'EXPERIMENT',
+    description: '3D animated card with neon glow, glitch effects, and generative cyberpunk sound.',
+    longDescription: 'An interactive greeting card with a full cyberpunk aesthetic. Features 3D card flip via CSS transforms, neon glow and glitch animations, moving grid-line background with floating particles, circuit and holographic elements, and custom cyber SFX generated via Web Audio API. Keyboard (Space/Enter) and hover interactions included.',
+    stack: ['HTML5', 'CSS3', 'Vanilla JS', 'Web Audio API'],
+    tools: [],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/cyberpunk-friendship-card' },
+      { label: 'LIVE DEMO', href: 'https://syfaarizal.github.io/cyberpunk-friendship-card/' },
+    ],
+    accent: '#22d3ee',
+  },
+  {
+    id: 'lovecard',
+    title: 'Love & Deepspace Card',
+    category: 'APP',
+    year: '2026',
+    status: 'EXPERIMENT',
+    description: 'Character card showcase with hover-reveal powers and neon gradient aesthetics.',
+    longDescription: 'An interactive character card landing page inspired by Love and Deepspace. Cards reveal hidden powers and descriptions on hover, trigger glowing animations on click, and feature soft neon gradients with atmospheric lighting. Fully responsive across desktop, tablet, and mobile — a love letter to the game\'s visual language.',
+    stack: ['HTML5', 'CSS3', 'Vanilla JS'],
+    tools: [],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/loveanddeepspace-card' },
+      { label: 'LIVE DEMO', href: 'https://syfaarizal.github.io/loveanddeepspace-card/' },
+    ],
+    accent: '#f472b6',
+  },
+  {
+    id: 'aichalk',
+    title: 'AI Chalkboard',
+    category: 'APP',
+    year: '2026',
+    status: 'EXPERIMENT',
+    description: 'Minimal chalkboard canvas where AI paints in real-time with a 5-color palette.',
+    longDescription: 'A single-file HTML5 chalkboard canvas that connects to AI for real-time drawing. Users paint with selectable brush sizes and a 5-color palette (White, Red, Yellow, Blue, Green) on a textured chalkboard surface. The AI generates content and draws directly on the canvas — exploring the intersection of human input and AI-driven visual creation.',
+    stack: ['HTML5', 'Canvas API', 'AI API'],
+    tools: [],
+    links: [
+      { label: 'GITHUB', href: 'https://github.com/syfaarizal/ai-chalkboard' },
+      { label: 'LIVE DEMO', href: 'https://syfaarizal.github.io/ai-chalkboard/' },
+    ],
+    accent: '#fbbf24',
+  },
+];
+
+const PROJECTS = [...MAIN_PROJECTS, ...EXPERIMENT_PROJECTS];
+
+const CATEGORY_FILTERS = ['ALL', 'WEB', 'BOT', 'GAME', 'APP'] as const;
 type Filter = typeof CATEGORY_FILTERS[number];
 
 const R = '#cc1133';
@@ -199,8 +268,10 @@ export function Inventory({ onNavigate }: InventoryProps) {
   const [filter, setFilter] = useState<Filter>('ALL');
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const visible = filter === 'ALL' ? PROJECTS : PROJECTS.filter(p => p.category === filter);
-  const active = activeId ? PROJECTS.find(p => p.id === activeId) ?? null : visible[0] ?? null;
+  const filteredMain = filter === 'ALL' ? MAIN_PROJECTS : MAIN_PROJECTS.filter(p => p.category === filter);
+  const filteredExp = filter === 'ALL' ? EXPERIMENT_PROJECTS : EXPERIMENT_PROJECTS.filter(p => p.category === filter);
+  const allVisible = [...filteredMain, ...filteredExp];
+  const active = activeId ? PROJECTS.find(p => p.id === activeId) ?? null : allVisible[0] ?? null;
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden" style={{ background: '#07020a' }}>
@@ -258,7 +329,7 @@ export function Inventory({ onNavigate }: InventoryProps) {
         <div className="grid gap-5 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] flex-1">
           {/* Project list */}
           <div className="flex flex-col gap-2.5 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 320px)' }}>
-            {visible.map((p, idx) => {
+            {filteredMain.map((p, idx) => {
               const isActive = active?.id === p.id;
               const statusColor = p.status === 'SHIPPED' ? '#22c55e' : '#f59e0b';
               return (
@@ -315,6 +386,74 @@ export function Inventory({ onNavigate }: InventoryProps) {
                 </motion.button>
               );
             })}
+
+            {/* Experiment section */}
+            {filteredExp.length > 0 && (
+              <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(61,15,26,0.7)' }}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-pixel text-[8px] tracking-[0.22em] text-[#a855f7]/80">
+                    // EXPERIMENT.LAB
+                  </span>
+                  <span className="block h-px flex-1 max-w-[60px] bg-gradient-to-r from-[#a855f7]/30 to-transparent" />
+                </div>
+                {filteredExp.map((p, idx) => {
+                  const isActive = active?.id === p.id;
+                  return (
+                    <motion.button
+                      key={p.id}
+                      layout
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (filteredMain.length + idx) * 0.04, duration: 0.25 }}
+                      onClick={() => setActiveId(p.id)}
+                      className="text-left p-3 group relative mb-2.5 w-full"
+                      style={{
+                        background: isActive ? 'rgba(168,85,247,0.07)' : 'rgba(13,4,8,0.6)',
+                        border: `1px solid ${isActive ? '#a855f7' : 'rgba(61,15,26,0.8)'}`,
+                        clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)',
+                        boxShadow: isActive ? '0 0 14px rgba(168,85,247,0.3)' : 'none',
+                      }}
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-1.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span
+                            className="font-pixel text-[9px] tracking-widest"
+                            style={{ color: p.accent }}
+                          >
+                            {p.category}
+                          </span>
+                          <span
+                            className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+                            style={{
+                              border: `1px solid ${p.accent}`,
+                              color: p.accent,
+                              boxShadow: `0 0 6px ${p.accent}66`,
+                            }}
+                          >
+                            EXPERIMENT
+                          </span>
+                        </div>
+                        <span className="font-pixel text-[8px] text-[#7a6068]">{p.year}</span>
+                      </div>
+                      <div className="font-pixel text-[12px] tracking-wider text-[#e8d8dc] mb-1">
+                        {p.title}
+                      </div>
+                      <div className="text-[10px] text-[#7a6068] leading-snug line-clamp-2">
+                        {p.description}
+                      </div>
+
+                      {/* Active indicator */}
+                      {isActive && (
+                        <span
+                          className="absolute right-2 top-2 w-1.5 h-1.5"
+                          style={{ background: '#a855f7', boxShadow: `0 0 6px #a855f7`, transform: 'rotate(45deg)' }}
+                        />
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Detail pane */}
@@ -327,7 +466,7 @@ export function Inventory({ onNavigate }: InventoryProps) {
         <div className="mt-8 pt-6 flex items-center justify-between gap-3">
           <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('about')} side="left" />
           <span className="font-pixel text-[8px] tracking-widest text-[#7a6068]">
-            [ INVENTORY v2.0 ]
+            [ INVENTORY v3.0 ]
           </span>
           <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('projects')} side="right" />
         </div>
@@ -337,7 +476,11 @@ export function Inventory({ onNavigate }: InventoryProps) {
 }
 
 function ProjectDetail({ project }: { project: Project }) {
-  const statusColor = project.status === 'SHIPPED' ? '#22c55e' : '#f59e0b';
+  const statusColor =
+    project.status === 'SHIPPED' ? '#22c55e' :
+    project.status === 'EXPERIMENT' ? project.accent :
+    '#f59e0b';
+  const isExp = project.status === 'EXPERIMENT';
   return (
     <motion.div
       key={project.id}
@@ -346,8 +489,8 @@ function ProjectDetail({ project }: { project: Project }) {
       transition={{ duration: 0.3 }}
       className="relative h-full p-5 md:p-6"
       style={{
-        background: 'rgba(13,4,8,0.7)',
-        border: '1px solid rgba(61,15,26,0.85)',
+        background: isExp ? `${project.accent}08` : 'rgba(13,4,8,0.7)',
+        border: `1px solid ${isExp ? project.accent + '40' : 'rgba(61,15,26,0.85)'}`,
         clipPath: 'polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)',
       }}
     >
@@ -449,14 +592,14 @@ function ProjectDetail({ project }: { project: Project }) {
             style={{
               border: `1px solid ${project.accent}`,
               color: project.accent,
-              background: 'rgba(204,17,51,0.06)',
+              background: `${project.accent}0f`,
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(204,17,51,0.16)';
+              e.currentTarget.style.background = `${project.accent}29`;
               e.currentTarget.style.boxShadow = `0 0 12px ${project.accent}66`;
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(204,17,51,0.06)';
+              e.currentTarget.style.background = `${project.accent}0f`;
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
