@@ -111,7 +111,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
 interface Project {
   id: string;
   title: string;
-  category: 'WEB' | 'APP' | 'UI KIT' | 'GAME';
+  category: 'WEB' | 'BOT' | 'GAME';
   year: string;
   status: 'SHIPPED' | 'WIP';
   description: string;
@@ -126,7 +126,7 @@ const PROJECTS: Project[] = [
   {
     id: 'kichi',
     title: 'Kichi — Discord Bot',
-    category: 'APP',
+    category: 'BOT',
     year: '2025',
     status: 'SHIPPED',
     description: 'Sarcastic AI companion for Discord — memory, reminders, voice, lyrics.',
@@ -142,7 +142,7 @@ const PROJECTS: Project[] = [
   {
     id: 'aegis',
     title: 'Aegis — Anti-Spam',
-    category: 'APP',
+    category: 'BOT',
     year: '2025',
     status: 'WIP',
     description: 'Discord security bot — auto-detects cross-channel duplicate spam.',
@@ -187,7 +187,7 @@ const PROJECTS: Project[] = [
   },
 ];
 
-const CATEGORY_FILTERS = ['ALL', 'WEB', 'APP', 'UI KIT', 'GAME'] as const;
+const CATEGORY_FILTERS = ['ALL', 'WEB', 'BOT', 'GAME'] as const;
 type Filter = typeof CATEGORY_FILTERS[number];
 
 const R = '#cc1133';
