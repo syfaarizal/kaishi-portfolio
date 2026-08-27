@@ -111,7 +111,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
 interface Project {
   id: string;
   title: string;
-  category: 'WEB' | 'BOT' | 'GAME' | 'APP';
+  category: 'WEB' | 'BOT' | 'GAME' | 'EXPERIMENT';
   year: string;
   status: 'SHIPPED' | 'WIP' | 'EXPERIMENT';
   description: string;
@@ -191,7 +191,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
   {
     id: 'prodraw',
     title: 'Pro Draw — Canvas App',
-    category: 'APP',
+    category: 'EXPERIMENT',
     year: '2025',
     status: 'EXPERIMENT',
     description: 'Browser-based drawing with multi-layer system, brush engine, and PNG/JSON export.',
@@ -207,7 +207,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
   {
     id: 'cyberpunkcard',
     title: 'Cyberpunk Friendship Card',
-    category: 'APP',
+    category: 'EXPERIMENT',
     year: '2025',
     status: 'EXPERIMENT',
     description: '3D animated card with neon glow, glitch effects, and generative cyberpunk sound.',
@@ -223,7 +223,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
   {
     id: 'lovecard',
     title: 'Love & Deepspace Card',
-    category: 'APP',
+    category: 'EXPERIMENT',
     year: '2026',
     status: 'EXPERIMENT',
     description: 'Character card showcase with hover-reveal powers and neon gradient aesthetics.',
@@ -239,7 +239,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
   {
     id: 'aichalk',
     title: 'AI Chalkboard',
-    category: 'APP',
+    category: 'EXPERIMENT',
     year: '2026',
     status: 'EXPERIMENT',
     description: 'Minimal chalkboard canvas where AI paints in real-time with a 5-color palette.',
@@ -255,7 +255,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
   {
     id: 'biocard',
     title: 'BioCard — Profile Link',
-    category: 'APP',
+    category: 'EXPERIMENT',
     year: '2026',
     status: 'EXPERIMENT',
     description: 'Link-in-bio card creator with URL-encoded sharing — no backend needed.',
@@ -272,7 +272,7 @@ const EXPERIMENT_PROJECTS: Project[] = [
 
 const PROJECTS = [...MAIN_PROJECTS, ...EXPERIMENT_PROJECTS];
 
-const CATEGORY_FILTERS = ['ALL', 'WEB', 'BOT', 'GAME', 'APP'] as const;
+const CATEGORY_FILTERS = ['ALL', 'WEB', 'BOT', 'GAME', 'EXPERIMENT'] as const;
 type Filter = typeof CATEGORY_FILTERS[number];
 
 const R = '#cc1133';
