@@ -123,7 +123,7 @@ function rankFor(score: number, maxScore: number): { rank: string; label: string
   return { rank: 'C', label: 'ROOKIE', tone: 'text-kai-muted' };
 }
 
-export function BugHunter({ quest: _quest, onComplete }: BugHunterProps) {
+export function BugHunter({ onComplete }: BugHunterProps) {
   const [phase, setPhase] = useState<Phase>('playing');
   const [roundIndex, setRoundIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(ROUND_TIME);
@@ -138,14 +138,18 @@ export function BugHunter({ quest: _quest, onComplete }: BugHunterProps) {
   useEffect(() => {
     if (phase !== 'playing' || locked) return;
     if (timeLeft <= 0) {
-      setLocked(true);
-      setFeedback('wrong');
-      setLastPicked(-1);
-      setResults((r) => [
-        ...r,
-        { roundIndex, correct: false, timeSpent: ROUND_TIME, pickedIndex: -1 },
-      ]);
-      const t = setTimeout(() => advance(), 900);
+      // Lost the round — fire from a zero-delay timer so setState doesn't
+      // happen synchronously inside the effect body.
+      const t = setTimeout(() => {
+        setLocked(true);
+        setFeedback('wrong');
+        setLastPicked(-1);
+        setResults((r) => [
+          ...r,
+          { roundIndex, correct: false, timeSpent: ROUND_TIME, pickedIndex: -1 },
+        ]);
+        setTimeout(() => advance(), 900);
+      }, 0);
       return () => clearTimeout(t);
     }
     const id = setInterval(() => setTimeLeft((t) => Math.max(0, t - 1)), 1000);

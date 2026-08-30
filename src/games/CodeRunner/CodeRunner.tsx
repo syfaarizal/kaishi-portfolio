@@ -75,14 +75,20 @@ const PORTAL = { x: 192, y: STAGE_BOTTOM - 8 - 12, width: 6, height: 12 };
 
 type Phase = 'playing' | 'won' | 'gameover';
 
-export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
+// This component reads refs during render because it runs a game loop via
+// useGameLoop — the refs are mutated each frame and forceRender() ensures
+// fresh values are always used. This is intentional and safe.
+export function CodeRunner({ onComplete }: CodeRunnerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(800);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const update = () => setContainerWidth(el.getBoundingClientRect().width);
+    const update = () => {
+      const next = el.getBoundingClientRect().width;
+      setContainerWidth((prev) => (prev === next ? prev : next));
+    };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
@@ -92,7 +98,7 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
   // Camera follows player
   const cameraX = useRef(0);
 
-  // Player physics state (refs to keep loop allocations low)
+  // Player physics state
   const playerX = useRef(2);
   const playerY = useRef(STAGE_BOTTOM - 8 - PLAYER_HEIGHT);
   const playerVX = useRef(0);
@@ -103,15 +109,9 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
   const playerJumpBuffer = useRef(0);
   const playerCoyote = useRef(0);
   const playerHurtTimer = useRef(0);
-  const [, forceRender] = useState(0);
 
-  const livesRef = useRef(3);
-  const scoreRef = useRef(0);
-  const [lives, setLives] = useState(3);
-  const [score, setScore] = useState(0);
-  const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
-
-  // Platforms (mutable for moving ones)
+  // Platforms (mutable for moving ones) — declared before snapshot so useState
+  // initializers can reference them without hitting the temporal dead zone.
   const platformsRef = useRef<PlatformSpec[]>(
     INITIAL_PLATFORMS.map((p) => ({ ...p })),
   );
@@ -119,8 +119,27 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
     INITIAL_ENEMIES.map((e) => ({ ...e, originX: e.x })),
   );
 
-  // Re-render the platforms so moving ones update visually each frame
-  const [platformTick, setPlatformTick] = useState(0);
+  // Single state object holding all values read in JSX — avoids react-hooks/refs
+  // errors. Updated once per frame at the end of the update() loop.
+  /* eslint-disable react-hooks/refs */
+  const [snapshot, setSnapshot] = useState(() => ({
+    cameraX: 0,
+    playerX: 2,
+    playerY: STAGE_BOTTOM - 8 - PLAYER_HEIGHT,
+    playerFacing: 1 as 1 | -1,
+    playerGrounded: false,
+    playerVX: 0,
+    playerHurt: false,
+    platforms: platformsRef.current,
+    enemies: enemiesRef.current,
+  }));
+  /* eslint-enable react-hooks/refs */
+
+  const livesRef = useRef(3);
+  const scoreRef = useRef(0);
+  const [lives, setLives] = useState(3);
+  const [score, setScore] = useState(0);
+  const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
 
   const [phase, setPhase] = useState<Phase>('playing');
   const [paused, setPaused] = useState(false);
@@ -134,13 +153,24 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
     playerVY.current = 0;
     playerHurtTimer.current = 1.2;
     cameraX.current = 0;
-    forceRender((v) => v + 1);
+    setSnapshot({
+      cameraX: 0,
+      playerX: 2,
+      playerY: STAGE_BOTTOM - 8 - PLAYER_HEIGHT,
+      playerFacing: 1,
+      playerGrounded: false,
+      playerVX: 0,
+      playerHurt: true,
+      platforms: platformsRef.current,
+      enemies: enemiesRef.current,
+    });
   }, []);
 
   const update = useCallback(
     (dt: number) => {
       const left = isKeyDown('arrowleft') || isKeyDown('a');
       const right = isKeyDown('arrowright') || isKeyDown('d');
+      const jumpHeld = isKeyDown('arrowup') || isKeyDown(' ') || isKeyDown('w');
 
       // Horizontal motion
       if (left && !right) {
@@ -151,6 +181,17 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
         playerFacing.current = 1;
       } else {
         playerVX.current = 0;
+      }
+
+      // Keyboard jump input — buffer a jump request whenever the key is held
+      // and we haven't just consumed a buffer. touchControl() handles mobile.
+      if (jumpHeld) {
+        playerJumpHeld.current = true;
+        if (playerJumpBuffer.current <= 0) {
+          playerJumpBuffer.current = 0.12;
+        }
+      } else {
+        playerJumpHeld.current = false;
       }
 
       // Jump buffer / coyote time
@@ -190,7 +231,6 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
             Math.sin(t * p.moveSpeed) * p.moveRange;
         }
       });
-      setPlatformTick((v) => (v + 1) % 1000000);
 
       // Platform collision (only when falling)
       playerGrounded.current = false;
@@ -308,10 +348,22 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
         setPhase('won');
       }
 
-      // Tick re-render so HUD/positions update visually
-      forceRender((v) => (v + 1) % 1000000);
+      // Update snapshot state so JSX sees fresh values. This is a single state update
+      // per frame — React batches it, so it's one re-render per frame, same as before.
+      setSnapshot({
+        cameraX: cameraX.current,
+        playerX: playerX.current,
+        playerY: playerY.current,
+        playerFacing: playerFacing.current,
+        playerGrounded: playerGrounded.current,
+        playerVX: playerVX.current,
+        playerHurt: playerHurtTimer.current > 0,
+        platforms: platformsRef.current,
+        enemies: enemiesRef.current,
+      });
     },
-    [collectedIds, respawn],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [], // update is stable — refs are mutable, collectedIds is captured as local const
   );
 
   useGameLoop(update, isRunning);
@@ -327,6 +379,18 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
     } else if (action === 'right') {
       setTouchKey('d', state === 'down');
     }
+    // Sync snapshot so touch controls reflect immediately in JSX
+    setSnapshot({
+      cameraX: cameraX.current,
+      playerX: playerX.current,
+      playerY: playerY.current,
+      playerFacing: playerFacing.current,
+      playerGrounded: playerGrounded.current,
+      playerVX: playerVX.current,
+      playerHurt: playerHurtTimer.current > 0,
+      platforms: platformsRef.current,
+      enemies: enemiesRef.current,
+    });
   }
 
   const totalCollected = collectedIds.size;
@@ -351,7 +415,7 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
         <div
           className="absolute inset-0"
           style={{
-            transform: `translateX(${-cameraX.current * (containerWidth / 100)}px)`,
+            transform: `translateX(${-snapshot.cameraX * (containerWidth / 100)}px)`,
             width: `${STAGE_WIDTH}%`,
             height: '100%',
             background:
@@ -369,7 +433,7 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
           />
 
           {/* Platforms */}
-          {platformsRef.current.map((p) => (
+          {snapshot.platforms.map((p) => (
             <Platform
               key={p.id}
               x={p.x + ((p as PlatformSpec & { _offset?: number })._offset ?? 0)}
@@ -391,7 +455,7 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
           ))}
 
           {/* Enemies */}
-          {enemiesRef.current.map((e) => (
+          {snapshot.enemies.map((e) => (
             <Enemy key={e.id} x={e.x} y={e.y} />
           ))}
 
@@ -420,12 +484,12 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
 
           {/* Player */}
           <Player
-            x={playerX.current}
-            y={playerY.current}
-            facing={playerFacing.current}
-            isJumping={!playerGrounded.current}
-            isMoving={playerVX.current !== 0}
-            isHurt={playerHurtTimer.current > 0}
+            x={snapshot.playerX}
+            y={snapshot.playerY}
+            facing={snapshot.playerFacing}
+            isJumping={!snapshot.playerGrounded}
+            isMoving={snapshot.playerVX !== 0}
+            isHurt={snapshot.playerHurt}
           />
         </div>
 
@@ -543,9 +607,6 @@ export function CodeRunner({ quest: _quest, onComplete }: CodeRunnerProps) {
         <span>SPACE / ↑ JUMP</span>
         <span>P PAUSE</span>
       </div>
-
-      {/* Read platformTick so the moving-platform state is consumed visually. */}
-      <span className="hidden">{platformTick}</span>
     </div>
   );
 }

@@ -64,7 +64,15 @@ function useLayoutSize(ref: React.RefObject<HTMLElement | null>): LayoutSize {
       const containerHeight = 220; // fixed height for stage
       const cellSize = Math.floor((containerWidth - gap * (GRID_COLS + 1)) / GRID_COLS);
       const pieceSize = cellSize;
-      setSize({ containerWidth, containerHeight, cellSize, gap, pieceSize });
+      setSize((prev) =>
+        prev.containerWidth === containerWidth &&
+        prev.containerHeight === containerHeight &&
+        prev.cellSize === cellSize &&
+        prev.gap === gap &&
+        prev.pieceSize === pieceSize
+          ? prev
+          : { containerWidth, containerHeight, cellSize, gap, pieceSize },
+      );
     };
     update();
     const ro = new ResizeObserver(update);
@@ -75,7 +83,7 @@ function useLayoutSize(ref: React.RefObject<HTMLElement | null>): LayoutSize {
   return size;
 }
 
-export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
+export function UIPuzzle({ onComplete }: UIPuzzleProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const piecesLayerRef = useRef<HTMLDivElement | null>(null);
   const size = useLayoutSize(stageRef);
@@ -89,23 +97,10 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
   const [flash, setFlash] = useState<string | null>(null);
   const [phase, setPhase] = useState<'playing' | 'won' | 'lost'>('playing');
 
-  // Track piece positions so drag knows where each piece currently sits on screen
-  const [piecePositions, setPiecePositions] = useState<Record<string, { x: number; y: number }>>({});
-
-  // Initialize piece positions in the tray (bottom of stage)
-  useEffect(() => {
-    if (!size.containerWidth || !size.containerHeight) return;
-    const trayY = size.containerHeight - size.pieceSize - size.gap;
-    let cursorX = size.gap;
-    const positions: Record<string, { x: number; y: number }> = {};
-    PIECES.forEach((p) => {
-      if (!placed[p.id]) {
-        positions[p.id] = { x: cursorX, y: trayY };
-        cursorX += size.pieceSize + size.gap;
-      }
-    });
-    setPiecePositions(positions);
-  }, [size.containerWidth, size.containerHeight, placed, size.pieceSize, size.gap]);
+  // Explicit user-moved positions for pieces in the tray. Pieces that have
+  // been placed correctly get their slot position; unplaced pieces fall back
+  // to a computed tray position at render time.
+  const [trayPositions, setTrayPositions] = useState<Record<string, { x: number; y: number }>>({});
 
   // Compute slot screen positions
   const slotPositions = useMemo(() => {
@@ -121,25 +116,62 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
     return map;
   }, [size.cellSize, size.gap]);
 
-  // Timer
-  useEffect(() => {
-    if (phase !== 'playing') return;
-    if (timeLeft <= 0) {
-      setPhase('lost');
-      return;
-    }
-    const id = setInterval(() => setTimeLeft((t) => Math.max(0, t - 1)), 1000);
-    return () => clearInterval(id);
-  }, [phase, timeLeft]);
+  // Derive each piece's live screen position at render time, so the previous
+  // useEffect that mirrored derived state via setState is no longer needed.
+  const trayOrder = useMemo(() => {
+    return PIECES.filter((p) => !placed[p.id]?.correct).map((p) => p.id);
+  }, [placed]);
 
-  // Win check
+  const livePositions = useMemo(() => {
+    const out: Record<string, { x: number; y: number }> = {};
+    PIECES.forEach((p) => {
+      const placedInfo = placed[p.id];
+      if (placedInfo?.correct) {
+        const sp = slotPositions[placedInfo.slotIndex];
+        if (sp) {
+          out[p.id] = sp;
+          return;
+        }
+      }
+      const explicit = trayPositions[p.id];
+      if (explicit) {
+        out[p.id] = explicit;
+        return;
+      }
+      const idx = trayOrder.indexOf(p.id);
+      out[p.id] = {
+        x: size.gap + idx * (size.pieceSize + size.gap),
+        y: size.containerHeight - size.pieceSize - size.gap,
+      };
+    });
+    return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    placed,
+    trayPositions,
+    trayOrder,
+    slotPositions,
+    size.containerWidth,
+    size.containerHeight,
+    size.pieceSize,
+    size.gap,
+  ]);
+
+  // Timer — phase transition is fired from inside the setState updater so we
+  // don't call setPhase synchronously in the effect body.
   useEffect(() => {
     if (phase !== 'playing') return;
-    const allCorrect = PIECES.every((p) => placed[p.id]?.correct === true);
-    if (allCorrect) {
-      setPhase('won');
-    }
-  }, [placed, phase]);
+    const id = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          setPhase('lost');
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [phase]);
 
   function findClosestSlot(x: number, y: number): number | null {
     // x,y is the piece's center; compare to slot center
@@ -157,9 +189,21 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
       if (!best || dist < best.dist) best = { idx: i, dist };
     }
     if (!best) return null;
-    // Only snap if within snap radius (cell diagonal * 0.9)
+    // Only snap if within snap radius (cell diagonal * 0.7)
     const snapRadius = Math.hypot(size.cellSize, size.cellSize) * 0.7;
     return best.dist <= snapRadius ? best.idx : null;
+  }
+
+  function trayPositionFor(pieceId: string): { x: number; y: number } {
+    // Tray position: pieces in tray are placed in row at bottom. Re-derive
+    // here so we can write the absolute position into trayPositions after a
+    // drag ends.
+    const trayPieces = PIECES.filter((p) => !placed[p.id]?.correct);
+    const idx = trayPieces.findIndex((p) => p.id === pieceId);
+    return {
+      x: size.gap + idx * (size.pieceSize + size.gap),
+      y: size.containerHeight - size.pieceSize - size.gap,
+    };
   }
 
   function handleDragEnd(piece: Piece, _e: unknown, info: { point: { x: number; y: number } }) {
@@ -170,7 +214,7 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
     const closest = findClosestSlot(localX, localY);
     if (closest === null) {
       // Return to tray
-      setPiecePositions((prev) => ({ ...prev, [piece.id]: trayPositionFor(piece.id) }));
+      setTrayPositions((prev) => ({ ...prev, [piece.id]: trayPositionFor(piece.id) }));
       return;
     }
     const slot = slots[closest];
@@ -194,37 +238,43 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
     // Correct placement — place and lock
     setSlots((s) => s.map((sl) => (sl.index === closest ? { ...sl, pieceId: piece.id } : sl)));
     setPlaced((p) => ({ ...p, [piece.id]: { slotIndex: closest, correct: true } }));
-    setPiecePositions((p) => ({ ...p, [piece.id]: slotPositions[closest] }));
+    // Clear any previously-saved tray position so the memoized derivation
+    // falls through to the slotPositions branch.
+    setTrayPositions((prev) => {
+      const next = { ...prev };
+      delete next[piece.id];
+      return next;
+    });
     setFlash(`OK ${piece.label}`);
     setTimeout(() => setFlash(null), 700);
-  }
 
-  function trayPositionFor(pieceId: string): { x: number; y: number } {
-    // Find tray position: pieces in tray are placed in row at bottom
-    const trayPieces = PIECES.filter((p) => !placed[p.id] || p.id === pieceId);
-    const idx = trayPieces.findIndex((p) => p.id === pieceId);
-    return {
-      x: size.gap + idx * (size.pieceSize + size.gap),
-      y: size.containerHeight - size.pieceSize - size.gap,
-    };
+    // Win check — fire from the event handler so we don't setPhase in an
+    // effect body. We check the latest state by reading placed from the
+    // updater closure (which includes the piece we just placed).
+    const allCorrect = PIECES.every((q) => {
+      if (q.id === piece.id) return true;
+      return placed[q.id]?.correct === true;
+    });
+    if (allCorrect) {
+      setPhase('won');
+    }
   }
 
   function returnToTray(pieceId: string) {
-    setPiecePositions((p) => ({ ...p, [pieceId]: trayPositionFor(pieceId) }));
+    setTrayPositions((p) => ({ ...p, [pieceId]: trayPositionFor(pieceId) }));
   }
 
   function penalize(_pieceId: string, reason: string) {
-    setIntegrity((i) => Math.max(0, i - 12));
+    setIntegrity((i) => {
+      const next = Math.max(0, i - 12);
+      if (next <= 0) {
+        setPhase('lost');
+      }
+      return next;
+    });
     setFlash(reason);
     setTimeout(() => setFlash(null), 700);
   }
-
-  // If integrity hits 0, lose
-  useEffect(() => {
-    if (phase === 'playing' && integrity <= 0) {
-      setPhase('lost');
-    }
-  }, [integrity, phase]);
 
   const placedCount = Object.values(placed).filter((p) => p.correct).length;
 
@@ -303,7 +353,7 @@ export function UIPuzzle({ quest: _quest, onComplete }: UIPuzzleProps) {
         {/* Pieces layer */}
         <div ref={piecesLayerRef} className="absolute inset-0">
           {PIECES.map((piece) => {
-            const pos = piecePositions[piece.id];
+            const pos = livePositions[piece.id];
             const isPlaced = placed[piece.id]?.correct;
             return (
               <motion.div
