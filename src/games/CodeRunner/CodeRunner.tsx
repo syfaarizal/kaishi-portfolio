@@ -147,15 +147,16 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
   const isRunning = phase === 'playing' && !paused;
 
   const respawn = useCallback(() => {
-    playerX.current = 2;
+    // Respawn past the first enemy so the player isn't stuck in a death loop
+    playerX.current = 60;
     playerY.current = STAGE_BOTTOM - 8 - PLAYER_HEIGHT;
     playerVX.current = 0;
     playerVY.current = 0;
     playerHurtTimer.current = 1.2;
-    cameraX.current = 0;
+    cameraX.current = 10;
     setSnapshot({
-      cameraX: 0,
-      playerX: 2,
+      cameraX: 10,
+      playerX: 60,
       playerY: STAGE_BOTTOM - 8 - PLAYER_HEIGHT,
       playerFacing: 1,
       playerGrounded: false,
@@ -272,13 +273,10 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         if (Math.abs(e.x - e.originX) > e.range) e.vx *= -1;
       });
 
-      // Camera
-      const desiredCam = clamp(
-        playerX.current + PLAYER_WIDTH / 2 - 50,
-        0,
-        Math.max(0, STAGE_WIDTH - 100),
-      );
-      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 6);
+      // Camera — track player so they stay centered on screen. desiredCam places
+      // the player at a fixed virtual position; lerp smooths the follow.
+      const desiredCam = clamp(playerX.current + 1, 0, STAGE_WIDTH - 100);
+      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 20);
 
       // Enemy collisions
       if (playerHurtTimer.current <= 0) {
