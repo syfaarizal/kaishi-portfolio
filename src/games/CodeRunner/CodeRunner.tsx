@@ -44,34 +44,90 @@ interface EnemyState {
   originX: number;
 }
 
-const STAGE_WIDTH = 200; // virtual world width in %
+const STAGE_WIDTH = 420; // 2x+ longer level
 
 const INITIAL_PLATFORMS: PlatformSpec[] = [
-  { id: 'ground-0', x: 0, y: STAGE_BOTTOM - 8, width: 36, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'p-1', x: 42, y: STAGE_BOTTOM - 22, width: 14, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'p-2', x: 62, y: STAGE_BOTTOM - 34, width: 10, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'p-3', x: 78, y: STAGE_BOTTOM - 22, width: 16, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'ground-1', x: 100, y: STAGE_BOTTOM - 8, width: 30, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'p-4', x: 136, y: STAGE_BOTTOM - 26, width: 12, height: 4, moving: true, moveRange: 8, moveSpeed: 4 },
-  { id: 'p-5', x: 156, y: STAGE_BOTTOM - 40, width: 10, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
-  { id: 'ground-2', x: 172, y: STAGE_BOTTOM - 8, width: 28, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  // Ground segments (y=92, height=8) — wide safe zones separated by real gaps
+  { id: 'g-0',  x: 0,   y: 92, width: 35, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-1',  x: 50,  y: 92, width: 30, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-2',  x: 95,  y: 92, width: 35, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-3',  x: 145, y: 92, width: 30, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-4',  x: 190, y: 92, width: 35, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-5',  x: 240, y: 92, width: 30, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-6',  x: 285, y: 92, width: 35, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-7',  x: 335, y: 92, width: 30, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'g-8',  x: 380, y: 92, width: 40, height: 8, moving: false, moveRange: 0, moveSpeed: 0 },
+
+  // Mid-tier platforms (y=70-76) — reachable from ground, bridging gaps
+  { id: 'm-0',  x: 18,  y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-1',  x: 38,  y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-2',  x: 55,  y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-3',  x: 75,  y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-4',  x: 92,  y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-5',  x: 112, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-6',  x: 129, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-7',  x: 149, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-8',  x: 166, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-9',  x: 186, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-10', x: 203, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-11', x: 223, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-12', x: 240, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-13', x: 260, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-14', x: 277, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-15', x: 297, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-16', x: 314, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-17', x: 334, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-18', x: 351, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-19', x: 371, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-20', x: 388, y: 76, width: 12, height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'm-21', x: 408, y: 72, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+
+  // High-tier platforms (y=52-56) — need mid-tier launch; precision jumps
+  { id: 'h-0',  x: 24,  y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-1',  x: 40,  y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-2',  x: 60,  y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-3',  x: 78,  y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-4',  x: 97,  y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-5',  x: 115, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-6',  x: 134, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-7',  x: 152, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-8',  x: 171, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-9',  x: 189, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-10', x: 208, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-11', x: 226, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-12', x: 245, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-13', x: 263, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-14', x: 282, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-15', x: 300, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-16', x: 319, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-17', x: 337, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-18', x: 356, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-19', x: 374, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-20', x: 393, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+  { id: 'h-21', x: 411, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
 ];
 
 const INITIAL_ENEMIES: { id: string; x: number; y: number; vx: number; range: number }[] = [
-  { id: 'e-1', x: 50, y: STAGE_BOTTOM - 8 - 6, vx: 6, range: 5 },
-  { id: 'e-2', x: 108, y: STAGE_BOTTOM - 8 - 6, vx: 8, range: 6 },
-  { id: 'e-3', x: 180, y: STAGE_BOTTOM - 8 - 6, vx: 7, range: 6 },
+  { id: 'e-0', x: 25,  y: 86, vx: 8,  range: 8 },
+  { id: 'e-1', x: 67,  y: 86, vx: 10, range: 10 },
+  { id: 'e-2', x: 110, y: 86, vx: 8,  range: 8 },
+  { id: 'e-3', x: 160, y: 86, vx: 10, range: 10 },
+  { id: 'e-4', x: 205, y: 86, vx: 8,  range: 8 },
+  { id: 'e-5', x: 255, y: 86, vx: 10, range: 10 },
+  { id: 'e-6', x: 300, y: 86, vx: 8,  range: 8 },
+  { id: 'e-7', x: 350, y: 86, vx: 10, range: 10 },
+  { id: 'e-8', x: 398, y: 86, vx: 8,  range: 8 },
 ];
 
 const COLLECTIBLE_DEFS: { id: string; x: number; y: number }[] = [
-  { id: 'c-1', x: 47, y: STAGE_BOTTOM - 28 },
-  { id: 'c-2', x: 66, y: STAGE_BOTTOM - 40 },
-  { id: 'c-3', x: 84, y: STAGE_BOTTOM - 28 },
-  { id: 'c-4', x: 142, y: STAGE_BOTTOM - 32 },
-  { id: 'c-5', x: 160, y: STAGE_BOTTOM - 46 },
+  { id: 'c-1', x: 42,  y: 67 },
+  { id: 'c-2', x: 143, y: 67 },
+  { id: 'c-3', x: 252, y: 67 },
+  { id: 'c-4', x: 341, y: 67 },
+  { id: 'c-5', x: 395, y: 67 },
 ];
 
-const PORTAL = { x: 192, y: STAGE_BOTTOM - 8 - 12, width: 6, height: 12 };
+const PORTAL = { x: 410, y: 80, width: 6, height: 12 };
 
 type Phase = 'playing' | 'won' | 'gameover';
 
@@ -100,7 +156,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
 
   // Player physics state
   const playerX = useRef(2);
-  const playerY = useRef(STAGE_BOTTOM - 8 - PLAYER_HEIGHT);
+  const playerY = useRef(92 - PLAYER_HEIGHT);
   const playerVX = useRef(0);
   const playerVY = useRef(0);
   const playerFacing = useRef<1 | -1>(1);
@@ -125,7 +181,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
   const [snapshot, setSnapshot] = useState(() => ({
     cameraX: 0,
     playerX: 2,
-    playerY: STAGE_BOTTOM - 8 - PLAYER_HEIGHT,
+    playerY: 92 - PLAYER_HEIGHT,
     playerFacing: 1 as 1 | -1,
     playerGrounded: false,
     playerVX: 0,
@@ -147,17 +203,17 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
   const isRunning = phase === 'playing' && !paused;
 
   const respawn = useCallback(() => {
-    // Respawn past the first enemy so the player isn't stuck in a death loop
-    playerX.current = 60;
-    playerY.current = STAGE_BOTTOM - 8 - PLAYER_HEIGHT;
+    // Always respawn at the start of the level
+    playerX.current = 2;
+    playerY.current = 92 - PLAYER_HEIGHT;
     playerVX.current = 0;
     playerVY.current = 0;
     playerHurtTimer.current = 1.2;
-    cameraX.current = 10;
+    cameraX.current = 0;
     setSnapshot({
-      cameraX: 10,
-      playerX: 60,
-      playerY: STAGE_BOTTOM - 8 - PLAYER_HEIGHT,
+      cameraX: 0,
+      playerX: 2,
+      playerY: 92 - PLAYER_HEIGHT,
       playerFacing: 1,
       playerGrounded: false,
       playerVX: 0,
@@ -260,8 +316,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         }
       }
 
-      // Hard floor
-      if (playerY.current + PLAYER_HEIGHT >= STAGE_BOTTOM) {
+      // Hard floor — only active on the very first ground segment (x 0–35).
+      // Beyond that, falling off a platform = fall into pit.
+      if (playerX.current <= 35 && playerY.current + PLAYER_HEIGHT >= STAGE_BOTTOM) {
         playerY.current = STAGE_BOTTOM - PLAYER_HEIGHT;
         playerVY.current = 0;
         playerGrounded.current = true;
@@ -273,10 +330,17 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         if (Math.abs(e.x - e.originX) > e.range) e.vx *= -1;
       });
 
-      // Camera — track player so they stay centered on screen. desiredCam places
-      // the player at a fixed virtual position; lerp smooths the follow.
-      const desiredCam = clamp(playerX.current + 1, 0, STAGE_WIDTH - 100);
-      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 20);
+      // Camera — player stays at ~25% from left edge of viewport.
+      // The inner world div has width=STAGE_WIDTH% and is translated left by cameraX * (containerWidth/100)px.
+      // So player appears at (playerX - cameraX) virtual units from the left.
+      // We want player at 25 virtual units → cameraX = playerX - 25.
+      // Clamp so camera never goes negative.
+      const maxCameraX = Math.max(0, STAGE_WIDTH - 100);
+      const desiredCam = Math.max(0, Math.min(playerX.current - 25, maxCameraX));
+      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 12);
+
+      // Track if player landed on any platform this frame
+      const didLand = playerGrounded.current;
 
       // Enemy collisions
       if (playerHurtTimer.current <= 0) {
@@ -301,6 +365,20 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
             break;
           }
         }
+      }
+
+      // Fall into pit — if player is below ground level AND didn't land on any platform,
+      // they fell into a gap. Same penalty as hitting an enemy: lose a life, respawn.
+      const playerBottom = playerY.current + PLAYER_HEIGHT;
+      if (!didLand && playerBottom > STAGE_BOTTOM + 15) {
+        livesRef.current -= 1;
+        setLives(livesRef.current);
+        if (livesRef.current <= 0) {
+          setPhase('gameover');
+        } else {
+          respawn();
+        }
+        return;
       }
 
       // Collectibles

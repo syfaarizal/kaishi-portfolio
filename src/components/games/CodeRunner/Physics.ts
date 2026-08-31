@@ -3,7 +3,7 @@
 
 export const GRAVITY = 260; // %/s^2
 export const JUMP_VELOCITY = -98; // %/s
-export const MOVE_SPEED = 46; // %/s
+export const MOVE_SPEED = 28; // %/s — slower for better control
 export const MAX_FALL_SPEED = 170; // %/s
 export const PLAYER_WIDTH = 5.5;
 export const PLAYER_HEIGHT = 11;
