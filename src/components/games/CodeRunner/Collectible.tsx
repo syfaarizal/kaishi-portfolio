@@ -6,7 +6,7 @@ interface CollectibleProps {
   collected: boolean;
 }
 
-const HAZARDS_SPRITE = '/assets/game/hazards-game.png';
+const HAZARDS_SPRITE = '/assets/game/obstacle-game.png';
 
 export function Collectible({ x, y, collected }: CollectibleProps) {
   return (

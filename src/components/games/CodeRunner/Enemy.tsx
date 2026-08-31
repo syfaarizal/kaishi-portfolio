@@ -3,7 +3,7 @@ interface EnemyProps {
   y: number;
 }
 
-const OBSTACLE_SPRITE = '/assets/game/obstacle-game.png';
+const OBSTACLE_SPRITE = '/assets/game/hazards-game.png';
 
 export function Enemy({ x, y }: EnemyProps) {
   return (
