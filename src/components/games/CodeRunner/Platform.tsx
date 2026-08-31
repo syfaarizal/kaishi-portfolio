@@ -1,3 +1,5 @@
+import { STAGE_WIDTH } from './Physics';
+
 interface PlatformProps {
   x: number;
   y: number;
@@ -11,9 +13,9 @@ export function Platform({ x, y, width, height, moving }: PlatformProps) {
     <div
       className="absolute"
       style={{
-        left: `${x}%`,
+        left: `${(x / STAGE_WIDTH) * 100}%`,
         top: `${y}%`,
-        width: `${width}%`,
+        width: `${(width / STAGE_WIDTH) * 100}%`,
         height: `${height}%`,
         background: 'linear-gradient(180deg, #1a0e13, #0c0608)',
         borderTop: `2px solid ${moving ? '#ff1144' : '#cc1133'}`,

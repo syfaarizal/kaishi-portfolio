@@ -15,6 +15,7 @@ import {
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
   STAGE_BOTTOM,
+  STAGE_WIDTH,
   intersects,
   clamp,
 } from '../../components/games/CodeRunner/Physics';
@@ -43,8 +44,6 @@ interface EnemyState {
   range: number;
   originX: number;
 }
-
-const STAGE_WIDTH = 420; // 2x+ longer level
 
 const INITIAL_PLATFORMS: PlatformSpec[] = [
   // Ground segments (y=92, height=8) — wide safe zones separated by real gaps
@@ -330,12 +329,11 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         if (Math.abs(e.x - e.originX) > e.range) e.vx *= -1;
       });
 
-      // Camera — player stays at ~25% from left edge of viewport.
-      // The inner world div has width=STAGE_WIDTH% and is translated left by cameraX * (containerWidth/100)px.
-      // So player appears at (playerX - cameraX) virtual units from the left.
-      // We want player at 25 virtual units → cameraX = playerX - 25.
-      // Clamp so camera never goes negative.
-      const maxCameraX = Math.max(0, STAGE_WIDTH - 100);
+      // Camera — player stays at ~25 virtual units from the left edge of the viewport.
+      // With the world now 100% wide (not STAGE_WIDTH%), virtual cameraX directly maps to scroll.
+      // cameraX in virtual units: 0 = left edge, STAGE_WIDTH = right edge (fully scrolled).
+      // We want player at virtual x=25 (25% from left) once the camera starts moving.
+      const maxCameraX = STAGE_WIDTH - 25;
       const desiredCam = Math.max(0, Math.min(playerX.current - 25, maxCameraX));
       cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 12);
 
@@ -491,8 +489,11 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         <div
           className="absolute inset-0"
           style={{
-            transform: `translateX(${-snapshot.cameraX * (containerWidth / 100)}px)`,
-            width: `${STAGE_WIDTH}%`,
+            // World container is 100% of viewport width. All virtual coordinates (0-STAGE_WIDTH)
+            // are expressed as percentages of STAGE_WIDTH. Camera scrolls by converting virtual
+            // cameraX to pixels: -cameraX * (containerWidth / STAGE_WIDTH) px
+            transform: `translateX(${(-snapshot.cameraX * containerWidth) / STAGE_WIDTH}px)`,
+            width: '100%',
             height: '100%',
             background:
               'linear-gradient(180deg, #0a0508 0%, #1a0a10 60%, #2a0a14 100%)',
@@ -539,9 +540,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
           <div
             className="absolute flex items-center justify-center font-pixel text-[7px] text-kai-red"
             style={{
-              left: `${PORTAL.x}%`,
+              left: `${(PORTAL.x / STAGE_WIDTH) * 100}%`,
               top: `${PORTAL.y}%`,
-              width: `${PORTAL.width}%`,
+              width: `${(PORTAL.width / STAGE_WIDTH) * 100}%`,
               height: `${PORTAL.height}%`,
             }}
           >

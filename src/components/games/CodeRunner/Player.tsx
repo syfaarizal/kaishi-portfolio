@@ -1,4 +1,4 @@
-import { PLAYER_HEIGHT, PLAYER_WIDTH } from './Physics';
+import { PLAYER_HEIGHT, PLAYER_WIDTH, STAGE_WIDTH } from './Physics';
 
 interface PlayerProps {
   x: number;
@@ -16,10 +16,10 @@ export function Player({ x, y, facing, isJumping, isMoving, isHurt }: PlayerProp
     <div
       className="absolute transition-none overflow-hidden"
       style={{
-        left: `${x}%`,
+        left: `${(x / STAGE_WIDTH) * 100}%`,
         top: `${y}%`,
-        width: `${PLAYER_WIDTH}%`,
-        height: `${PLAYER_HEIGHT}%`,
+        width: `${(PLAYER_WIDTH / STAGE_WIDTH) * 100}%`,
+        height: `${(PLAYER_HEIGHT / STAGE_WIDTH) * 100}%`,
         transform: `scaleX(${facing})`,
         filter: isHurt ? 'brightness(2) saturate(0) hue-rotate(0deg)' : 'drop-shadow(0 0 4px rgba(204,17,51,0.5))',
       }}
