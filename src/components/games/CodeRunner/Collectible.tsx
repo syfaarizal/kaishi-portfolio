@@ -15,7 +15,7 @@ export function Collectible({ x, y, collected }: CollectibleProps) {
       {!collected && (
         <motion.div
           className="absolute flex items-center justify-center"
-          style={{ left: `${(x / STAGE_WIDTH) * 100}%`, top: `${y}%`, width: '4%', height: '6%' }}
+          style={{ left: `${(x / STAGE_WIDTH) * 100}%`, top: `${y}%`, width: `${(4 / STAGE_WIDTH) * 100}%`, height: `6%` }}
           animate={{ y: [0, -3, 0] }}
           transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
           exit={{ opacity: 0, scale: 1.6 }}

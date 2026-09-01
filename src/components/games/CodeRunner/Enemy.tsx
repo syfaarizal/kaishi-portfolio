@@ -11,7 +11,7 @@ export function Enemy({ x, y }: EnemyProps) {
   return (
     <div
       className="absolute flex items-center justify-center"
-      style={{ left: `${(x / STAGE_WIDTH) * 100}%`, top: `${y}%`, width: '4%', height: '6%' }}
+      style={{ left: `${(x / STAGE_WIDTH) * 100}%`, top: `${y}%`, width: `${(4 / STAGE_WIDTH) * 100}%`, height: `6%` }}
     >
       <img
         src={OBSTACLE_SPRITE}

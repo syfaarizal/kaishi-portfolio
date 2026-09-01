@@ -19,7 +19,7 @@ export function Player({ x, y, facing, isJumping, isMoving, isHurt }: PlayerProp
         left: `${(x / STAGE_WIDTH) * 100}%`,
         top: `${y}%`,
         width: `${(PLAYER_WIDTH / STAGE_WIDTH) * 100}%`,
-        height: `${(PLAYER_HEIGHT / STAGE_WIDTH) * 100}%`,
+        height: `${PLAYER_HEIGHT}%`,
         transform: `scaleX(${facing})`,
         filter: isHurt ? 'brightness(2) saturate(0) hue-rotate(0deg)' : 'drop-shadow(0 0 4px rgba(204,17,51,0.5))',
       }}
