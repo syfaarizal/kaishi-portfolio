@@ -730,9 +730,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
                 <div className="font-pixel text-sm text-green-400 text-glow mb-2">
                   LEVEL COMPLETE
                 </div>
-                <div className="font-pixel text-[8px] text-kai-muted mb-1">IKAN TERKUMPUL</div>
+                <div className="font-pixel text-[8px] text-kai-muted mb-1">FISH COLLECTED</div>
                 <div className="font-pixel text-3xl text-kai-red mb-1">
-                  🐟 {totalCollected} / {COLLECTIBLE_DEFS.length}
+                  <img src="/assets/game/obstacle-game.png" alt="fish" className="inline-block w-6 h-6 object-contain" /> {totalCollected} / {COLLECTIBLE_DEFS.length}
                 </div>
                 <div className="font-pixel text-[8px] text-kai-muted mb-1">FISH SCORE</div>
                 <div className="font-pixel text-2xl text-white mb-1">{totalCollected * 100}</div>

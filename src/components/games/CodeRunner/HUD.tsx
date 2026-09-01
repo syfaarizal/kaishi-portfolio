@@ -24,7 +24,7 @@ export function HUD({ lives, maxLives, score, fragmentsCollected, totalFragments
           SCORE <span className="text-kai-red">{score.toLocaleString()}</span>
         </span>
         <span>
-          🟡 {fragmentsCollected}/{totalFragments}
+          <img src="/assets/game/obstacle-game.png" alt="fish" className="inline-block w-3 h-3 object-contain" /> {fragmentsCollected}/{totalFragments}
         </span>
         <button
           onClick={onPause}
