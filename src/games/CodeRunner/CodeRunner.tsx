@@ -231,6 +231,19 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
   const [phase, setPhase] = useState<Phase>('playing');
   const [paused, setPaused] = useState(false);
 
+  // Audio refs (declared after phase so useEffect can reference phase as dependency)
+  const sfxRef = useRef<HTMLAudioElement | null>(null);
+
+  // Cleanup: stop any playing SFX when component unmounts
+  useEffect(() => {
+    return () => {
+      if (sfxRef.current) {
+        sfxRef.current.pause();
+        sfxRef.current = null;
+      }
+    };
+  }, []);
+
   const isRunning = phase === 'playing' && !paused;
 
   const respawn = useCallback(() => {
@@ -406,6 +419,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
             playerHurtTimer.current = 1.2;
             livesRef.current -= 1;
             setLives(livesRef.current);
+            // Hit SFX
+            if (sfxRef.current) sfxRef.current.pause();
+            const hitSfx = new Audio('/assets/audio/fall-hit-enemy-sfx.mp3');
+            hitSfx.volume = 0.6;
+            hitSfx.play().catch(() => {});
+            sfxRef.current = hitSfx;
             if (livesRef.current <= 0) {
               setPhase('gameover');
             } else {
@@ -422,6 +441,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       if (!didLand && playerBottom > STAGE_BOTTOM + 15) {
         livesRef.current -= 1;
         setLives(livesRef.current);
+        // Fall SFX
+        if (sfxRef.current) sfxRef.current.pause();
+        const fallSfx = new Audio('/assets/audio/fall-hit-enemy-sfx.mp3');
+        fallSfx.volume = 0.6;
+        fallSfx.play().catch(() => {});
+        sfxRef.current = fallSfx;
         if (livesRef.current <= 0) {
           setPhase('gameover');
         } else {
@@ -447,6 +472,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
           collectedSet.add(c.id);
           scoreRef.current += 100;
           collectedThisFrame = true;
+          // Fish SFX
+          if (sfxRef.current) sfxRef.current.pause();
+          const fishSfx = new Audio('/assets/audio/got-fish-sfx.mp3');
+          fishSfx.volume = 0.5;
+          fishSfx.play().catch(() => {});
+          sfxRef.current = fishSfx;
         }
       });
       if (collectedThisFrame) {
