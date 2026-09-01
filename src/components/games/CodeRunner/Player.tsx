@@ -28,6 +28,7 @@ export function Player({ x, y, facing, isJumping, isMoving, isHurt }: PlayerProp
         src={PLAYER_SPRITE}
         alt="Player"
         className={`w-full h-full object-contain ${isMoving && !isJumping ? 'animate-[bounce_0.3s_ease-in-out_infinite]' : ''}`}
+        style={{ objectPosition: 'bottom' }}
         draggable={false}
       />
     </div>

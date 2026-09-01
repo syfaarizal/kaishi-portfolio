@@ -104,26 +104,37 @@ const INITIAL_PLATFORMS: PlatformSpec[] = [
   { id: 'h-19', x: 374, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
   { id: 'h-20', x: 393, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
   { id: 'h-21', x: 411, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
+
+  // Moving platforms — two mid-tier movers in hard-to-reach spots for pacing
+  // (one over a wide ground gap, one between high-tier jumps)
+  { id: 'mov-0', x: 130, y: 64, width: 11, height: 4, moving: true, moveRange: 7, moveSpeed: 1.3 },
+  { id: 'mov-1', x: 290, y: 60, width: 11, height: 4, moving: true, moveRange: 8, moveSpeed: 1.6 },
 ];
 
 const INITIAL_ENEMIES: { id: string; x: number; y: number; vx: number; range: number }[] = [
-  { id: 'e-0', x: 25,  y: 86, vx: 8,  range: 8 },
-  { id: 'e-1', x: 67,  y: 86, vx: 10, range: 10 },
-  { id: 'e-2', x: 110, y: 86, vx: 8,  range: 8 },
-  { id: 'e-3', x: 160, y: 86, vx: 10, range: 10 },
-  { id: 'e-4', x: 205, y: 86, vx: 8,  range: 8 },
-  { id: 'e-5', x: 255, y: 86, vx: 10, range: 10 },
-  { id: 'e-6', x: 300, y: 86, vx: 8,  range: 8 },
-  { id: 'e-7', x: 350, y: 86, vx: 10, range: 10 },
-  { id: 'e-8', x: 398, y: 86, vx: 8,  range: 8 },
+  // Ground patrols — varied speeds (5–13) and ranges (5–14)
+  { id: 'e-0', x: 25,  y: 86, vx: 7,  range: 9 },
+  { id: 'e-1', x: 67,  y: 86, vx: 12, range: 7 },
+  { id: 'e-2', x: 118, y: 86, vx: 5,  range: 14 },
+  { id: 'e-3', x: 165, y: 86, vx: 10, range: 6 },
+  { id: 'e-4', x: 215, y: 86, vx: 13, range: 8 },
+  { id: 'e-5', x: 258, y: 86, vx: 6,  range: 11 },
+  { id: 'e-6', x: 310, y: 86, vx: 9,  range: 9 },
+  { id: 'e-7', x: 358, y: 86, vx: 11, range: 5 },
+  { id: 'e-8', x: 400, y: 86, vx: 8,  range: 12 },
+
+  // Mid/high-tier sentries — patrolling narrower ranges to threaten jumping routes
+  { id: 'e-9',  x: 60,  y: 70, vx: 9,  range: 6 },
+  { id: 'e-10', x: 210, y: 50, vx: 7, range: 5 },
 ];
 
 const COLLECTIBLE_DEFS: { id: string; x: number; y: number }[] = [
-  { id: 'c-1', x: 42,  y: 67 },
-  { id: 'c-2', x: 143, y: 67 },
-  { id: 'c-3', x: 252, y: 67 },
-  { id: 'c-4', x: 341, y: 67 },
-  { id: 'c-5', x: 395, y: 67 },
+  // Spread across ground / mid / high tiers with non-uniform horizontal spacing
+  { id: 'c-1', x: 38,  y: 85 },
+  { id: 'c-2', x: 110, y: 50 },
+  { id: 'c-3', x: 195, y: 67 },
+  { id: 'c-4', x: 285, y: 88 },
+  { id: 'c-5', x: 405, y: 55 },
 ];
 
 const PORTAL = { x: 410, y: 80, width: 6, height: 12 };
@@ -192,6 +203,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
 
   const livesRef = useRef(3);
   const scoreRef = useRef(0);
+  const collectedIdsRef = useRef<Set<string>>(new Set());
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
@@ -329,12 +341,13 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         if (Math.abs(e.x - e.originX) > e.range) e.vx *= -1;
       });
 
-      // Camera — player stays at ~25 virtual units from the left edge of the viewport.
-      // With the world now 100% wide (not STAGE_WIDTH%), virtual cameraX directly maps to scroll.
-      // cameraX in virtual units: 0 = left edge, STAGE_WIDTH = right edge (fully scrolled).
-      // We want player at virtual x=25 (25% from left) once the camera starts moving.
-      const maxCameraX = STAGE_WIDTH - 25;
-      const desiredCam = Math.max(0, Math.min(playerX.current - 25, maxCameraX));
+      // Camera — viewport shows 100 virtual units at a time, so player stays at virtual
+      // x=100 (100/420 ≈ 24% from left of the world, which renders as ~24% from left
+      // of the viewport since the world is STAGE_WIDTH% of viewport width).
+      // cameraX in virtual units: 0 = left edge of world aligned with left edge of viewport,
+      // STAGE_WIDTH - 100 = world right edge aligned with viewport right edge (no empty gap).
+      const maxCameraX = STAGE_WIDTH - 100;
+      const desiredCam = Math.max(0, Math.min(playerX.current - 100, maxCameraX));
       cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 12);
 
       // Track if player landed on any platform this frame
@@ -379,11 +392,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         return;
       }
 
-      // Collectibles
+      // Collectibles — read/mutate collectedIdsRef (closure-stable, not frozen by React state)
+      // and only sync to React state when something actually changed (for HUD re-render).
       let collectedThisFrame = false;
-      const next = new Set(collectedIds);
+      const collectedSet = collectedIdsRef.current;
       COLLECTIBLE_DEFS.forEach((c) => {
-        if (next.has(c.id)) return;
+        if (collectedSet.has(c.id)) return;
         const cRect = { x: c.x, y: c.y, width: 4, height: 6 };
         const pRect = {
           x: playerX.current,
@@ -392,13 +406,13 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
           height: PLAYER_HEIGHT,
         };
         if (intersects(pRect, cRect)) {
-          next.add(c.id);
+          collectedSet.add(c.id);
           scoreRef.current += 100;
           collectedThisFrame = true;
         }
       });
       if (collectedThisFrame) {
-        setCollectedIds(next);
+        setCollectedIds(new Set(collectedSet));
         setScore(scoreRef.current);
       }
 
@@ -489,11 +503,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         <div
           className="absolute inset-0"
           style={{
-            // World container is 100% of viewport width. All virtual coordinates (0-STAGE_WIDTH)
-            // are expressed as percentages of STAGE_WIDTH. Camera scrolls by converting virtual
-            // cameraX to pixels: -cameraX * (containerWidth / STAGE_WIDTH) px
-            transform: `translateX(${(-snapshot.cameraX * containerWidth) / STAGE_WIDTH}px)`,
-            width: '100%',
+            // World container is STAGE_WIDTH% of viewport width. All virtual coordinates
+            // (0-STAGE_WIDTH) are expressed as percentages of STAGE_WIDTH: (x / STAGE_WIDTH) * 100%.
+            // Camera scrolls by converting virtual cameraX to pixels:
+            //   1 virtual unit = containerWidth / 100 px  →  translateX = -cameraX * containerWidth / 100
+            transform: `translateX(${(-snapshot.cameraX * containerWidth) / 100}px)`,
+            width: `${STAGE_WIDTH}%`,
             height: '100%',
             background:
               'linear-gradient(180deg, #0a0508 0%, #1a0a10 60%, #2a0a14 100%)',
