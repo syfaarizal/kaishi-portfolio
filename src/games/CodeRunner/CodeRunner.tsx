@@ -353,14 +353,26 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         if (Math.abs(e.x - e.originX) > e.range) e.vx *= -1;
       });
 
-      // Camera — viewport shows 100 virtual units at a time, so player stays at virtual
-      // x=100 (100/420 ≈ 24% from left of the world, which renders as ~24% from left
-      // of the viewport since the world is STAGE_WIDTH% of viewport width).
-      // cameraX in virtual units: 0 = left edge of world aligned with left edge of viewport,
-      // STAGE_WIDTH - 100 = world right edge aligned with viewport right edge (no empty gap).
-      const maxCameraX = STAGE_WIDTH - 100;
-      const desiredCam = Math.max(0, Math.min(playerX.current - 100, maxCameraX));
-      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 20);
+      const VIEWPORT_W = 100;           // virtual units visible at once
+      const CAM_TARGET_LEFT  = 20;      // dead-zone left edge (relative to viewport)
+      const CAM_TARGET_RIGHT = 55;      // dead-zone right edge (relative to viewport)
+      const maxCameraX = STAGE_WIDTH - VIEWPORT_W;
+
+      // Player position relative to current viewport
+      const playerRelX = playerX.current - cameraX.current;
+
+      let desiredCam = cameraX.current;
+      if (playerRelX < CAM_TARGET_LEFT) {
+        // Player too close to left edge — scroll camera left
+        desiredCam = playerX.current - CAM_TARGET_LEFT;
+      } else if (playerRelX > CAM_TARGET_RIGHT) {
+        // Player too close to right edge — scroll camera right
+        desiredCam = playerX.current - CAM_TARGET_RIGHT;
+      }
+      desiredCam = Math.max(0, Math.min(desiredCam, maxCameraX));
+
+      // Smooth follow — faster factor (dt * 12) keeps up with player without overshooting
+      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 12);
 
       // Track if player landed on any platform this frame
       const didLand = playerGrounded.current;
