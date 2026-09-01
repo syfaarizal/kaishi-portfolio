@@ -105,27 +105,39 @@ const INITIAL_PLATFORMS: PlatformSpec[] = [
   { id: 'h-20', x: 393, y: 56, width: 7,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
   { id: 'h-21', x: 411, y: 54, width: 5,  height: 4, moving: false, moveRange: 0, moveSpeed: 0 },
 
-  // Moving platforms — two mid-tier movers in hard-to-reach spots for pacing
-  // (one over a wide ground gap, one between high-tier jumps)
-  { id: 'mov-0', x: 130, y: 64, width: 11, height: 4, moving: true, moveRange: 7, moveSpeed: 1.3 },
-  { id: 'mov-1', x: 290, y: 60, width: 11, height: 4, moving: true, moveRange: 8, moveSpeed: 1.6 },
+  // Moving platforms — original two (faster) + new traps across the stage
+  { id: 'mov-0', x: 130, y: 64, width: 9,  height: 4, moving: true, moveRange: 10, moveSpeed: 2.1 },
+  { id: 'mov-1', x: 290, y: 60, width: 9,  height: 4, moving: true, moveRange: 11, moveSpeed: 2.4 },
+  // NEW traps: narrow fast-moving platforms over critical gaps
+  { id: 'mov-2', x: 43,  y: 64, width: 6,  height: 4, moving: true, moveRange: 5,  moveSpeed: 2.8 }, // early trap over first gap
+  { id: 'mov-3', x: 220, y: 62, width: 7,  height: 4, moving: true, moveRange: 8,  moveSpeed: 2.5 }, // mid-stage vertical trap
+  { id: 'mov-4', x: 360, y: 64, width: 7,  height: 4, moving: true, moveRange: 9,  moveSpeed: 3.0 }, // late-stage fast trap near c-5
 ];
 
 const INITIAL_ENEMIES: { id: string; x: number; y: number; vx: number; range: number }[] = [
-  // Ground patrols — varied speeds (5–13) and ranges (5–14)
-  { id: 'e-0', x: 25,  y: 86, vx: 7,  range: 9 },
-  { id: 'e-1', x: 67,  y: 86, vx: 12, range: 7 },
-  { id: 'e-2', x: 118, y: 86, vx: 5,  range: 14 },
-  { id: 'e-3', x: 165, y: 86, vx: 10, range: 6 },
-  { id: 'e-4', x: 215, y: 86, vx: 13, range: 8 },
-  { id: 'e-5', x: 258, y: 86, vx: 6,  range: 11 },
-  { id: 'e-6', x: 310, y: 86, vx: 9,  range: 9 },
-  { id: 'e-7', x: 358, y: 86, vx: 11, range: 5 },
-  { id: 'e-8', x: 400, y: 86, vx: 8,  range: 12 },
+  // Ground patrols — varied speeds (5–18) and ranges (5–14)
+  { id: 'e-0',  x: 25,  y: 86, vx: 9,  range: 9 },
+  { id: 'e-1',  x: 67,  y: 86, vx: 15, range: 7 },
+  { id: 'e-2',  x: 118, y: 86, vx: 7,  range: 14 },
+  { id: 'e-3',  x: 165, y: 86, vx: 13, range: 6 },
+  { id: 'e-4',  x: 215, y: 86, vx: 18, range: 8 },
+  { id: 'e-5',  x: 258, y: 86, vx: 9,  range: 11 },
+  { id: 'e-6',  x: 310, y: 86, vx: 14, range: 9 },
+  { id: 'e-7',  x: 358, y: 86, vx: 16, range: 5 },
+  { id: 'e-8',  x: 395, y: 86, vx: 12, range: 14 },
 
   // Mid/high-tier sentries — patrolling narrower ranges to threaten jumping routes
-  { id: 'e-9',  x: 60,  y: 70, vx: 9,  range: 6 },
-  { id: 'e-10', x: 210, y: 50, vx: 7, range: 5 },
+  { id: 'e-9',  x: 60,  y: 70, vx: 12, range: 6 },
+  { id: 'e-10', x: 210, y: 50, vx: 10, range: 5 },
+
+  // NEW: extra aggressive sentries guarding key areas
+  { id: 'e-11', x: 100, y: 70, vx: 14, range: 8 },  // guards mid-tier near c-2 approach
+  { id: 'e-12', x: 175, y: 70, vx: 11, range: 7 },  // between c-2 and c-3 zone
+  { id: 'e-13', x: 260, y: 70, vx: 16, range: 6 },  // guards c-4 approach from above
+  { id: 'e-14', x: 350, y: 70, vx: 13, range: 8 },  // late-game mid-tier pressure
+  { id: 'e-15', x: 383, y: 70, vx: 18, range: 10 }, // fast guard near c-5 and portal
+  { id: 'e-16', x: 145, y: 86, vx: 17, range: 5 },  // narrow gap guard on ground
+  { id: 'e-17', x: 335, y: 86, vx: 20, range: 4 },  // very fast ground patrol near end
 ];
 
 const COLLECTIBLE_DEFS: { id: string; x: number; y: number }[] = [
@@ -134,10 +146,12 @@ const COLLECTIBLE_DEFS: { id: string; x: number; y: number }[] = [
   { id: 'c-2', x: 110, y: 50 },
   { id: 'c-3', x: 195, y: 67 },
   { id: 'c-4', x: 285, y: 88 },
-  { id: 'c-5', x: 405, y: 55 },
+  // c-5: hovering above the final ground segment (g-8), guarded by fast enemy
+  { id: 'c-5', x: 393, y: 68 },
 ];
 
-const PORTAL = { x: 410, y: 80, width: 6, height: 12 };
+// EXIT DOOR — wide red door at the end of stage, clearly visible
+const PORTAL = { x: 408, y: 72, width: 12, height: 20 };
 
 type Phase = 'playing' | 'won' | 'gameover';
 
@@ -354,8 +368,8 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       });
 
       const VIEWPORT_W = 100;           // virtual units visible at once
-      const CAM_TARGET_LEFT  = 20;      // dead-zone left edge (relative to viewport)
-      const CAM_TARGET_RIGHT = 55;      // dead-zone right edge (relative to viewport)
+      const CAM_TARGET_LEFT  = 30;      // dead-zone left edge (centered: 30+70=100)
+      const CAM_TARGET_RIGHT = 70;      // dead-zone right edge — centered so camera follows when player moves away from center
       const maxCameraX = STAGE_WIDTH - VIEWPORT_W;
 
       // Player position relative to current viewport
@@ -577,9 +591,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
             <Enemy key={e.id} x={e.x} y={e.y} />
           ))}
 
-          {/* Portal */}
+          {/* EXIT DOOR — big red door at end of stage */}
           <div
-            className="absolute flex items-center justify-center font-pixel text-[7px] text-kai-red"
+            className="absolute"
             style={{
               left: `${(PORTAL.x / STAGE_WIDTH) * 100}%`,
               top: `${PORTAL.y}%`,
@@ -587,17 +601,56 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
               height: `${PORTAL.height}%`,
             }}
           >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-              className="w-full h-full border-2 border-kai-red"
+            {/* Door frame */}
+            <div
+              className="relative w-full h-full flex flex-col items-center justify-end"
               style={{
-                boxShadow: '0 0 18px #cc1133, inset 0 0 12px #ff1144',
-                background:
-                  'radial-gradient(circle, rgba(255,17,68,0.6) 0%, rgba(204,17,51,0.1) 70%)',
+                border: '3px solid #ff1144',
+                boxShadow: '0 0 24px #ff1144, 0 0 48px rgba(255,17,68,0.4), inset 0 0 16px rgba(255,17,68,0.2)',
+                background: 'linear-gradient(180deg, #1a0005 0%, #3a0010 40%, #cc1133 100%)',
               }}
-            />
-            <span className="absolute">⌬</span>
+            >
+              {/* Animated glow pulse */}
+              <motion.div
+                className="absolute inset-0"
+                animate={{ opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 80%, rgba(255,17,68,0.5) 0%, transparent 70%)',
+                }}
+              />
+              {/* Door knob */}
+              <div
+                className="absolute"
+                style={{
+                  right: '15%',
+                  top: '50%',
+                  width: '12%',
+                  height: '8%',
+                  borderRadius: '50%',
+                  background: '#ffaa33',
+                  boxShadow: '0 0 4px #ffaa33',
+                }}
+              />
+              {/* EXIT label */}
+              <motion.div
+                className="absolute top-1 w-full text-center font-pixel"
+                style={{ fontSize: '4px', color: '#ff6688', letterSpacing: '1px' }}
+                animate={{ opacity: [1, 0.4, 1] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+              >
+                EXIT
+              </motion.div>
+              {/* Arrow indicator */}
+              <motion.div
+                className="absolute font-pixel"
+                style={{ top: '30%', fontSize: '6px', color: '#ff1144' }}
+                animate={{ y: [0, -3, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+              >
+                ▶
+              </motion.div>
+            </div>
           </div>
 
           {/* Player */}
@@ -646,11 +699,14 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
                 <div className="font-pixel text-sm text-green-400 text-glow mb-2">
                   LEVEL COMPLETE
                 </div>
-                <div className="font-pixel text-[8px] text-kai-muted mb-1">SCORE</div>
-                <div className="font-pixel text-2xl text-white mb-1">{score}</div>
+                <div className="font-pixel text-[8px] text-kai-muted mb-1">IKAN TERKUMPUL</div>
+                <div className="font-pixel text-3xl text-kai-red mb-1">
+                  🐟 {totalCollected} / {COLLECTIBLE_DEFS.length}
+                </div>
+                <div className="font-pixel text-[8px] text-kai-muted mb-1">FISH SCORE</div>
+                <div className="font-pixel text-2xl text-white mb-1">{totalCollected * 100}</div>
                 <div className="font-display text-xs text-kai-muted mb-4">
-                  Lives remaining: {lives} • Fragments: {totalCollected}/
-                  {COLLECTIBLE_DEFS.length}
+                  Lives remaining: {lives} • Total Score: {score}
                 </div>
                 <button
                   onClick={onComplete}
