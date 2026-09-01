@@ -153,6 +153,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
     if (!el) return;
     const update = () => {
       const next = el.getBoundingClientRect().width;
+      // TEMPORARY DEBUG — container width verification
+      // eslint-disable-next-line no-console
+      console.log('[CodeRunner] containerWidth:', next);
       setContainerWidth((prev) => (prev === next ? prev : next));
     };
     update();
@@ -185,6 +188,12 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
     INITIAL_ENEMIES.map((e) => ({ ...e, originX: e.x })),
   );
 
+  // Mutable refs declared before the snapshot useState so its initializer can
+  // safely read .current without hitting the temporal dead zone.
+  const livesRef = useRef(3);
+  const scoreRef = useRef(0);
+  const collectedIdsRef = useRef<Set<string>>(new Set());
+
   // Single state object holding all values read in JSX — avoids react-hooks/refs
   // errors. Updated once per frame at the end of the update() loop.
   /* eslint-disable react-hooks/refs */
@@ -198,12 +207,9 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
     playerHurt: false,
     platforms: platformsRef.current,
     enemies: enemiesRef.current,
+    collectedIds: collectedIdsRef.current,
   }));
   /* eslint-enable react-hooks/refs */
-
-  const livesRef = useRef(3);
-  const scoreRef = useRef(0);
-  const collectedIdsRef = useRef<Set<string>>(new Set());
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
   const [collectedIds, setCollectedIds] = useState<Set<string>>(new Set());
@@ -231,6 +237,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       playerHurt: true,
       platforms: platformsRef.current,
       enemies: enemiesRef.current,
+      collectedIds: collectedIdsRef.current,
     });
   }, []);
 
@@ -239,6 +246,11 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       const left = isKeyDown('arrowleft') || isKeyDown('a');
       const right = isKeyDown('arrowright') || isKeyDown('d');
       const jumpHeld = isKeyDown('arrowup') || isKeyDown(' ') || isKeyDown('w');
+      // TEMPORARY DEBUG — keyboard input verification
+      if (left || right) {
+        // eslint-disable-next-line no-console
+        console.log('[GameLoop] LEFT:', left, 'RIGHT:', right, 'playerVX:', playerVX.current);
+      }
 
       // Horizontal motion
       if (left && !right) {
@@ -348,7 +360,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       // STAGE_WIDTH - 100 = world right edge aligned with viewport right edge (no empty gap).
       const maxCameraX = STAGE_WIDTH - 100;
       const desiredCam = Math.max(0, Math.min(playerX.current - 100, maxCameraX));
-      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 12);
+      cameraX.current += (desiredCam - cameraX.current) * Math.min(1, dt * 20);
 
       // Track if player landed on any platform this frame
       const didLand = playerGrounded.current;
@@ -448,6 +460,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
         playerHurt: playerHurtTimer.current > 0,
         platforms: platformsRef.current,
         enemies: enemiesRef.current,
+        collectedIds: collectedIdsRef.current,
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -478,6 +491,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       playerHurt: playerHurtTimer.current > 0,
       platforms: platformsRef.current,
       enemies: enemiesRef.current,
+      collectedIds: collectedIdsRef.current,
     });
   }
 
@@ -542,7 +556,7 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
               key={c.id}
               x={c.x}
               y={c.y}
-              collected={collectedIds.has(c.id)}
+              collected={snapshot.collectedIds.has(c.id)}
             />
           ))}
 
