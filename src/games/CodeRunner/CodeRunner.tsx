@@ -368,8 +368,8 @@ export function CodeRunner({ onComplete }: CodeRunnerProps) {
       });
 
       const VIEWPORT_W = 100;           // virtual units visible at once
-      const CAM_TARGET_LEFT  = 30;      // dead-zone left edge (centered: 30+70=100)
-      const CAM_TARGET_RIGHT = 70;      // dead-zone right edge — centered so camera follows when player moves away from center
+      const CAM_TARGET_LEFT  = 0;       // camera starts locked at world left edge
+      const CAM_TARGET_RIGHT = 50;      // camera starts following when player passes 50% → locked at portal
       const maxCameraX = STAGE_WIDTH - VIEWPORT_W;
 
       // Player position relative to current viewport

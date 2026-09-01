@@ -1,7 +1,7 @@
 // All units are percentages of the game stage (0-100), so the game
 // scales responsively without any manual pixel/DPI recalculation.
 
-export const STAGE_WIDTH = 420;
+export const STAGE_WIDTH = 500;
 export const GRAVITY = 260; // %/s^2
 export const JUMP_VELOCITY = -98; // %/s
 export const MOVE_SPEED = 28; // %/s — slower for better control
