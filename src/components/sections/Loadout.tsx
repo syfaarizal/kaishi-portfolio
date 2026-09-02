@@ -413,15 +413,15 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
           {item.short}
         </span>
         <span
-          className="font-pixel tracking-wide whitespace-nowrap truncate min-w-0 block"
-          style={{ fontSize: '10px', color: '#e8d8dc', maxWidth: '100%' }}
+          className="font-pixel tracking-wide whitespace-nowrap w-full block truncate min-w-0"
+          style={{ fontSize: '10px', color: '#e8d8dc' }}
           title={item.name}
         >
           {item.name}
         </span>
         <div className="flex items-center justify-between mt-0.5 gap-1 min-w-0">
           <span
-            className="font-pixel tracking-widest whitespace-nowrap min-w-0 shrink"
+            className="font-pixel tracking-widest whitespace-nowrap shrink-0"
             style={{ fontSize: '8px', color: '#7a6068' }}
           >
             {item.mark} {item.years}
