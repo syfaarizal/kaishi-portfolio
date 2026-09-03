@@ -413,7 +413,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
           {item.short}
         </span>
         <span
-          className="font-pixel tracking-wide whitespace-nowrap w-full block truncate min-w-0"
+          className="font-pixel tracking-wide block min-w-0 break-words"
           style={{ fontSize: '10px', color: '#e8d8dc' }}
           title={item.name}
         >
