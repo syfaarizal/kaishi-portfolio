@@ -12,7 +12,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   React: {
     name: 'React',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61dafb" strokeWidth="1.4" />
         <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61dafb" strokeWidth="1.4" transform="rotate(60 12 12)" />
         <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61dafb" strokeWidth="1.4" transform="rotate(120 12 12)" />
@@ -23,7 +23,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   TypeScript: {
     name: 'TypeScript',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <rect width="24" height="24" rx="3" fill="#3178c6" opacity="0.18" />
         <rect width="24" height="24" rx="3" stroke="#3178c6" strokeWidth="1.4" />
         <path d="M4 8h6M7 8v8" stroke="#3178c6" strokeWidth="1.8" strokeLinecap="round" />
@@ -34,7 +34,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Tailwind: {
     name: 'Tailwind',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M5 8a4 4 0 018 0" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" />
         <path d="M3 12h14a3 3 0 000-6h-1" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" />
         <path d="M3 16h10a3 3 0 010 6h-1" stroke="#38bdf8" strokeWidth="1.8" strokeLinecap="round" />
@@ -44,7 +44,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Framer: {
     name: 'Framer',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M5 4h14v6H12l7 6v4H12l-7-6V4z" stroke="#cc1133" strokeWidth="1.6" strokeLinejoin="round" fill="rgba(204,17,51,0.12)" />
       </svg>
     ),
@@ -52,7 +52,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Node: {
     name: 'Node.js',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M12 3L20.5 7.5v9L12 21 3.5 16.5v-9L12 3z" stroke="#68a063" strokeWidth="1.4" />
         <path d="M9 16V8l6 8V8" stroke="#68a063" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -61,7 +61,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Postgres: {
     name: 'PostgreSQL',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <ellipse cx="12" cy="6" rx="7" ry="3" stroke="#336791" strokeWidth="1.4" />
         <path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" stroke="#336791" strokeWidth="1.4" />
         <path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" stroke="#336791" strokeWidth="1.4" />
@@ -71,7 +71,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Supabase: {
     name: 'Supabase',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M12 2L4 14h6l-2 8 10-12h-6l2-8z" stroke="#3ecf8e" strokeWidth="1.6" strokeLinejoin="round" fill="rgba(62,207,142,0.12)" />
       </svg>
     ),
@@ -79,7 +79,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Figma: {
     name: 'Figma',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <circle cx="9" cy="6" r="3" stroke="#a259ff" strokeWidth="1.4" />
         <circle cx="9" cy="12" r="3" stroke="#a259ff" strokeWidth="1.4" />
         <circle cx="9" cy="18" r="3" stroke="#a259ff" strokeWidth="1.4" />
@@ -91,7 +91,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Three: {
     name: 'Three.js',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M5 4l1.4 15L12 21l6.6-2L20 4H5z" stroke="#e8e0e3" strokeWidth="1.4" />
         <path d="M8 10l-2.5 2L8 14M16 10l2.5 2L16 14M13 9l-2 6" stroke="#e8e0e3" strokeWidth="1.4" strokeLinecap="round" />
       </svg>
@@ -100,7 +100,7 @@ const TOOL_LIBRARY: Record<string, ToolIcon> = {
   Vite: {
     name: 'Vite',
     svg: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path d="M3 8l9-5 9 5-9 13L3 8z" stroke="#ffd028" strokeWidth="1.4" strokeLinejoin="round" />
         <path d="M3 8h18M12 21V3" stroke="#ffd028" strokeWidth="1.2" opacity="0.5" />
       </svg>
@@ -290,49 +290,49 @@ export function Inventory({ onNavigate }: InventoryProps) {
   const active = activeId ? PROJECTS.find(p => p.id === activeId) ?? null : allVisible[0] ?? null;
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden" style={{ background: '#07020a' }}>
+    <section className="relative h-screen w-full overflow-hidden" style={{ background: '#07020a' }}>
       <PixelGrid />
 
-      <div className="relative z-10 flex flex-col min-h-screen pt-[80px] pb-12 px-5 md:px-10">
+      <div className="relative z-10 flex flex-col h-full pt-20 sm:pt-24 md:pt-[80px] pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8 lg:px-10">
         {/* Header */}
-        <header className="mb-7">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="font-pixel text-[9px] tracking-widest text-[#cc1133]/70">
+        <header className="shrink-0 mb-4 sm:mb-5 md:mb-6">
+          <div className="flex items-center gap-3 mb-1.5 sm:mb-2">
+            <span className="font-pixel text-[8px] sm:text-[9px] tracking-widest text-[#cc1133]/70">
               [ INVENTORY.LOG ]
             </span>
-            <span className="block h-px flex-1 max-w-[140px] bg-gradient-to-r from-[#cc1133]/40 to-transparent" />
-            <span className="font-pixel text-[8px] tracking-widest text-[#7a6068]">
+            <span className="block h-px flex-1 max-w-[60px] sm:max-w-[100px] md:max-w-[140px] bg-gradient-to-r from-[#cc1133]/40 to-transparent" />
+            <span className="font-pixel text-[7px] sm:text-[8px] tracking-widest text-[#7a6068]">
               {PROJECTS.length} ENTRIES
             </span>
           </div>
           <h1
-            className="font-pixel text-[#cc1133] tracking-widest"
+            className="font-pixel text-[#cc1133] tracking-widest leading-none"
             style={{
-              fontSize: 'clamp(20px, 3.6vw, 36px)',
+              fontSize: 'clamp(18px, 3.4vw, 36px)',
               textShadow: '0 0 18px rgba(204,17,51,0.55), 0 0 36px rgba(204,17,51,0.25)',
             }}
           >
             INVENTORY ARCHIVE
           </h1>
-          <p className="mt-2 text-[11px] md:text-[12px] tracking-[0.22em] text-[#7a6068] max-w-[640px]">
-            Builds I've shipped and the ones still in the forge. Click a record to inspect tools, stack, and entry points.
+          <p className="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.16em] sm:tracking-[0.2em] text-[#7a6068] max-w-[640px] leading-relaxed">
+            Builds I've shipped and the ones still in the forge.
           </p>
         </header>
 
         {/* Category filter */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mb-3 sm:mb-4 md:mb-5 shrink-0">
           {CATEGORY_FILTERS.map(f => {
             const active = filter === f;
             return (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className="px-3 py-1.5 font-pixel text-[9px] tracking-[0.18em] transition-all"
+                className="px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 font-pixel text-[7px] sm:text-[8px] md:text-[9px] tracking-[0.14em] sm:tracking-[0.16em] transition-all min-h-[32px] sm:min-h-0"
                 style={{
                   border: `1px solid ${active ? R : 'rgba(122,96,104,0.45)'}`,
                   color: active ? R : '#7a6068',
                   background: active ? 'rgba(204,17,51,0.08)' : 'transparent',
-                  boxShadow: active ? '0 0 10px rgba(204,17,51,0.4)' : 'none',
+                  boxShadow: active ? '0 0 8px rgba(204,17,51,0.4)' : 'none',
                 }}
               >
                 {f}
@@ -341,10 +341,11 @@ export function Inventory({ onNavigate }: InventoryProps) {
           })}
         </div>
 
-        {/* Master / detail layout */}
-        <div className="grid gap-5 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] flex-1">
+        {/* Master / detail layout — fills remaining height, scrolls */}
+        <div className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-3 sm:gap-4 lg:gap-5 flex-1 min-h-0 overflow-y-auto">
           {/* Project list */}
-          <div className="flex flex-col gap-2.5 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 320px)' }}>
+          <div className="flex flex-col gap-1.5 sm:gap-2 min-h-0">
+            <div className="flex flex-col gap-1.5 sm:gap-2 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 280px)' }}>
             {filteredMain.map((p, idx) => {
               const isActive = active?.id === p.id;
               const statusColor = p.status === 'SHIPPED' ? '#22c55e' : '#f59e0b';
@@ -356,47 +357,47 @@ export function Inventory({ onNavigate }: InventoryProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04, duration: 0.25 }}
                   onClick={() => setActiveId(p.id)}
-                  className="text-left p-3 group relative"
+                  className="text-left p-2 sm:p-2.5 group relative"
                   style={{
                     background: isActive ? 'rgba(204,17,51,0.07)' : 'rgba(13,4,8,0.6)',
                     border: `1px solid ${isActive ? R : 'rgba(61,15,26,0.8)'}`,
-                    clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)',
-                    boxShadow: isActive ? '0 0 14px rgba(204,17,51,0.3)' : 'none',
+                    clipPath: 'polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)',
+                    boxShadow: isActive ? '0 0 12px rgba(204,17,51,0.3)' : 'none',
                   }}
                 >
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-1.5 flex-wrap">
+                  <div className="flex items-start justify-between gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                    <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
                       <span
-                        className="font-pixel text-[9px] tracking-widest"
+                        className="font-pixel text-[7px] sm:text-[8px] md:text-[9px] tracking-widest"
                         style={{ color: p.accent }}
                       >
                         {p.category}
                       </span>
                       <span
-                        className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+                        className="font-pixel text-[5px] sm:text-[6px] md:text-[7px] tracking-widest px-0.5 sm:px-1 py-0.5"
                         style={{
                           border: `1px solid ${statusColor}`,
                           color: statusColor,
-                          boxShadow: p.status === 'SHIPPED' ? `0 0 6px ${statusColor}66` : 'none',
+                          boxShadow: p.status === 'SHIPPED' ? `0 0 4px ${statusColor}66` : 'none',
                         }}
                       >
                         {p.status}
                       </span>
                     </div>
-                    <span className="font-pixel text-[8px] text-[#7a6068]">{p.year}</span>
+                    <span className="font-pixel text-[6px] sm:text-[7px] md:text-[8px] text-[#7a6068]">{p.year}</span>
                   </div>
-                  <div className="font-pixel text-[12px] tracking-wider text-[#e8d8dc] mb-1">
+                  <div className="font-pixel text-[10px] sm:text-[11px] md:text-[12px] tracking-wider text-[#e8d8dc] mb-0.5">
                     {p.title}
                   </div>
-                  <div className="text-[10px] text-[#7a6068] leading-snug line-clamp-2">
+                  <div className="text-[8px] sm:text-[9px] md:text-[10px] text-[#7a6068] leading-snug line-clamp-2">
                     {p.description}
                   </div>
 
                   {/* Active indicator */}
                   {isActive && (
                     <span
-                      className="absolute right-2 top-2 w-1.5 h-1.5"
-                      style={{ background: R, boxShadow: `0 0 6px ${R}`, transform: 'rotate(45deg)' }}
+                      className="absolute right-1 sm:right-1.5 top-1 sm:top-1.5 w-1 sm:w-1.5 h-1 sm:h-1.5"
+                      style={{ background: R, boxShadow: `0 0 4px ${R}`, transform: 'rotate(45deg)' }}
                     />
                   )}
                 </motion.button>
@@ -405,12 +406,12 @@ export function Inventory({ onNavigate }: InventoryProps) {
 
             {/* Experiment section */}
             {filteredExp.length > 0 && (
-              <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(61,15,26,0.7)' }}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="font-pixel text-[8px] tracking-[0.22em] text-[#a855f7]/80">
+              <div className="mt-2 sm:mt-3 pt-2 sm:pt-3" style={{ borderTop: '1px solid rgba(61,15,26,0.7)' }}>
+                <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                  <span className="font-pixel text-[6px] sm:text-[7px] md:text-[8px] tracking-[0.2em] text-[#a855f7]/80">
                     // EXPERIMENT.LAB
                   </span>
-                  <span className="block h-px flex-1 max-w-[60px] bg-gradient-to-r from-[#a855f7]/30 to-transparent" />
+                  <span className="block h-px flex-1 max-w-[30px] sm:max-w-[40px] md:max-w-[60px] bg-gradient-to-r from-[#a855f7]/30 to-transparent" />
                 </div>
                 {filteredExp.map((p, idx) => {
                   const isActive = active?.id === p.id;
@@ -422,47 +423,47 @@ export function Inventory({ onNavigate }: InventoryProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: (filteredMain.length + idx) * 0.04, duration: 0.25 }}
                       onClick={() => setActiveId(p.id)}
-                      className="text-left p-3 group relative mb-2.5 w-full"
+                      className="text-left p-2 sm:p-2.5 group relative mb-1.5 sm:mb-2 w-full"
                       style={{
                         background: isActive ? 'rgba(168,85,247,0.07)' : 'rgba(13,4,8,0.6)',
                         border: `1px solid ${isActive ? '#a855f7' : 'rgba(61,15,26,0.8)'}`,
-                        clipPath: 'polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)',
-                        boxShadow: isActive ? '0 0 14px rgba(168,85,247,0.3)' : 'none',
+                        clipPath: 'polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)',
+                        boxShadow: isActive ? '0 0 12px rgba(168,85,247,0.3)' : 'none',
                       }}
                     >
-                      <div className="flex items-start justify-between gap-2 mb-1.5">
-                        <div className="flex items-center gap-1.5 flex-wrap">
+                      <div className="flex items-start justify-between gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                        <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
                           <span
-                            className="font-pixel text-[9px] tracking-widest"
+                            className="font-pixel text-[7px] sm:text-[8px] md:text-[9px] tracking-widest"
                             style={{ color: p.accent }}
                           >
                             {p.category}
                           </span>
                           <span
-                            className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+                            className="font-pixel text-[5px] sm:text-[6px] md:text-[7px] tracking-widest px-0.5 sm:px-1 py-0.5"
                             style={{
                               border: `1px solid ${p.accent}`,
                               color: p.accent,
-                              boxShadow: `0 0 6px ${p.accent}66`,
+                              boxShadow: `0 0 4px ${p.accent}66`,
                             }}
                           >
                             EXPERIMENT
                           </span>
                         </div>
-                        <span className="font-pixel text-[8px] text-[#7a6068]">{p.year}</span>
+                        <span className="font-pixel text-[6px] sm:text-[7px] md:text-[8px] text-[#7a6068]">{p.year}</span>
                       </div>
-                      <div className="font-pixel text-[12px] tracking-wider text-[#e8d8dc] mb-1">
+                      <div className="font-pixel text-[10px] sm:text-[11px] md:text-[12px] tracking-wider text-[#e8d8dc] mb-0.5">
                         {p.title}
                       </div>
-                      <div className="text-[10px] text-[#7a6068] leading-snug line-clamp-2">
+                      <div className="text-[8px] sm:text-[9px] md:text-[10px] text-[#7a6068] leading-snug line-clamp-2">
                         {p.description}
                       </div>
 
                       {/* Active indicator */}
                       {isActive && (
                         <span
-                          className="absolute right-2 top-2 w-1.5 h-1.5"
-                          style={{ background: '#a855f7', boxShadow: `0 0 6px #a855f7`, transform: 'rotate(45deg)' }}
+                          className="absolute right-1 sm:right-1.5 top-1 sm:top-1.5 w-1 sm:w-1.5 h-1 sm:h-1.5"
+                          style={{ background: '#a855f7', boxShadow: `0 0 4px #a855f7`, transform: 'rotate(45deg)' }}
                         />
                       )}
                     </motion.button>
@@ -470,18 +471,19 @@ export function Inventory({ onNavigate }: InventoryProps) {
                 })}
               </div>
             )}
+            </div>
           </div>
 
           {/* Detail pane */}
-          <div className="relative min-h-[420px]">
+          <div className="relative min-h-[300px] lg:min-h-0">
             {active ? <ProjectDetail project={active} /> : null}
           </div>
         </div>
 
         {/* Footer nav */}
-        <div className="mt-8 pt-6 flex items-center justify-between gap-3">
+        <div className="mt-4 sm:mt-5 md:mt-6 pt-4 sm:pt-5 flex flex-wrap items-center justify-between gap-2 shrink-0">
           <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('about')} side="left" />
-          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068]">
+          <span className="font-pixel text-[7px] sm:text-[8px] tracking-widest text-[#7a6068] order-first w-full text-center sm:order-none sm:w-auto">
             [ INVENTORY v3.0 ]
           </span>
           <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('projects')} side="right" />
@@ -503,7 +505,7 @@ function ProjectDetail({ project }: { project: Project }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative h-full p-5 md:p-6"
+      className="relative h-full p-3 sm:p-4 md:p-5"
       style={{
         background: isExp ? `${project.accent}08` : 'rgba(13,4,8,0.7)',
         border: `1px solid ${isExp ? project.accent + '40' : 'rgba(61,15,26,0.85)'}`,
@@ -521,23 +523,23 @@ function ProjectDetail({ project }: { project: Project }) {
       />
 
       {/* Title row */}
-      <div className="flex items-start justify-between gap-3 mb-1">
-        <h2 className="font-pixel text-[14px] md:text-[16px] tracking-wider text-[#e8d8dc]">
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <h2 className="font-pixel text-[11px] sm:text-[12px] md:text-[14px] lg:text-[16px] tracking-wider text-[#e8d8dc]">
           {project.title}
         </h2>
-        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+        <div className="flex items-center gap-1 flex-wrap justify-end shrink-0">
           <span
-            className="font-pixel text-[7px] tracking-widest px-1.5 py-0.5"
+            className="font-pixel text-[5px] sm:text-[6px] md:text-[7px] tracking-widest px-0.5 sm:px-1 py-0.5"
             style={{
               border: `1px solid ${statusColor}`,
               color: statusColor,
-              boxShadow: project.status === 'SHIPPED' ? `0 0 6px ${statusColor}66` : 'none',
+              boxShadow: project.status === 'SHIPPED' ? `0 0 4px ${statusColor}66` : 'none',
             }}
           >
             {project.status}
           </span>
           <span
-            className="font-pixel text-[8px] tracking-widest px-2 py-1"
+            className="font-pixel text-[6px] sm:text-[7px] md:text-[8px] tracking-widest px-1 sm:px-1.5 py-0.5"
             style={{
               border: `1px solid ${project.accent}`,
               color: project.accent,
@@ -549,18 +551,18 @@ function ProjectDetail({ project }: { project: Project }) {
       </div>
 
       {/* Long description */}
-      <p className="text-[12px] md:text-[13px] leading-relaxed text-[#c7b6bd] mt-3 mb-5 max-w-prose">
+      <p className="text-[10px] sm:text-[11px] md:text-[12px] leading-relaxed text-[#c7b6bd] mt-2 sm:mt-3 mb-3 sm:mb-4 max-w-prose">
         {project.longDescription}
       </p>
 
       {/* Stack */}
-      <div className="mb-5">
+      <div className="mb-3 sm:mb-4">
         <SectionLabel>STACK</SectionLabel>
-        <div className="flex flex-wrap gap-1.5 mt-2">
+        <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-1 sm:mt-1.5">
           {project.stack.map(s => (
             <span
               key={s}
-              className="font-pixel text-[8px] tracking-widest px-2 py-1"
+              className="font-pixel text-[6px] sm:text-[7px] md:text-[8px] tracking-widest px-1 sm:px-1.5 py-0.5"
               style={{ border: '1px solid rgba(122,96,104,0.4)', color: '#c0a8b4' }}
             >
               {s}
@@ -570,16 +572,16 @@ function ProjectDetail({ project }: { project: Project }) {
       </div>
 
       {/* Tools (SVG) */}
-      <div className="mb-6">
+      <div className="mb-3 sm:mb-4 md:mb-5">
         <SectionLabel>TOOLS USED</SectionLabel>
-        <div className="flex flex-wrap items-center gap-3 mt-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-1.5 sm:mt-2">
           {project.tools.map(key => {
             const t = TOOL_LIBRARY[key];
             if (!t) return null;
             return (
               <div
                 key={key}
-                className="flex items-center gap-2 px-2.5 py-1.5"
+                className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1 sm:py-1.5"
                 style={{
                   border: '1px solid rgba(61,15,26,0.85)',
                   background: 'rgba(8,2,6,0.7)',
@@ -587,7 +589,7 @@ function ProjectDetail({ project }: { project: Project }) {
                 title={t.name}
               >
                 {t.svg}
-                <span className="font-pixel text-[9px] tracking-wider text-[#c0a8b4]">
+                <span className="font-pixel text-[7px] sm:text-[8px] md:text-[9px] tracking-wider text-[#c0a8b4]">
                   {t.name}
                 </span>
               </div>
@@ -597,14 +599,14 @@ function ProjectDetail({ project }: { project: Project }) {
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-1 sm:gap-1.5">
         {project.links.map(l => (
           <a
             key={l.label}
             href={l.href}
             target={l.href === '#' ? undefined : '_blank'}
             rel="noreferrer"
-            className="font-pixel text-[9px] tracking-[0.18em] px-4 py-2 transition-all"
+            className="font-pixel text-[7px] sm:text-[8px] md:text-[9px] tracking-[0.14em] sm:tracking-[0.16em] px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 transition-all"
             style={{
               border: `1px solid ${project.accent}`,
               color: project.accent,
@@ -612,7 +614,7 @@ function ProjectDetail({ project }: { project: Project }) {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = `${project.accent}29`;
-              e.currentTarget.style.boxShadow = `0 0 12px ${project.accent}66`;
+              e.currentTarget.style.boxShadow = `0 0 10px ${project.accent}66`;
             }}
             onMouseLeave={e => {
               e.currentTarget.style.background = `${project.accent}0f`;
@@ -644,7 +646,7 @@ function FooterNav({ label, icon, onClick, side }: { label: string; icon: string
       onClick={onClick}
       whileHover={{ x: side === 'left' ? -3 : 3 }}
       whileTap={{ scale: 0.95 }}
-      className="flex items-center gap-2 px-3 py-2 font-pixel text-[9px] tracking-widest transition-colors"
+      className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 font-pixel text-[7px] sm:text-[8px] tracking-[0.14em] sm:tracking-[0.16em] transition-colors min-h-[32px] sm:min-h-0"
       style={{ border: `1px solid ${DIM}`, color: '#7a6068' }}
     >
       {side === 'left' && <span style={{ color: R }}>{icon}</span>}
