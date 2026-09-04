@@ -399,7 +399,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
 
       {/* Left block */}
       <div
-        className="flex flex-col justify-center px-3 py-3 min-w-0 flex-1"
+        className="flex flex-col justify-center px-3 py-3 pt-4 min-w-0 flex-1"
         style={{ gap: '2px' }}
       >
         <span
