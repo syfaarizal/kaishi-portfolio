@@ -24,16 +24,6 @@ const Icon = {
       <path d="M11.914 0c-.346 0-.692.02-1.029.06-1.93.234-2.279 1.428-2.279 2.213v1.743h4.554v.581H7.142c-1.323 0-2.484.795-2.846 2.307-.418 1.742-.437 2.83 0 4.654.323 1.377 1.094 2.307 2.418 2.307h1.563v-2.082c0-1.349 1.167-2.539 2.554-2.539h4.539c1.137 0 2.045-.937 2.045-2.078V2.273C17.415.97 16.342.04 14.86.014 13.886 0 12.9 0 11.914 0zM9.84 1.418c.47 0 .854.388.854.864 0 .476-.384.86-.854.86-.471 0-.85-.384-.85-.86 0-.476.379-.864.85-.864zM19.097 4.6v2.04c0 1.402-1.188 2.5-2.554 2.5h-4.539c-1.115 0-2.045.957-2.045 2.08v4.079c0 1.117.969 1.776 2.045 2.078 1.288.364 2.524.43 4.539 0 1.366-.293 2.045-1.049 2.045-2.078v-1.743h-4.539v-.58h6.84c1.323 0 1.823-.883 2.279-2.308.474-1.466.453-2.875 0-4.654-.324-1.276-1.066-2.307-2.418-2.307h-1.653zm-3.144 11.617c.471 0 .85.384.85.86 0 .476-.379.864-.85.864-.47 0-.854-.388-.854-.864 0-.476.384-.86.854-.86z" />
     </svg>
   ),
-  Go: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M1.811 10.231c-.047 0-.058-.023-.035-.059l.244-.425c.023-.035.081-.058.128-.058h7.935c.047 0 .058.035.035.07l-.21.426c-.023.047-.081.07-.128.07zm-.244.34c-.047 0-.058.035-.035.07l.21.425c.023.047.081.07.128.07h5.808c.047 0 .104-.023.128-.07l.21-.425c.023-.047 0-.07-.046-.07zm.314 1.094c-.047 0-.058.035-.035.07l.21.426c.023.047.07.07.117.07h4.442c.047 0 .104-.023.128-.07l.21-.426c.023-.047 0-.07-.046-.07zm-.28 1.094c-.047 0-.07.035-.058.082l.117.426c.012.047.058.082.105.082h3.605c.047 0 .082-.035.07-.082l-.058-.426c0-.047-.047-.082-.105-.082zm15.7-6.241c.35 0 .607.047.84.14.234.094.42.247.56.467.14.21.198.49.198.84 0 .35-.058.654-.198.886-.14.234-.327.41-.56.525-.234.117-.49.164-.84.164-.234 0-.444-.023-.607-.082-.163-.058-.327-.152-.444-.28-.117-.13-.21-.292-.257-.503-.047-.21-.058-.467-.058-.77v-3.62c0-.07.035-.105.105-.105h.945c.07 0 .105.035.105.105v3.503c0 .257.023.444.058.56.047.117.117.198.21.234.094.047.21.07.327.07zm6.32.094c.234 0 .397.058.514.175.117.117.175.28.175.514 0 .21-.058.397-.175.514-.117.117-.28.175-.514.175-.234 0-.397-.058-.514-.175-.117-.117-.175-.28-.175-.514 0-.21.058-.397.175-.514.117-.117.28-.175.514-.175z" />
-    </svg>
-  ),
-  Rust: () => (
-    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path d="M23.834 22.249l-1.585-2.745a11.493 11.493 0 0 0 1.495-5.753C23.744 8.51 18.234 3 12 3 5.766 3 .256 8.51.256 13.751.256 19 5.766 24.502 12 24.502c2.18 0 4.22-.583 5.974-1.59l1.46 2.527c.196.34.566.52.93.485l2.518-.27c.495-.052.838-.5.736-.984-.05-.234-.21-.45-.426-.535l-2.358-1.42zM12 21.502c-4.275 0-7.744-3.469-7.744-7.751S7.725 6 12 6s7.744 3.469 7.744 7.751-3.469 7.751-7.744 7.751zm.583-13.502h-1.95l-.42 1.443h2.37l.42-1.443zm-2.79 3.61h1.95l.42-1.444h-2.37l-.42 1.444zm.42 1.443h-1.95l-.42 1.443h2.37l.42-1.443zm5.79-3.61l-.42 1.443h-1.95l.42-1.443h1.95zm-3.21 1.443h-1.95l-.42 1.444h2.37l.42-1.444zm2.37 0h-1.95l-.42 1.444h2.37l.42-1.444zm-2.79 3.61l.42-1.443h-1.95l-.42 1.443h1.95z" />
-    </svg>
-  ),
   React: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" xmlns="http://www.w3.org/2000/svg">
       <circle cx="12" cy="12" r="2.05" fill="currentColor" />
@@ -52,13 +42,6 @@ const Icon = {
   NodeJS: () => (
     <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
       <path d="M11.998 1.85c-.263 0-.524.07-.756.205L3.36 7.107a1.515 1.515 0 0 0-.757 1.308v7.17c0 .538.288 1.034.757 1.308l7.882 5.052c.232.135.493.205.756.205.262 0 .523-.07.755-.205l7.882-5.052c.47-.274.756-.77.756-1.308v-7.17a1.515 1.515 0 0 0-.756-1.308L12.755 2.055a1.515 1.515 0 0 0-.757-.205zm.002 3.404a.563.563 0 0 1 .278.075l5.36 3.435a.563.563 0 0 1 .281.486v6.863a.563.563 0 0 1-.281.487l-5.36 3.435a.563.563 0 0 1-.557 0l-5.36-3.435a.563.563 0 0 1-.281-.487V9.25c0-.2.107-.385.281-.486l5.36-3.435a.563.563 0 0 1 .279-.075zm-.005 2.1L8.4 9.29v1.78l2.7 1.55v3.17l1.9-1.084V11.55l-2.7-1.55V8.43l3.6 2.06v5.36l1.9 1.085V9.85l-3.61-2.06a1 1 0 0 0-.99 0z" />
-    </svg>
-  ),
-  Express: () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 12h18" />
-      <path d="M16 6l6 6-6 6" />
-      <path d="M3 18l4-6-4-6" />
     </svg>
   ),
   FastAPI: () => (
@@ -94,15 +77,6 @@ const Icon = {
   Vite: () => (
     <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
       <path d="M8.108 2.243l-7.057 7.058a1 1 0 0 0 0 1.413l11.227 11.225a1 1 0 0 0 1.414 0l7.057-7.057a1 1 0 0 0 0-1.413L9.522 2.243a1 1 0 0 0-1.414 0zM12 4.7l4.99 4.99-4.99 4.99-4.99-4.99L12 4.7z" />
-    </svg>
-  ),
-  Figma: () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9 3h3v6H9a3 3 0 1 1 0-6z" />
-      <path d="M12 3h3a3 3 0 1 1 0 6h-3V3z" />
-      <path d="M12 9h3a3 3 0 1 1 0 6h-3V9z" />
-      <path d="M9 15h3v3a3 3 0 1 1-3-3z" />
-      <path d="M9 9h3v6H9a3 3 0 1 1 0-6z" />
     </svg>
   ),
   VSCode: () => (
@@ -146,14 +120,11 @@ const ITEMS: Item[] = [
   { name: 'TypeScript',  short: 'TS',  category: 'language', mark: '◆', years: '4y', icon: Icon.TypeScript },
   { name: 'JavaScript',  short: 'JS',  category: 'language', mark: '◆', years: '6y', icon: Icon.JavaScript },
   { name: 'Python',      short: 'PY',  category: 'language', mark: '◆', years: '3y', icon: Icon.Python },
-  { name: 'Go',          short: 'GO',  category: 'language', mark: '◆', years: '1y', icon: Icon.Go },
-  { name: 'Rust',        short: 'RS',  category: 'language', mark: '◆', years: '1y', icon: Icon.Rust },
 
   // Frameworks / runtimes
   { name: 'React',       short: 'RE',  category: 'framework', mark: '◇', years: '4y', icon: Icon.React },
   { name: 'Next.js',     short: 'NX',  category: 'framework', mark: '◇', years: '2y', icon: Icon.NextJS },
   { name: 'Node.js',     short: 'ND',  category: 'framework', mark: '◇', years: '4y', icon: Icon.NodeJS },
-  { name: 'Express',     short: 'EX',  category: 'framework', mark: '◇', years: '3y', icon: Icon.Express },
   { name: 'FastAPI',     short: 'FA',  category: 'framework', mark: '◇', years: '2y', icon: Icon.FastAPI },
   { name: 'Tailwind',    short: 'TW',  category: 'framework', mark: '◇', years: '3y', icon: Icon.Tailwind },
 
@@ -163,7 +134,6 @@ const ITEMS: Item[] = [
   { name: 'PostgreSQL',  short: 'PG',  category: 'tool', mark: '◈', years: '3y', icon: Icon.PostgreSQL },
   { name: 'MongoDB',     short: 'MG',  category: 'tool', mark: '◈', years: '2y', icon: Icon.MongoDB },
   { name: 'Vite',        short: 'VT',  category: 'tool', mark: '◈', years: '2y', icon: Icon.Vite },
-  { name: 'Figma',       short: 'FG',  category: 'tool', mark: '◈', years: '3y', icon: Icon.Figma },
   { name: 'VS Code',     short: 'VS',  category: 'tool', mark: '◈', years: '5y', icon: Icon.VSCode },
   { name: 'GitHub',      short: 'GH',  category: 'tool', mark: '◈', years: '4y', icon: Icon.GitHub },
   { name: 'Cursor',      short: 'CL',  category: 'tool', mark: '◈', years: '1y', icon: Icon.Cursor },
