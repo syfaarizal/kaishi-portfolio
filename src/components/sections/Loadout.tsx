@@ -189,7 +189,7 @@ export function Loadout({ onNavigate }: LoadoutProps) {
 
       {/* Right-side decorative vertical column */}
       <div
-        className="fixed right-5 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-3 hidden md:flex"
+        className="hidden lg:flex fixed right-5 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-3"
         aria-hidden="true"
       >
         <span className="font-pixel text-[8px]" style={{ color: 'rgba(204,17,51,0.4)' }}>◇</span>
@@ -201,38 +201,38 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         <span className="font-pixel text-[8px]" style={{ color: 'rgba(204,17,51,0.4)' }}>◇</span>
       </div>
 
-      <div className="relative z-10 flex flex-col pt-[80px] pb-12 px-5 md:px-10 min-h-full h-full">
+      <div className="relative z-10 flex flex-col pt-20 sm:pt-24 md:pt-[80px] pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8 lg:px-10 min-h-full h-full">
         {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="font-pixel text-[9px] tracking-widest text-[#cc1133]/70">
+        <header className="mb-6 sm:mb-7 md:mb-8">
+          <div className="flex items-center gap-3 mb-2.5 sm:mb-3">
+            <span className="font-pixel text-[8px] sm:text-[9px] tracking-widest text-[#cc1133]/70">
               [ LOADOUT.MOD ]
             </span>
-            <span className="block h-px flex-1 max-w-[120px] bg-gradient-to-r from-[#cc1133]/40 to-transparent" />
+            <span className="block h-px flex-1 max-w-[80px] sm:max-w-[100px] md:max-w-[120px] bg-gradient-to-r from-[#cc1133]/40 to-transparent" />
           </div>
           <h1
-            className="font-pixel text-[#cc1133] tracking-widest"
+            className="font-pixel text-[#cc1133] tracking-widest leading-none"
             style={{
-              fontSize: 'clamp(20px, 3.6vw, 36px)',
+              fontSize: 'clamp(18px, 3.4vw, 40px)',
               textShadow: '0 0 18px rgba(204,17,51,0.55), 0 0 36px rgba(204,17,51,0.25)',
             }}
           >
             EQUIPPED GEAR
           </h1>
-          <p className="mt-2 text-[11px] md:text-[12px] tracking-[0.22em] text-[#7a6068] max-w-[640px]">
+          <p className="mt-2 text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] tracking-[0.18em] sm:tracking-[0.22em] text-[#7a6068] max-w-[640px] leading-relaxed">
             Tools I keep slotted for daily work. Filter by category — no filler, no badges for the sake of badges.
           </p>
         </header>
 
         {/* Filter row */}
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5 sm:mb-6">
           {FILTERS.map(f => {
             const active = filter === f.id;
             return (
               <button
                 key={f.id}
                 onClick={() => setFilter(f.id)}
-                className="px-3 py-1.5 font-pixel text-[9px] tracking-[0.18em] transition-all"
+                className="px-2.5 sm:px-3 py-1 sm:py-1.5 font-pixel text-[8px] sm:text-[9px] tracking-[0.16em] sm:tracking-[0.18em] transition-all min-h-[36px] sm:min-h-0"
                 style={{
                   border: `1px solid ${active ? '#cc1133' : 'rgba(122,96,104,0.45)'}`,
                   color: active ? '#cc1133' : '#7a6068',
@@ -245,7 +245,7 @@ export function Loadout({ onNavigate }: LoadoutProps) {
             );
           })}
 
-          <span className="ml-auto font-pixel text-[9px] tracking-widest text-[#7a6068]">
+          <span className="ml-auto font-pixel text-[8px] sm:text-[9px] tracking-widest text-[#7a6068]">
             {String(visible.length).padStart(2, '0')} / {String(ITEMS.length).padStart(2, '0')} ACTIVE
           </span>
         </div>
@@ -258,22 +258,22 @@ export function Loadout({ onNavigate }: LoadoutProps) {
               return (
                 <div key={group.category} className="flex flex-col">
                   {/* Section header */}
-                  <div className="flex items-center gap-3 mt-6 mb-3">
+                  <div className="flex items-center gap-2 sm:gap-3 mt-5 sm:mt-6 mb-2.5 sm:mb-3">
                     <span
-                      className="font-pixel"
-                      style={{ fontSize: '10px', color: '#cc1133' }}
+                      className="font-pixel shrink-0"
+                      style={{ fontSize: 'clamp(9px, 1.4vw, 11px)', color: '#cc1133' }}
                     >
                       ◆
                     </span>
                     <span
-                      className="font-pixel uppercase font-bold"
-                      style={{ fontSize: '10px', color: '#cc1133', letterSpacing: '0.3em' }}
+                      className="font-pixel uppercase font-bold shrink-0"
+                      style={{ fontSize: 'clamp(9px, 1.4vw, 11px)', color: '#cc1133', letterSpacing: '0.3em' }}
                     >
                       {meta.label}
                     </span>
                     <span
-                      className="font-pixel"
-                      style={{ fontSize: '9px', color: '#7a6068' }}
+                      className="font-pixel hidden sm:inline truncate"
+                      style={{ fontSize: 'clamp(8px, 1.2vw, 10px)', color: '#7a6068' }}
                     >
                       {meta.comment}
                     </span>
@@ -287,9 +287,9 @@ export function Loadout({ onNavigate }: LoadoutProps) {
 
                   <motion.div
                     layout
-                    className="grid gap-3"
+                    className="grid gap-2.5 sm:gap-3"
                     style={{
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(150px, 22vw, 240px), 1fr))',
                     }}
                   >
                     {group.items.map((item, idx) => (
@@ -303,9 +303,9 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         ) : (
           <motion.div
             layout
-            className="grid gap-3"
+            className="grid gap-2.5 sm:gap-3"
             style={{
-              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(150px, 22vw, 240px), 1fr))',
             }}
           >
             {visible.map((item, idx) => (
@@ -315,9 +315,9 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         )}
 
         {/* Footer nav */}
-        <div className="mt-auto pt-10 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-auto pt-8 sm:pt-10 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
           <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('projects')} side="left" />
-          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068] order-first md:order-none w-full md:w-auto text-center">
+          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068] order-first w-full text-center sm:order-none sm:w-auto">
             [ LOADOUT v1.0 ]
           </span>
           <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('contact')} side="right" />
@@ -336,7 +336,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
       transition={{ delay: idx * 0.02, duration: 0.25 }}
       className="group relative flex flex-row"
       style={{
-        height: '72px',
+        height: 'clamp(60px, 8vw, 72px)',
         background: 'rgba(13,4,8,0.75)',
         border: '1px solid rgba(61,15,26,0.9)',
         clipPath:
@@ -372,13 +372,13 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
 
       {/* Left block */}
       <div
-        className="flex flex-col justify-center px-3 py-3 pt-4 min-w-0 flex-1"
+        className="flex flex-col justify-center px-2.5 sm:px-3 py-2 sm:py-3 pt-3 sm:pt-4 min-w-0 flex-1"
         style={{ gap: '2px' }}
       >
         <span
           className="font-pixel leading-none"
           style={{
-            fontSize: '22px',
+            fontSize: 'clamp(18px, 2.6vw, 24px)',
             color: '#cc1133',
             textShadow: '0 0 8px rgba(204,17,51,0.5)',
           }}
@@ -387,7 +387,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
         </span>
         <span
           className="font-pixel tracking-wide block min-w-0 break-words"
-          style={{ fontSize: '10px', color: '#e8d8dc' }}
+          style={{ fontSize: 'clamp(9px, 1.2vw, 11px)', color: '#e8d8dc' }}
           title={item.name}
         >
           {item.name}
@@ -395,14 +395,14 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
         <div className="flex items-center justify-between mt-0.5 gap-1 min-w-0">
           <span
             className="font-pixel tracking-widest whitespace-nowrap shrink-0"
-            style={{ fontSize: '8px', color: '#7a6068' }}
+            style={{ fontSize: 'clamp(7px, 0.9vw, 9px)', color: '#7a6068' }}
           >
             {item.mark} {item.years}
           </span>
           <span
             className="font-pixel px-1 pt-1 whitespace-nowrap shrink-0"
             style={{
-              fontSize: '7px',
+              fontSize: 'clamp(6px, 0.8vw, 8px)',
               color: '#7a6068',
               border: '1px solid rgba(122,96,104,0.35)',
             }}
@@ -415,17 +415,17 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
       {/* Right block — fixed width so the left block truly fills the rest */}
       <div
         className="relative shrink-0 overflow-hidden"
-        style={{ width: '56px' }}
+        style={{ width: 'clamp(48px, 6vw, 56px)' }}
       >
         <span
           aria-hidden="true"
           className="absolute pointer-events-none select-none"
           style={{
-            right: '8px',
+            right: 'clamp(6px, 0.8vw, 8px)',
             top: '50%',
             transform: 'translateY(-50%)',
-            width: '32px',
-            height: '32px',
+            width: 'clamp(26px, 3.6vw, 32px)',
+            height: 'clamp(26px, 3.6vw, 32px)',
             opacity: 0.12,
             color: '#cc1133',
             filter: 'sepia(1) saturate(5) hue-rotate(310deg)',
@@ -452,7 +452,7 @@ function FooterNav({ label, icon, onClick, side }: { label: string; icon: string
       onClick={onClick}
       whileHover={{ x: side === 'left' ? -3 : 3 }}
       whileTap={{ scale: 0.95 }}
-      className="flex items-center gap-2 px-3 py-2 font-pixel text-[9px] tracking-widest transition-colors"
+      className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 font-pixel text-[8px] sm:text-[9px] tracking-[0.16em] sm:tracking-[0.18em] transition-colors min-h-[36px] sm:min-h-0"
       style={{ border: '1px solid rgba(61,15,26,0.8)', color: '#7a6068' }}
     >
       {side === 'left' && <span style={{ color: '#cc1133' }}>{icon}</span>}
