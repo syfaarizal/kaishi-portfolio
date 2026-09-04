@@ -118,7 +118,7 @@ function SectionDots({ active, onNavigate }: {
   };
 
   return (
-    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[400] flex flex-col gap-3">
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[400] hidden md:flex flex-col gap-3">
       {SECTIONS.map((s) => (
         <button
           key={s}
