@@ -399,7 +399,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
 
       {/* Left block */}
       <div
-        className="flex flex-col justify-center pl-3 py-3 min-w-0 flex-1"
+        className="flex flex-col justify-center px-3 py-3 min-w-0 flex-1"
         style={{ gap: '2px' }}
       >
         <span
@@ -427,7 +427,7 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
             {item.mark} {item.years}
           </span>
           <span
-            className="font-pixel px-1 whitespace-nowrap shrink-0"
+            className="font-pixel px-1 pt-1 whitespace-nowrap shrink-0"
             style={{
               fontSize: '7px',
               color: '#7a6068',
