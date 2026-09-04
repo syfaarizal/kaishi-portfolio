@@ -181,12 +181,15 @@ export function Loadout({ onNavigate }: LoadoutProps) {
   }
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden" style={{ background: '#07020a' }}>
+    <section
+      className="relative w-full h-full overflow-y-auto overflow-x-hidden overscroll-contain"
+      style={{ background: '#07020a' }}
+    >
       <PixelGrid />
 
       {/* Right-side decorative vertical column */}
       <div
-        className="fixed right-5 top-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-3"
+        className="fixed right-5 top-1/2 -translate-y-1/2 z-10 flex-col items-center gap-3 hidden md:flex"
         aria-hidden="true"
       >
         <span className="font-pixel text-[8px]" style={{ color: 'rgba(204,17,51,0.4)' }}>◇</span>
@@ -198,7 +201,7 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         <span className="font-pixel text-[8px]" style={{ color: 'rgba(204,17,51,0.4)' }}>◇</span>
       </div>
 
-      <div className="relative z-10 flex flex-col min-h-screen pt-[80px] pb-12 px-5 md:px-10">
+      <div className="relative z-10 flex flex-col pt-[80px] pb-12 px-5 md:px-10 min-h-full h-full">
         {/* Header */}
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-3">
@@ -312,9 +315,9 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         )}
 
         {/* Footer nav */}
-        <div className="mt-auto pt-10 flex items-center justify-between gap-3">
+        <div className="mt-auto pt-10 flex flex-wrap items-center justify-between gap-3">
           <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('projects')} side="left" />
-          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068]">
+          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068] order-first md:order-none w-full md:w-auto text-center">
             [ LOADOUT v1.0 ]
           </span>
           <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('contact')} side="right" />
