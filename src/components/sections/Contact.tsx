@@ -9,12 +9,133 @@ const socials = [
   { label: 'DISCORD', handle: 'kaishi#0001' },
 ];
 
-const socialIcons: Record<string, string> = {
-  GITHUB: '</>',
-  'TWITTER / X': '✕',
-  YOUTUBE: '▶',
-  DISCORD: '🎮',
+type IconName =
+  | 'spark'
+  | 'message'
+  | 'user'
+  | 'email'
+  | 'pencil'
+  | 'github'
+  | 'x'
+  | 'youtube'
+  | 'discord'
+  | 'chevron'
+  | 'play'
+  | 'success';
+
+const socialIcons: Record<string, IconName> = {
+  GITHUB: 'github',
+  'TWITTER / X': 'x',
+  YOUTUBE: 'youtube',
+  DISCORD: 'discord',
 };
+
+function Icon({ name, className = '' }: { name: IconName; className?: string }) {
+  const common = {
+    className,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    'aria-hidden': true,
+  };
+
+  switch (name) {
+    case 'spark':
+      return (
+        <svg {...common}>
+          <path d="M12 3v5" />
+          <path d="M12 16v5" />
+          <path d="M3 12h5" />
+          <path d="M16 12h5" />
+          <path d="m6.8 6.8 2.1 2.1" />
+          <path d="m15.1 15.1 2.1 2.1" />
+          <path d="m17.2 6.8-2.1 2.1" />
+          <path d="m8.9 15.1-2.1 2.1" />
+        </svg>
+      );
+    case 'message':
+      return (
+        <svg {...common}>
+          <path d="M5 6.5h14v9H9l-4 3v-12Z" />
+          <path d="M8 9.5h8" />
+          <path d="M8 12.5h5" />
+        </svg>
+      );
+    case 'user':
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="8" r="3.2" />
+          <path d="M5.5 19c.9-3.2 3.1-4.8 6.5-4.8s5.6 1.6 6.5 4.8" />
+        </svg>
+      );
+    case 'email':
+      return (
+        <svg {...common}>
+          <rect x="4" y="6" width="16" height="12" rx="1.5" />
+          <path d="m5 7 7 6 7-6" />
+        </svg>
+      );
+    case 'pencil':
+      return (
+        <svg {...common}>
+          <path d="m5 18 1.2-4.3L16.8 3.1l4.1 4.1L10.3 17.8 6 19l-1-1Z" />
+          <path d="m14.5 5.5 4 4" />
+        </svg>
+      );
+    case 'github':
+      return (
+        <svg {...common}>
+          <path d="m9 8-4 4 4 4" />
+          <path d="m15 8 4 4-4 4" />
+          <path d="m13 6-2 12" />
+        </svg>
+      );
+    case 'x':
+      return (
+        <svg {...common}>
+          <path d="M6 6l12 12" />
+          <path d="M18 6 6 18" />
+        </svg>
+      );
+    case 'youtube':
+      return (
+        <svg {...common}>
+          <rect x="3.5" y="7" width="17" height="10" rx="2.5" />
+          <path d="m11 10 4 2-4 2v-4Z" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case 'discord':
+      return (
+        <svg {...common}>
+          <path d="M8 17c-1.8-.4-3-1.2-3-1.2.2-3.8 1.6-6.5 3.1-8.4 1.3.2 2.3.6 3 1.1.6-.1 1.2-.1 1.8 0 .7-.5 1.7-.9 3-1.1 1.5 1.9 2.9 4.6 3.1 8.4 0 0-1.2.8-3 1.2l-.8-1.3c.7-.2 1.4-.5 2-.9-1.3.6-3 .9-5.2.9s-3.9-.3-5.2-.9c.6.4 1.3.7 2 .9L8 17Z" />
+          <path d="M9.2 12.3h.1" />
+          <path d="M14.7 12.3h.1" />
+        </svg>
+      );
+    case 'chevron':
+      return (
+        <svg {...common}>
+          <path d="m9 5 7 7-7 7" />
+        </svg>
+      );
+    case 'play':
+      return (
+        <svg {...common}>
+          <path d="m8 5 11 7-11 7V5Z" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case 'success':
+      return (
+        <svg {...common}>
+          <path d="M12 3.5 14.4 9l5.6.7-4.1 3.8 1 5.5-4.9-2.7L7.1 19l1-5.5L4 9.7 9.6 9 12 3.5Z" />
+          <path d="m9.2 12.2 1.9 1.9 3.8-4.2" />
+        </svg>
+      );
+  }
+}
 
 function CornerAccents({ color = '#cc1133' }: { color?: string }) {
   return (
@@ -68,7 +189,11 @@ export function Contact() {
       </div>
 
       <div className="absolute right-4 top-4 z-[3] hidden text-right sm:block">
-        <div className="font-pixel text-[7px] text-[#cc1133]">✦ KAISHI PORTAL V1.0 ✦</div>
+        <div className="flex items-center justify-end gap-1.5 font-pixel text-[7px] text-[#cc1133]">
+          <Icon name="spark" className="h-3 w-3" />
+          <span>KAISHI PORTAL V1.0</span>
+          <Icon name="spark" className="h-3 w-3" />
+        </div>
         <div className="mt-2 h-px w-full bg-[#cc1133]/30" />
       </div>
 
@@ -105,7 +230,7 @@ export function Contact() {
             </span>
           </h2>
           <div className="mt-5 text-center font-mono text-[13px] tracking-widest text-[#cc1133]/60">
-            {'>>> 接続を開始する <<<'}
+            {'>>> \u63a5\u7d9a\u3092\u958b\u59cb\u3059\u308b <<<'}
           </div>
         </motion.div>
 
@@ -122,7 +247,7 @@ export function Contact() {
               <CornerAccents />
               <div className="flex items-center gap-3 border-b border-[#cc1133]/30 px-4 py-3">
                 <div className="flex h-8 w-8 items-center justify-center border border-[#cc1133] bg-[#cc1133]/20 text-[#cc1133]">
-                  💬
+                  <Icon name="message" className="h-4 w-4" />
                 </div>
                 <span className="font-pixel text-[9px] text-[#cc1133]/60">&gt;&gt;</span>
                 <span className="font-pixel text-[10px] text-[#cc1133]" style={{ textShadow: '0 0 10px rgba(204,17,51,0.7)' }}>
@@ -134,12 +259,7 @@ export function Contact() {
               <div className="p-5">
                 {sent ? (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="py-8 text-center">
-                    <img
-                      src="/assets/icon-kai-love.png"
-                      alt=""
-                      className="mx-auto h-12 w-12 object-contain"
-                      style={{ imageRendering: 'pixelated', filter: 'drop-shadow(0 0 10px #cc1133)' }}
-                    />
+                    <Icon name="success" className="mx-auto h-12 w-12 text-[#cc1133] drop-shadow-[0_0_10px_rgba(204,17,51,0.85)]" />
                     <div className="mt-3 font-pixel text-[9px] text-[#cc1133]" style={{ textShadow: '0 0 10px rgba(204,17,51,0.8)' }}>
                       MESSAGE SENT!
                     </div>
@@ -148,8 +268,8 @@ export function Contact() {
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     {[
-                      { id: 'name', label: 'PLAYER NAME', placeholder: 'Enter your name...', icon: '👤' },
-                      { id: 'email', label: 'EMAIL ADDRESS', placeholder: 'your@email.com', icon: '✉' },
+                      { id: 'name', label: 'PLAYER NAME', placeholder: 'Enter your name...', icon: 'user' as IconName },
+                      { id: 'email', label: 'EMAIL ADDRESS', placeholder: 'your@email.com', icon: 'email' as IconName },
                     ].map(field => (
                       <div key={field.id}>
                         <label className="mb-1.5 flex items-center gap-2">
@@ -166,7 +286,7 @@ export function Contact() {
                             required
                           />
                           <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#cc1133] opacity-30">
-                            {field.icon}
+                            <Icon name={field.icon} className="h-4 w-4" />
                           </span>
                         </div>
                       </div>
@@ -185,7 +305,9 @@ export function Contact() {
                           className="w-full resize-none border border-[rgba(204,17,51,0.25)] bg-[rgba(15,5,10,0.7)] px-3 py-2 pr-9 font-mono text-xs text-[#e8e0e3] placeholder-[#7a6068] outline-none transition-all focus:border-[#cc1133] focus:shadow-[0_0_10px_rgba(204,17,51,0.2)]"
                           required
                         />
-                        <span className="pointer-events-none absolute bottom-3 right-3 text-[#cc1133] opacity-30">✏</span>
+                        <span className="pointer-events-none absolute bottom-3 right-3 text-[#cc1133] opacity-30">
+                          <Icon name="pencil" className="h-4 w-4" />
+                        </span>
                       </div>
                     </div>
                     <button
@@ -234,14 +356,16 @@ export function Contact() {
                     whileHover={{ x: 4 }}
                     className="group flex items-center gap-4 border border-[rgba(204,17,51,0.15)] bg-[rgba(204,17,51,0.04)] px-4 py-3.5 transition-colors hover:border-[#cc1133]/60 hover:bg-[rgba(204,17,51,0.08)]"
                   >
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#cc1133] bg-[#cc1133]/15 font-mono text-[13px] text-[#cc1133]">
-                      {socialIcons[s.label]}
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#cc1133] bg-[#cc1133]/15 text-[#cc1133]">
+                      <Icon name={socialIcons[s.label]} className="h-5 w-5" />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block font-pixel text-[9px] tracking-wider text-[#cc1133]">{s.label}</span>
                       <span className="mt-1 block truncate font-mono text-[13px] text-[#e8e0e3]">{s.handle}</span>
                     </span>
-                    <span className="font-pixel text-[10px] text-[#cc1133]">›</span>
+                    <span className="text-[#cc1133]">
+                      <Icon name="chevron" className="h-4 w-4" />
+                    </span>
                   </motion.a>
                 ))}
               </div>
@@ -264,7 +388,9 @@ export function Contact() {
                 </div>
                 <div className="mt-1 font-mono text-[12px] text-[#7a6068]">Open for freelance &amp; collaboration</div>
               </div>
-              <div className="absolute right-4 text-2xl leading-none text-[#00b4b4]/30">▶</div>
+              <div className="absolute right-4 text-[#00b4b4]/30">
+                <Icon name="play" className="h-6 w-6" />
+              </div>
             </motion.div>
           </motion.div>
         </div>
