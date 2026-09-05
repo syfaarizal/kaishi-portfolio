@@ -3,10 +3,12 @@ import { motion, useInView } from 'framer-motion';
 import { PixelGrid } from '../ui/PixelGrid';
 
 const socials = [
-  { label: 'GITHUB', handle: '@kaishi' },
-  { label: 'TWITTER / X', handle: '@kaishi_dev' },
-  { label: 'YOUTUBE', handle: 'Kai Shi' },
-  { label: 'DISCORD', handle: 'kaishi#0001' },
+  { label: 'GITHUB', handle: '@syfaarizal/kaishi-portfolio', href: 'https://github.com/syfaarizal/kaishi-portfolio' },
+  { label: 'TWITTER / X', handle: '@kaishiscd', href: 'https://twitter.com/kaishiscd' },
+  { label: 'INSTAGRAM', handle: '@kaishiscd', href: 'https://instagram.com/kaishiscd' },
+  { label: 'TIKTOK', handle: '@kaishiscd', href: 'https://tiktok.com/@kaishiscd' },
+  { label: 'YOUTUBE', handle: '@kaishiscd', href: 'https://youtube.com/@kaishiscd' },
+  { label: 'JOIN DISCORD SERVER', handle: 'discord.gg/84NbEnYNdN', href: 'https://discord.gg/84NbEnYNdN' },
 ];
 
 type IconName =
@@ -17,6 +19,8 @@ type IconName =
   | 'pencil'
   | 'github'
   | 'x'
+  | 'instagram'
+  | 'tiktok'
   | 'youtube'
   | 'discord'
   | 'chevron'
@@ -26,8 +30,10 @@ type IconName =
 const socialIcons: Record<string, IconName> = {
   GITHUB: 'github',
   'TWITTER / X': 'x',
+  INSTAGRAM: 'instagram',
+  TIKTOK: 'tiktok',
   YOUTUBE: 'youtube',
-  DISCORD: 'discord',
+  'JOIN DISCORD SERVER': 'discord',
 };
 
 function Icon({ name, className = '' }: { name: IconName; className?: string }) {
@@ -39,6 +45,12 @@ function Icon({ name, className = '' }: { name: IconName; className?: string }) 
     strokeWidth: 1.8,
     strokeLinecap: 'round' as const,
     strokeLinejoin: 'round' as const,
+    'aria-hidden': true,
+  };
+  const brand = {
+    className,
+    viewBox: '0 0 24 24',
+    fill: 'currentColor',
     'aria-hidden': true,
   };
 
@@ -87,32 +99,38 @@ function Icon({ name, className = '' }: { name: IconName; className?: string }) 
       );
     case 'github':
       return (
-        <svg {...common}>
-          <path d="m9 8-4 4 4 4" />
-          <path d="m15 8 4 4-4 4" />
-          <path d="m13 6-2 12" />
+        <svg {...brand}>
+          <path d="M12 .297C5.37.297 0 5.67 0 12.297c0 5.303 3.438 9.8 8.207 11.387.6.113.82-.258.82-.578 0-.285-.011-1.04-.016-2.04-3.34.727-4.043-1.61-4.043-1.61-.547-1.387-1.336-1.758-1.336-1.758-1.09-.746.082-.73.082-.73 1.207.086 1.844 1.238 1.844 1.238 1.07 1.836 2.809 1.305 3.492.997.11-.778.418-1.305.762-1.606-2.664-.3-5.465-1.332-5.465-5.93 0-1.313.469-2.383 1.238-3.223-.125-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.3 1.23a11.48 11.48 0 0 1 3-.403c1.02.004 2.047.137 3 .403 2.29-1.552 3.297-1.23 3.297-1.23.656 1.653.246 2.873.121 3.176.77.84 1.235 1.91 1.235 3.222 0 4.61-2.805 5.625-5.477 5.922.43.371.813 1.102.813 2.219 0 1.601-.016 2.89-.016 3.281 0 .32.215.696.825.578C20.565 22.092 24 17.596 24 12.297c0-6.627-5.373-12-12-12Z" />
         </svg>
       );
     case 'x':
       return (
-        <svg {...common}>
-          <path d="M6 6l12 12" />
-          <path d="M18 6 6 18" />
+        <svg {...brand}>
+          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.153h7.594l5.243 6.932 6.064-6.932Zm-1.293 19.493h2.039L6.486 3.241H4.298l13.31 17.405Z" />
+        </svg>
+      );
+    case 'instagram':
+      return (
+        <svg {...brand}>
+          <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6Zm9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" />
+        </svg>
+      );
+    case 'tiktok':
+      return (
+        <svg {...brand}>
+          <path d="M16.6 5.82a5.17 5.17 0 0 0 3.02 1.01v3.32a8.43 8.43 0 0 1-3.02-.57v5.72a6.17 6.17 0 1 1-5.37-6.12v3.37a2.87 2.87 0 1 0 2.03 2.75V2h3.34v3.82Z" />
         </svg>
       );
     case 'youtube':
       return (
-        <svg {...common}>
-          <rect x="3.5" y="7" width="17" height="10" rx="2.5" />
-          <path d="m11 10 4 2-4 2v-4Z" fill="currentColor" stroke="none" />
+        <svg {...brand}>
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.016 3.016 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.121 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.376-.505a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814ZM9.545 15.568V8.432L15.818 12l-6.273 3.568Z" />
         </svg>
       );
     case 'discord':
       return (
-        <svg {...common}>
-          <path d="M8 17c-1.8-.4-3-1.2-3-1.2.2-3.8 1.6-6.5 3.1-8.4 1.3.2 2.3.6 3 1.1.6-.1 1.2-.1 1.8 0 .7-.5 1.7-.9 3-1.1 1.5 1.9 2.9 4.6 3.1 8.4 0 0-1.2.8-3 1.2l-.8-1.3c.7-.2 1.4-.5 2-.9-1.3.6-3 .9-5.2.9s-3.9-.3-5.2-.9c.6.4 1.3.7 2 .9L8 17Z" />
-          <path d="M9.2 12.3h.1" />
-          <path d="M14.7 12.3h.1" />
+        <svg {...brand}>
+          <path d="M20.317 4.369A19.791 19.791 0 0 0 15.558 2.9a13.87 13.87 0 0 0-.61 1.25 18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25 19.736 19.736 0 0 0-4.762 1.47C1.066 8.902.244 13.322.651 17.68a19.9 19.9 0 0 0 5.84 2.967 14.77 14.77 0 0 0 1.251-2.03 12.93 12.93 0 0 1-1.972-.95c.165-.122.327-.247.484-.375 3.801 1.777 7.93 1.777 11.686 0 .159.128.32.253.485.375-.63.375-1.29.693-1.975.952a14.65 14.65 0 0 0 1.251 2.028 19.86 19.86 0 0 0 5.844-2.967c.478-5.052-.816-9.431-3.228-13.31ZM8.677 14.994c-1.14 0-2.077-1.06-2.077-2.364 0-1.303.918-2.365 2.077-2.365 1.167 0 2.096 1.071 2.077 2.365 0 1.303-.918 2.364-2.077 2.364Zm6.646 0c-1.14 0-2.077-1.06-2.077-2.364 0-1.303.918-2.365 2.077-2.365 1.167 0 2.096 1.071 2.077 2.365 0 1.303-.91 2.364-2.077 2.364Z" />
         </svg>
       );
     case 'chevron':
@@ -349,7 +367,10 @@ export function Contact() {
                 {socials.map((s, i) => (
                   <motion.a
                     key={s.label}
-                    href="#"
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${s.label} - ${s.handle}`}
                     initial={{ opacity: 0, x: 15 }}
                     animate={inView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
