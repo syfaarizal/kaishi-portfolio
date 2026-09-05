@@ -179,24 +179,30 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" ref={ref} className="relative min-h-screen overflow-hidden py-24">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{ zIndex: 0 }}
-      >
-        <source src="/assets/portal-background.mp4" type="video/mp4" />
-      </video>
-      <div className="absolute inset-0" style={{ background: 'rgba(4,1,8,0.72)', zIndex: 1 }} />
-      <div className="relative z-[2]">
-        <PixelGrid />
+    <section
+      id="contact"
+      ref={ref}
+      className="relative h-full overflow-y-auto overflow-x-hidden overscroll-contain bg-[#040108]"
+    >
+      <div className="pointer-events-none sticky top-0 z-0 -mb-[100vh] h-screen overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ zIndex: 0 }}
+        >
+          <source src="/assets/portal-background.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0" style={{ background: 'rgba(4,1,8,0.72)', zIndex: 1 }} />
+        <div className="relative z-[2] h-full">
+          <PixelGrid />
+        </div>
       </div>
 
-      <div className="absolute left-4 top-4 z-[3] hidden sm:block">
+      <div className="pointer-events-none absolute left-4 top-4 z-[3] hidden sm:block">
         <div className="mb-2 flex items-center gap-2">
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#cc1133]" style={{ boxShadow: '0 0 10px #cc1133' }} />
           <span className="font-pixel text-[7px] text-[#cc1133]">SYSTEM ONLINE</span>
@@ -206,7 +212,7 @@ export function Contact() {
         </div>
       </div>
 
-      <div className="absolute right-4 top-4 z-[3] hidden text-right sm:block">
+      <div className="pointer-events-none absolute right-4 top-4 z-[3] hidden text-right sm:block">
         <div className="flex items-center justify-end gap-1.5 font-pixel text-[7px] text-[#cc1133]">
           <Icon name="spark" className="h-3 w-3" />
           <span>KAISHI PORTAL V1.0</span>
@@ -215,11 +221,11 @@ export function Contact() {
         <div className="mt-2 h-px w-full bg-[#cc1133]/30" />
       </div>
 
-      <div className="absolute bottom-4 left-4 z-[3] hidden font-pixel text-[7px] text-[#cc1133]/50 sm:block">
+      <div className="pointer-events-none absolute bottom-4 left-4 z-[3] hidden font-pixel text-[7px] text-[#cc1133]/50 sm:block">
         SECURE CONNECTION ESTABLISHED
       </div>
 
-      <div className="absolute bottom-4 right-4 z-[3] hidden items-center gap-2 sm:flex">
+      <div className="pointer-events-none absolute bottom-4 right-4 z-[3] hidden items-center gap-2 sm:flex">
         <div className="inline-flex items-center gap-0.5">
           <span className="h-1.5 w-3 bg-[#cc1133]" />
           <span className="h-1.5 w-3 bg-[#cc1133]" />
@@ -230,14 +236,14 @@ export function Contact() {
         <span className="font-pixel text-[7px] text-[#cc1133]">STATUS: READY</span>
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 lg:px-12">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 pb-24 sm:px-6 sm:py-20 sm:pb-28 lg:px-12 lg:py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="mb-10 text-center"
         >
-          <div className="mb-4 font-pixel text-[8px] tracking-widest text-[#cc1133]/70">// PORTAL //</div>
+          <div className="my-4 font-pixel text-[7px] tracking-widest text-[#cc1133]/70 sm:text-[8px]">// PORTAL //</div>
           <h2
             className="flex flex-wrap items-center justify-center gap-3 font-pixel leading-tight"
             style={{ fontSize: 'clamp(28px, 4vw, 52px)' }}
@@ -247,12 +253,12 @@ export function Contact() {
               CONNECTION
             </span>
           </h2>
-          <div className="mt-5 text-center font-mono text-[13px] tracking-widest text-[#cc1133]/60">
+          <div className="mt-5 text-center font-mono text-[11px] tracking-widest text-[#cc1133]/60 sm:text-[13px]">
             {'>>> \u63a5\u7d9a\u3092\u958b\u59cb\u3059\u308b <<<'}
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -263,18 +269,18 @@ export function Contact() {
               style={{ boxShadow: '0 0 30px rgba(204,17,51,0.25), inset 0 0 20px rgba(204,17,51,0.04)' }}
             >
               <CornerAccents />
-              <div className="flex items-center gap-3 border-b border-[#cc1133]/30 px-4 py-3">
+              <div className="flex items-center gap-2 border-b border-[#cc1133]/30 px-3 py-3 sm:gap-3 sm:px-4">
                 <div className="flex h-8 w-8 items-center justify-center border border-[#cc1133] bg-[#cc1133]/20 text-[#cc1133]">
                   <Icon name="message" className="h-4 w-4" />
                 </div>
                 <span className="font-pixel text-[9px] text-[#cc1133]/60">&gt;&gt;</span>
-                <span className="font-pixel text-[10px] text-[#cc1133]" style={{ textShadow: '0 0 10px rgba(204,17,51,0.7)' }}>
+                <span className="font-pixel text-[9px] text-[#cc1133] sm:text-[10px]" style={{ textShadow: '0 0 10px rgba(204,17,51,0.7)' }}>
                   SEND MESSAGE
                 </span>
-                <span className="ml-auto font-mono text-[8px] text-[#cc1133]/20">/ / / / /</span>
+                <span className="ml-auto hidden font-mono text-[8px] text-[#cc1133]/20 min-[380px]:inline">/ / / / /</span>
               </div>
 
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 {sent ? (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="py-8 text-center">
                     <Icon name="success" className="mx-auto h-12 w-12 text-[#cc1133] drop-shadow-[0_0_10px_rgba(204,17,51,0.85)]" />
@@ -356,14 +362,14 @@ export function Contact() {
               style={{ boxShadow: '0 0 30px rgba(204,17,51,0.25), inset 0 0 20px rgba(204,17,51,0.04)' }}
             >
               <CornerAccents />
-              <div className="flex items-center justify-between border-b border-[#cc1133]/30 px-4 py-3">
-                <span className="font-pixel text-[10px] text-[#cc1133]/80">// SOCIAL LINKS</span>
+              <div className="flex items-center justify-between border-b border-[#cc1133]/30 px-3 py-3 sm:px-4">
+                <span className="font-pixel text-[9px] text-[#cc1133]/80 sm:text-[10px]">// SOCIAL LINKS</span>
                 <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-[#cc1133]">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[#cc1133]" />
                 </span>
               </div>
 
-              <div className="space-y-3 p-5">
+              <div className="space-y-3 p-4 sm:p-5">
                 {socials.map((s, i) => (
                   <motion.a
                     key={s.label}
@@ -375,13 +381,13 @@ export function Contact() {
                     animate={inView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
                     whileHover={{ x: 4 }}
-                    className="group flex items-center gap-4 border border-[rgba(204,17,51,0.15)] bg-[rgba(204,17,51,0.04)] px-4 py-3.5 transition-colors hover:border-[#cc1133]/60 hover:bg-[rgba(204,17,51,0.08)]"
+                    className="group flex items-center gap-3 border border-[rgba(204,17,51,0.15)] bg-[rgba(204,17,51,0.04)] px-3 py-3 transition-colors hover:border-[#cc1133]/60 hover:bg-[rgba(204,17,51,0.08)] sm:gap-4 sm:px-4 sm:py-3.5"
                   >
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#cc1133] bg-[#cc1133]/15 text-[#cc1133]">
-                      <Icon name={socialIcons[s.label]} className="h-5 w-5" />
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-[#cc1133] bg-[#cc1133]/15 text-[#cc1133] sm:h-11 sm:w-11">
+                      <Icon name={socialIcons[s.label]} className="h-4 w-4 sm:h-5 sm:w-5" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block font-pixel text-[9px] tracking-wider text-[#cc1133]">{s.label}</span>
+                      <span className="block break-words font-pixel text-[7px] leading-relaxed tracking-wider text-[#cc1133] sm:text-[9px]">{s.label}</span>
                       <span className="mt-1 block truncate font-mono text-[13px] text-[#e8e0e3]">{s.handle}</span>
                     </span>
                     <span className="text-[#cc1133]">
@@ -396,18 +402,18 @@ export function Contact() {
               initial={{ opacity: 0, y: 15 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.8 }}
-              className="relative flex items-center gap-4 border-[1.5px] border-[#00b4b4] bg-[rgba(0,20,20,0.8)] px-5 py-4"
+              className="relative flex items-center gap-3 border-[1.5px] border-[#00b4b4] bg-[rgba(0,20,20,0.8)] px-4 py-4 sm:gap-4 sm:px-5"
               style={{ boxShadow: '0 0 20px rgba(0,180,180,0.15)' }}
             >
               <CornerAccents color="#00b4b4" />
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-[#00b4b4] bg-[rgba(0,180,180,0.1)]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#00b4b4] bg-[rgba(0,180,180,0.1)] sm:h-12 sm:w-12">
                 <span className="h-4 w-4 animate-pulse rounded-full bg-[#00b4b4]" style={{ boxShadow: '0 0 10px #00b4b4' }} />
               </div>
               <div className="min-w-0 pr-8">
-                <div className="font-pixel text-[9px] tracking-widest text-[#00b4b4]" style={{ textShadow: '0 0 10px #00b4b480' }}>
+                <div className="font-pixel text-[7px] leading-relaxed tracking-widest text-[#00b4b4] sm:text-[9px]" style={{ textShadow: '0 0 10px #00b4b480' }}>
                   AVAILABLE FOR QUESTS
                 </div>
-                <div className="mt-1 font-mono text-[12px] text-[#7a6068]">Open for freelance &amp; collaboration</div>
+                <div className="mt-1 font-mono text-[11px] text-[#7a6068] sm:text-[12px]">Open for freelance &amp; collaboration</div>
               </div>
               <div className="absolute right-4 text-[#00b4b4]/30">
                 <Icon name="play" className="h-6 w-6" />
