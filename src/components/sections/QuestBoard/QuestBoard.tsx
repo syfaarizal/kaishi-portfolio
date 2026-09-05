@@ -34,55 +34,6 @@ function ScanlineFX() {
   );
 }
 
-// Decorative corner bracket for anime HUD feel
-function CornerBrackets({ color = '#cc1133', size = 16 }: { color?: string; size?: number }) {
-  const s = size;
-  return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-      <span
-        className="absolute block"
-        style={{
-          width: s, height: s,
-          top: 0, left: 0,
-          borderTop: `2px solid ${color}`,
-          borderLeft: `2px solid ${color}`,
-          boxShadow: `0 0 6px ${color}88`,
-        }}
-      />
-      <span
-        className="absolute block"
-        style={{
-          width: s, height: s,
-          top: 0, right: 0,
-          borderTop: `2px solid ${color}`,
-          borderRight: `2px solid ${color}`,
-          boxShadow: `0 0 6px ${color}88`,
-        }}
-      />
-      <span
-        className="absolute block"
-        style={{
-          width: s, height: s,
-          bottom: 0, left: 0,
-          borderBottom: `2px solid ${color}`,
-          borderLeft: `2px solid ${color}`,
-          boxShadow: `0 0 6px ${color}88`,
-        }}
-      />
-      <span
-        className="absolute block"
-        style={{
-          width: s, height: s,
-          bottom: 0, right: 0,
-          borderBottom: `2px solid ${color}`,
-          borderRight: `2px solid ${color}`,
-          boxShadow: `0 0 6px ${color}88`,
-        }}
-      />
-    </div>
-  );
-}
-
 // Pulsing dot accent
 function PulseDot({ color = '#cc1133', size = 6 }: { color?: string; size?: number }) {
   return (
@@ -293,4 +244,3 @@ export function QuestBoard() {
     </section>
   );
 }
-

@@ -15,21 +15,6 @@ const statusColor: Record<string, string> = {
   PLAYABLE: '#cc1133',
 };
 
-// Animated pulse dot
-function PulseDot({ color = '#cc1133', size = 5 }: { color?: string; size?: number }) {
-  return (
-    <span
-      className="inline-block rounded-full shrink-0"
-      style={{
-        width: size, height: size,
-        background: color,
-        boxShadow: `0 0 4px ${color}`,
-        animation: 'grid-pulse 2.5s ease-in-out infinite',
-      }}
-    />
-  );
-}
-
 // Corner bracket accent for anime HUD feel
 function CornerBrackets({ color = '#cc1133', size = 12 }: { color?: string; size?: number }) {
   return (
@@ -315,4 +300,3 @@ export function QuestGrid({ quests, onSelectQuest, onLaunchGame, isQuestComplete
     </div>
   );
 }
-
