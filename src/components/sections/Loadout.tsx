@@ -185,7 +185,24 @@ export function Loadout({ onNavigate }: LoadoutProps) {
       className="relative w-full h-full overflow-y-auto overflow-x-hidden overscroll-contain"
       style={{ background: '#07020a' }}
     >
-      <PixelGrid />
+      <div className="pointer-events-none sticky top-0 z-0 -mb-[100vh] h-screen overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ zIndex: 0 }}
+        >
+          <source src="/assets/loadout-background.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0" style={{ background: 'rgba(7,2,10,0.74)', zIndex: 1 }} />
+        <div className="relative z-[2] h-full">
+          <PixelGrid />
+        </div>
+      </div>
 
       {/* Right-side decorative vertical column */}
       <div

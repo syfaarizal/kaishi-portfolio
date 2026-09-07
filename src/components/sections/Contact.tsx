@@ -3,7 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { PixelGrid } from '../ui/PixelGrid';
 
 const socials = [
-  { label: 'GITHUB', handle: '@syfaarizal/kaishi-portfolio', href: 'https://github.com/syfaarizal/kaishi-portfolio' },
+  { label: 'GITHUB', handle: 'kaishi-portfolio', href: 'https://github.com/syfaarizal/kaishi-portfolio' },
   { label: 'TWITTER / X', handle: '@kaishiscd', href: 'https://twitter.com/kaishiscd' },
   { label: 'INSTAGRAM', handle: '@kaishiscd', href: 'https://instagram.com/kaishiscd' },
   { label: 'TIKTOK', handle: '@kaishiscd', href: 'https://tiktok.com/@kaishiscd' },
