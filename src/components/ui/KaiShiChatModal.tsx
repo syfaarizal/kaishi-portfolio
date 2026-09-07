@@ -253,6 +253,13 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
       {open && (
         <>
           {/* Backdrop */}
+          <div
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9001,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '12px', pointerEvents: 'auto',
+            }}
+          >
           <motion.div
             key="bd"
             initial={{ opacity: 0 }}
@@ -261,7 +268,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
             transition={{ duration: 0.18 }}
             onClick={onClose}
             style={{
-              position: 'fixed', inset: 0, zIndex: 9000,
+              position: 'fixed', inset: 0, zIndex: 0,
               background: 'rgba(2,0,8,0.78)',
               backdropFilter: 'blur(8px)',
             }}
@@ -281,15 +288,16 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={e => e.stopPropagation()}
             style={{
-              position: 'fixed',
+              position: 'relative',
               /* Centered, bounded — never full-screen */
-              top: '12%',
-              left: '25%',
-              transform: 'translate(-50%, -50%)',
-              width: 'min(98vw, 1050px)',
-              height: 'min(90vh, 700px)',
-              maxHeight: '700px',
-              zIndex: 9001,
+              width: '100%',
+              maxWidth: '1050px',
+              height: 'min(700px, calc(100dvh - 24px))',
+              maxHeight: 'calc(100dvh - 24px)',
+              minWidth: 0,
+              minHeight: 0,
+              zIndex: 1,
+              pointerEvents: 'auto',
               display: 'flex',
               flexDirection: 'column',
               background: 'rgba(6,2,10,0.97)',
@@ -555,6 +563,7 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
               </div>
             </div>
           </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
