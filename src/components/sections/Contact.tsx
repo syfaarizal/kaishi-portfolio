@@ -178,6 +178,10 @@ export function Contact() {
     setTimeout(() => setSent(false), 3000);
   };
 
+  const stopKeyboardPropagation = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <section
       id="contact"
@@ -305,6 +309,8 @@ export function Contact() {
                             type={field.id === 'email' ? 'email' : 'text'}
                             value={form[field.id as keyof typeof form]}
                             onChange={e => setForm(f => ({ ...f, [field.id]: e.target.value }))}
+                            onKeyDown={stopKeyboardPropagation}
+                            onKeyUp={stopKeyboardPropagation}
                             placeholder={field.placeholder}
                             className="w-full border border-[rgba(204,17,51,0.25)] bg-[rgba(15,5,10,0.7)] px-3 py-2 pr-9 font-mono text-xs text-[#e8e0e3] placeholder-[#7a6068] outline-none transition-all focus:border-[#cc1133] focus:shadow-[0_0_10px_rgba(204,17,51,0.2)]"
                             required
@@ -324,6 +330,8 @@ export function Contact() {
                         <textarea
                           value={form.message}
                           onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                          onKeyDown={stopKeyboardPropagation}
+                          onKeyUp={stopKeyboardPropagation}
                           placeholder="What's your quest?..."
                           rows={4}
                           className="w-full resize-none border border-[rgba(204,17,51,0.25)] bg-[rgba(15,5,10,0.7)] px-3 py-2 pr-9 font-mono text-xs text-[#e8e0e3] placeholder-[#7a6068] outline-none transition-all focus:border-[#cc1133] focus:shadow-[0_0_10px_rgba(204,17,51,0.2)]"
