@@ -129,7 +129,7 @@ export function QuestBoard() {
             className="mb-8 sm:mb-10 lg:mb-12"
           >
             {/* Top bar */}
-            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <div className="flex items-center gap-2 sm:gap-3 my-3 sm:mb-4">
               <div
                 className="h-px flex-1"
                 style={{
