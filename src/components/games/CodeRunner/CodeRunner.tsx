@@ -77,11 +77,38 @@ interface GameState {
   lives: number;
   score: number;
   collected: Record<string, boolean>;
+  bestScore: number;
+  platformPositions: Record<string, number>;
+  hazardPositions: Record<string, number>;
   status: GameStatus;
   invulnerable: boolean;
 }
 
-function createInitialState(): GameState {
+function getPlatformPositions(time: number): Record<string, number> {
+  return Object.fromEntries(
+    PLATFORMS.map((p) => {
+      if (!p.moving || !p.range) return [p.id, p.x];
+
+      const [min, max] = p.range;
+      const mid = (min + max) / 2;
+      const amp = (max - min) / 2;
+      return [p.id, mid + Math.sin(time * (p.speed ?? 8) * 0.15) * amp];
+    }),
+  );
+}
+
+function getHazardPositions(time: number): Record<string, number> {
+  return Object.fromEntries(
+    HAZARDS.map((h) => {
+      const [min, max] = h.range;
+      const mid = (min + max) / 2;
+      const amp = (max - min) / 2;
+      return [h.id, mid + Math.sin(time * 1.6 + h.range[0]) * amp];
+    }),
+  );
+}
+
+function createInitialState(bestScore: number): GameState {
   return {
     x: START_POS.x,
     y: START_POS.y,
@@ -92,6 +119,9 @@ function createInitialState(): GameState {
     lives: MAX_LIVES,
     score: 0,
     collected: {},
+    bestScore,
+    platformPositions: getPlatformPositions(0),
+    hazardPositions: getHazardPositions(0),
     status: 'playing',
     invulnerable: false,
   };
@@ -103,21 +133,15 @@ interface CodeRunnerProps {
 }
 
 export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
-  const [state, setState] = useState<GameState>(createInitialState);
-  const [bestScore, setBestScore] = useState<number>(() => {
+  const [initialBestScore] = useState<number>(() => {
     const stored = window.localStorage.getItem(BEST_SCORE_KEY);
     return stored ? Number(stored) : 0;
   });
+  const [state, setState] = useState<GameState>(() => createInitialState(initialBestScore));
 
   const keysRef = useRef({ left: false, right: false, up: false });
   const timeRef = useRef(0);
   const invulnTimerRef = useRef(0);
-  const platformPositions = useRef<Record<string, number>>(
-    Object.fromEntries(PLATFORMS.map((p) => [p.id, p.x])),
-  );
-  const hazardPositions = useRef<Record<string, number>>(
-    Object.fromEntries(HAZARDS.map((h) => [h.id, h.range[0]])),
-  );
 
   // Keyboard input
   useEffect(() => {
@@ -152,27 +176,11 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
   const update = useCallback(
     (dt: number) => {
       timeRef.current += dt;
-
-      // Advance moving platforms (sine-wave patrol)
-      PLATFORMS.forEach((p) => {
-        if (p.moving && p.range) {
-          const [min, max] = p.range;
-          const mid = (min + max) / 2;
-          const amp = (max - min) / 2;
-          platformPositions.current[p.id] = mid + Math.sin(timeRef.current * (p.speed ?? 8) * 0.15) * amp;
-        }
-      });
-
-      // Advance hazards (patrol back and forth)
-      HAZARDS.forEach((h) => {
-        const [min, max] = h.range;
-        const mid = (min + max) / 2;
-        const amp = (max - min) / 2;
-        hazardPositions.current[h.id] = mid + Math.sin(timeRef.current * 1.6 + h.range[0]) * amp;
-      });
+      const platformPositions = getPlatformPositions(timeRef.current);
+      const hazardPositions = getHazardPositions(timeRef.current);
 
       setState((prev) => {
-        if (prev.status !== 'playing') return prev;
+        if (prev.status !== 'playing') return { ...prev, platformPositions, hazardPositions };
 
         let vx = 0;
         if (keysRef.current.left) vx -= MOVE_SPEED;
@@ -194,7 +202,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
 
         if (vy >= 0) {
           for (const p of PLATFORMS) {
-            const px = platformPositions.current[p.id];
+            const px = platformPositions[p.id];
             const platRect: Rect = { x: px, y: p.y, width: p.width, height: p.height };
             const nextBottom = nextY + PLAYER_HEIGHT;
             const playerSpan: Rect = { x: nextX, y: nextY, width: PLAYER_WIDTH, height: PLAYER_HEIGHT };
@@ -211,7 +219,8 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
           }
         }
 
-        let { lives, score, collected, invulnerable } = prev;
+        const { collected } = prev;
+        let { lives, score, bestScore, invulnerable } = prev;
         let status: GameStatus = prev.status;
 
         // Fell into a pit
@@ -227,6 +236,8 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
             vy: 0,
             onGround: true,
             lives,
+            platformPositions,
+            hazardPositions,
             status: lives <= 0 ? 'lost' : 'playing',
             invulnerable: true,
           };
@@ -243,7 +254,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
 
         if (!invulnerable) {
           for (const h of HAZARDS) {
-            const hx = hazardPositions.current[h.id];
+            const hx = hazardPositions[h.id];
             const hazardRect: Rect = { x: hx, y: h.y, width: 4, height: 6 };
             if (intersects(playerRect, hazardRect)) {
               lives -= 1;
@@ -270,6 +281,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         const allCollected = FRAGMENTS.every((f) => newCollected[f.id]);
         if (allCollected && intersects(playerRect, PORTAL)) {
           status = 'won';
+          bestScore = Math.max(bestScore, score);
         }
 
         return {
@@ -282,7 +294,10 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
           onGround,
           lives,
           score,
+          bestScore,
           collected: newCollected,
+          platformPositions,
+          hazardPositions,
           status,
           invulnerable,
         };
@@ -294,16 +309,15 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
   useGameLoop(update, state.status === 'playing');
 
   useEffect(() => {
-    if (state.status === 'won' && state.score > bestScore) {
-      setBestScore(state.score);
-      window.localStorage.setItem(BEST_SCORE_KEY, String(state.score));
+    if (state.status === 'won') {
+      window.localStorage.setItem(BEST_SCORE_KEY, String(state.bestScore));
     }
-  }, [state.status, state.score, bestScore]);
+  }, [state.status, state.bestScore]);
 
   const handleRestart = () => {
     timeRef.current = 0;
     invulnTimerRef.current = 0;
-    setState(createInitialState());
+    setState((prev) => createInitialState(prev.bestScore));
   };
 
   const togglePause = () => {
@@ -344,7 +358,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         {PLATFORMS.map((p) => (
           <Platform
             key={p.id}
-            x={platformPositions.current[p.id]}
+            x={state.platformPositions[p.id]}
             y={p.y}
             width={p.width}
             height={p.height}
@@ -357,7 +371,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         ))}
 
         {HAZARDS.map((h) => (
-          <Enemy key={h.id} x={hazardPositions.current[h.id]} y={h.y} />
+          <Enemy key={h.id} x={state.hazardPositions[h.id]} y={h.y} />
         ))}
 
         {/* Portal */}
@@ -382,7 +396,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
           y={state.y}
           facing={state.facing}
           isJumping={!state.onGround}
-          isMoving={keysRef.current.left || keysRef.current.right}
+          isMoving={state.vx !== 0}
           isHurt={state.invulnerable}
         />
 
@@ -410,7 +424,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         {state.status === 'won' && (
           <Overlay
             title="MISSION COMPLETE"
-            subtitle={`SCORE: ${state.score.toLocaleString()}  •  BEST: ${bestScore.toLocaleString()}`}
+            subtitle={`SCORE: ${state.score.toLocaleString()}  •  BEST: ${state.bestScore.toLocaleString()}`}
             actions={[
               { label: 'PLAY AGAIN', onClick: handleRestart },
               { label: 'RETURN TO BRIEFING', onClick: onFinish, primary: true },
