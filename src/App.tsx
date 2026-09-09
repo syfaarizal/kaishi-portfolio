@@ -73,9 +73,9 @@ function App() {
       case 'hero':     return <Hero onNavigate={navigate} />;
       case 'about':    return <About onNavigate={navigate} />;
       case 'skills':   return <Inventory onNavigate={navigate} />;
-      case 'projects': return <QuestBoard />;
+      case 'projects': return <QuestBoard onNavigate={navigate} />;
       case 'loadout':  return <Loadout onNavigate={navigate} />;
-      case 'contact':  return <Contact />;
+      case 'contact':  return <Contact onNavigate={navigate} />;
       default:         return <Hero onNavigate={navigate} />;
     }
   };

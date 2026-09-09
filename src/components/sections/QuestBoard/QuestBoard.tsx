@@ -4,6 +4,17 @@ import { QuestGrid } from './QuestGrid';
 import { QuestDetails } from './QuestDetails';
 import { QuestGameLauncher } from './QuestGameLauncher';
 import { PixelGrid } from '../../ui/PixelGrid';
+import type { SectionId } from '../../../App';
+
+const SECTION_IDS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
+const SECTION_LABELS: Record<SectionId, string> = {
+  hero: 'INTRO',
+  about: 'PROFILE',
+  skills: 'INVENTORY',
+  projects: 'QUEST BOARD',
+  loadout: 'LOADOUT',
+  contact: 'PORTAL',
+};
 
 // Animated scanline overlay for cyber atmosphere
 function ScanlineFX() {
@@ -89,7 +100,11 @@ function GlowingRule({ color = '#cc1133' }: { color?: string }) {
   );
 }
 
-export function QuestBoard() {
+interface QuestBoardProps {
+  onNavigate: (id: SectionId) => void;
+}
+
+export function QuestBoard({ onNavigate }: QuestBoardProps) {
   const {
     quests,
     selectedQuest,
@@ -217,6 +232,8 @@ export function QuestBoard() {
             onLaunchGame={launchGame}
             isQuestCompleted={isQuestCompleted}
           />
+
+          <SectionNav active="projects" onNavigate={onNavigate} />
         </div>
       </div>
 
@@ -242,5 +259,102 @@ export function QuestBoard() {
         )}
       </AnimatePresence>
     </section>
+  );
+}
+
+function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id: SectionId) => void }) {
+  const currentIndex = SECTION_IDS.indexOf(active);
+  const previous = SECTION_IDS[(currentIndex - 1 + SECTION_IDS.length) % SECTION_IDS.length];
+  const next = SECTION_IDS[(currentIndex + 1) % SECTION_IDS.length];
+
+  return (
+    <motion.div className="mt-8 flex flex-wrap items-center justify-between gap-2 sm:mt-10 sm:gap-3">
+      <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
+
+      <div className="order-first flex w-full items-center justify-center gap-1.5 sm:order-none sm:w-auto sm:gap-2.5">
+        {SECTION_IDS.map((section) => {
+          const isActive = section === active;
+          return (
+            <button
+              key={section}
+              onClick={() => onNavigate(section)}
+              title={SECTION_LABELS[section]}
+              aria-label={SECTION_LABELS[section]}
+              className="group relative flex h-[22px] w-[22px] items-center justify-center"
+            >
+              <motion.span
+                className="block border"
+                animate={{
+                  width: isActive ? '14px' : '10px',
+                  height: isActive ? '14px' : '10px',
+                  background: isActive ? '#cc1133' : 'transparent',
+                  borderColor: isActive ? '#cc1133' : 'rgba(204,17,51,0.5)',
+                  boxShadow: isActive ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                  rotate: 45,
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <span
+                className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap font-pixel opacity-0 transition-opacity duration-150 group-hover:opacity-100 sm:block"
+                style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
+              >
+                {SECTION_LABELS[section]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate(next)} side="right" />
+    </motion.div>
+  );
+}
+
+function NavBtn({
+  label,
+  icon,
+  onClick,
+  side,
+}: {
+  label: string;
+  icon: string;
+  onClick: () => void;
+  side: 'left' | 'right';
+}) {
+  const clip = side === 'left'
+    ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
+    : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
+
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      className="flex items-center gap-1.5 whitespace-nowrap font-pixel transition-all sm:gap-2"
+      style={{
+        fontSize: 'clamp(7px, 2vw, 9px)',
+        color: '#7a6068',
+        border: '1px solid rgba(61,15,26,0.9)',
+        padding: 'clamp(6px, 2vw, 9px) clamp(10px, 4vw, 18px)',
+        background: 'rgba(8,2,6,0.78)',
+        clipPath: clip,
+      }}
+      onMouseEnter={e => {
+        const element = e.currentTarget as HTMLElement;
+        element.style.color = '#cc1133';
+        element.style.borderColor = '#cc1133';
+        element.style.boxShadow = '0 0 12px rgba(204,17,51,0.3)';
+      }}
+      onMouseLeave={e => {
+        const element = e.currentTarget as HTMLElement;
+        element.style.color = '#7a6068';
+        element.style.borderColor = 'rgba(61,15,26,0.9)';
+        element.style.boxShadow = 'none';
+      }}
+    >
+      {side === 'left' && <span style={{ fontSize: '13px' }}>{icon}</span>}
+      {label}
+      {side === 'right' && <span style={{ fontSize: '13px' }}>{icon}</span>}
+    </motion.button>
   );
 }
