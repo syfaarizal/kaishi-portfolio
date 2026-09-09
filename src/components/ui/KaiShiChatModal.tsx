@@ -240,9 +240,20 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
     }
   }, [input, loading, messages, resolvedKey, apiKeyInput]);
 
-  const handleKey = (e: React.KeyboardEvent) => {
+  const handleMessageKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
     if (e.key === 'Escape') onClose();
+  };
+
+  const handleApiKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    if (e.key === 'Enter' && apiKeyInput.trim()) setResolvedKey(apiKeyInput.trim());
+    if (e.key === 'Escape') onClose();
+  };
+
+  const stopKeyboardPropagation = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
   };
 
   const needsKey = !resolvedKey;
@@ -407,7 +418,8 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                     placeholder="sk-or-v1-..."
                     value={apiKeyInput}
                     onChange={e => setApiKeyInput(e.target.value)}
-                    onKeyDown={e => { if (e.key === 'Enter' && apiKeyInput.trim()) setResolvedKey(apiKeyInput.trim()); }}
+                    onKeyDown={handleApiKeyDown}
+                    onKeyUp={stopKeyboardPropagation}
                     className="font-mono"
                     style={{
                       flex: 1, background: '#080210', border: '1px solid #2a1018',
@@ -497,7 +509,8 @@ export function KaiShiChatModal({ open, onClose }: KaiShiChatModalProps) {
                   value={input}
                   disabled={loading || needsKey}
                   onChange={e => setInput(e.target.value)}
-                  onKeyDown={handleKey}
+                  onKeyDown={handleMessageKeyDown}
+                  onKeyUp={stopKeyboardPropagation}
                   className="font-mono"
                   style={{
                     flex: 1,
