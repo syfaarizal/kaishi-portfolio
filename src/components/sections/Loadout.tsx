@@ -163,6 +163,15 @@ const SECTION_META: Record<Exclude<Category, 'all'>, { label: string; comment: s
 };
 
 const SECTION_ORDER: Exclude<Category, 'all'>[] = ['language', 'framework', 'tool', 'design'];
+const SECTION_IDS: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
+const SECTION_LABELS: Record<SectionId, string> = {
+  hero: 'INTRO',
+  about: 'PROFILE',
+  skills: 'INVENTORY',
+  projects: 'QUEST BOARD',
+  loadout: 'LOADOUT',
+  contact: 'PORTAL',
+};
 
 interface LoadoutProps { onNavigate: (id: SectionId) => void; }
 
@@ -332,13 +341,7 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         )}
 
         {/* Footer nav */}
-        <div className="mt-auto pt-8 sm:pt-10 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-          <FooterNav label="PREV" icon="◀" onClick={() => onNavigate('projects')} side="left" />
-          <span className="font-pixel text-[8px] tracking-widest text-[#7a6068] order-first w-full text-center sm:order-none sm:w-auto">
-            [ LOADOUT v1.0 ]
-          </span>
-          <FooterNav label="NEXT" icon="▶" onClick={() => onNavigate('contact')} side="right" />
-        </div>
+        <SectionNav active="loadout" onNavigate={onNavigate} />
       </div>
     </section>
   );
@@ -463,18 +466,89 @@ function ItemCard({ item, idx }: { item: Item; idx: number }) {
   );
 }
 
-function FooterNav({ label, icon, onClick, side }: { label: string; icon: string; onClick: () => void; side: 'left' | 'right' }) {
+function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id: SectionId) => void }) {
+  const currentIndex = SECTION_IDS.indexOf(active);
+  const previous = SECTION_IDS[(currentIndex - 1 + SECTION_IDS.length) % SECTION_IDS.length];
+  const next = SECTION_IDS[(currentIndex + 1) % SECTION_IDS.length];
+
+  return (
+    <motion.div className="mt-auto pt-8 sm:pt-10 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+      <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
+
+      <div className="order-first flex w-full items-center justify-center gap-1.5 sm:order-none sm:w-auto sm:gap-2.5">
+        {SECTION_IDS.map((section) => {
+          const isActive = section === active;
+          return (
+            <button
+              key={section}
+              onClick={() => onNavigate(section)}
+              title={SECTION_LABELS[section]}
+              aria-label={SECTION_LABELS[section]}
+              className="group relative flex h-[22px] w-[22px] items-center justify-center"
+            >
+              <motion.span
+                className="block border"
+                animate={{
+                  width: isActive ? '14px' : '10px',
+                  height: isActive ? '14px' : '10px',
+                  background: isActive ? '#cc1133' : 'transparent',
+                  borderColor: isActive ? '#cc1133' : 'rgba(204,17,51,0.5)',
+                  boxShadow: isActive ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                  rotate: 45,
+                }}
+                transition={{ duration: 0.2 }}
+              />
+              <span
+                className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap font-pixel opacity-0 transition-opacity duration-150 group-hover:opacity-100 sm:block"
+                style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
+              >
+                {SECTION_LABELS[section]}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <NavBtn label="NEXT" icon="▶" onClick={() => onNavigate(next)} side="right" />
+    </motion.div>
+  );
+}
+
+function NavBtn({ label, icon, onClick, side }: { label: string; icon: string; onClick: () => void; side: 'left' | 'right' }) {
+  const clip = side === 'left'
+    ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
+    : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
+
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ x: side === 'left' ? -3 : 3 }}
-      whileTap={{ scale: 0.95 }}
-      className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 font-pixel text-[8px] sm:text-[9px] tracking-[0.16em] sm:tracking-[0.18em] transition-colors min-h-[36px] sm:min-h-0"
-      style={{ border: '1px solid rgba(61,15,26,0.8)', color: '#7a6068' }}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      className="flex items-center gap-1.5 whitespace-nowrap font-pixel transition-all sm:gap-2"
+      style={{
+        fontSize: 'clamp(7px, 2vw, 9px)',
+        color: '#7a6068',
+        border: '1px solid rgba(61,15,26,0.9)',
+        padding: 'clamp(6px, 2vw, 9px) clamp(10px, 4vw, 18px)',
+        background: 'rgba(8,2,6,0.78)',
+        clipPath: clip,
+      }}
+      onMouseEnter={e => {
+        const element = e.currentTarget as HTMLElement;
+        element.style.color = '#cc1133';
+        element.style.borderColor = '#cc1133';
+        element.style.boxShadow = '0 0 12px rgba(204,17,51,0.3)';
+      }}
+      onMouseLeave={e => {
+        const element = e.currentTarget as HTMLElement;
+        element.style.color = '#7a6068';
+        element.style.borderColor = 'rgba(61,15,26,0.9)';
+        element.style.boxShadow = 'none';
+      }}
     >
-      {side === 'left' && <span style={{ color: '#cc1133' }}>{icon}</span>}
-      <span>{label}</span>
-      {side === 'right' && <span style={{ color: '#cc1133' }}>{icon}</span>}
+      {side === 'left' && <span style={{ fontSize: '13px' }}>{icon}</span>}
+      {label}
+      {side === 'right' && <span style={{ fontSize: '13px' }}>{icon}</span>}
     </motion.button>
   );
 }
