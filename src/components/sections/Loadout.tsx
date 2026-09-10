@@ -476,7 +476,7 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.78, duration: 0.5 }}
-      className="flex items-center justify-center gap-4 pb-[30px] mt-[15px]"
+      className="flex items-center justify-center gap-4 pb-[30px] mt-[30px]"
     >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
 

@@ -21,9 +21,12 @@ interface SlotState {
   pieceId: string | null;
 }
 
-const TOTAL_TIME = 60; // seconds
+const TOTAL_TIME = 75; // seconds
 const GRID_COLS = 4;
 const GRID_ROWS = 2;
+const BOARD_TOP = 24;
+const BOARD_HEIGHT = 220;
+const STAGE_HEIGHT = 360;
 
 const PIECES: Piece[] = [
   { id: 'navbar', label: 'NAVBAR', icon: '▭', correctSlot: 0 },
@@ -36,6 +39,7 @@ const PIECES: Piece[] = [
 ];
 
 const SLOT_COUNT = GRID_COLS * GRID_ROWS;
+const SLOT_LABELS = ['NAVBAR', 'HERO', 'CARD A', 'CARD B', 'CARD C', 'CTA', 'EMPTY SPACE', 'FOOTER'];
 
 interface LayoutSize {
   containerWidth: number;
@@ -61,9 +65,11 @@ function useLayoutSize(ref: React.RefObject<HTMLElement | null>): LayoutSize {
       const rect = el.getBoundingClientRect();
       const gap = 8;
       const containerWidth = rect.width;
-      const containerHeight = 220; // fixed height for stage
-      const cellSize = Math.floor((containerWidth - gap * (GRID_COLS + 1)) / GRID_COLS);
-      const pieceSize = cellSize;
+      const containerHeight = STAGE_HEIGHT;
+      const horizontalCellSize = Math.floor((containerWidth - gap * (GRID_COLS + 1)) / GRID_COLS);
+      const verticalCellSize = Math.floor((BOARD_HEIGHT - BOARD_TOP - gap * (GRID_ROWS + 1)) / GRID_ROWS);
+      const cellSize = Math.min(horizontalCellSize, verticalCellSize);
+      const pieceSize = Math.min(cellSize, 58);
       setSize((prev) =>
         prev.containerWidth === containerWidth &&
         prev.containerHeight === containerHeight &&
@@ -110,7 +116,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
       const row = Math.floor(i / GRID_COLS);
       map[i] = {
         x: size.gap + col * (size.cellSize + size.gap),
-        y: size.gap + row * (size.cellSize + size.gap),
+        y: BOARD_TOP + size.gap + row * (size.cellSize + size.gap),
       };
     }
     return map;
@@ -129,7 +135,10 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
       if (placedInfo?.correct) {
         const sp = slotPositions[placedInfo.slotIndex];
         if (sp) {
-          out[p.id] = sp;
+          out[p.id] = {
+            x: sp.x + (size.cellSize - size.pieceSize) / 2,
+            y: sp.y + (size.cellSize - size.pieceSize) / 2,
+          };
           return;
         }
       }
@@ -139,9 +148,10 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
         return;
       }
       const idx = trayOrder.indexOf(p.id);
+      const trayCols = Math.max(1, Math.floor((size.containerWidth - size.gap) / (size.pieceSize + size.gap)));
       out[p.id] = {
-        x: size.gap + idx * (size.pieceSize + size.gap),
-        y: size.containerHeight - size.pieceSize - size.gap,
+        x: size.gap + (idx % trayCols) * (size.pieceSize + size.gap),
+        y: BOARD_HEIGHT + size.gap + Math.floor(idx / trayCols) * (size.pieceSize + size.gap),
       };
     });
     return out;
@@ -195,22 +205,31 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
   }
 
   function trayPositionFor(pieceId: string): { x: number; y: number } {
-    // Tray position: pieces in tray are placed in row at bottom. Re-derive
-    // here so we can write the absolute position into trayPositions after a
-    // drag ends.
+    // Keep unplaced pieces in a compact tray below the wireframe.
     const trayPieces = PIECES.filter((p) => !placed[p.id]?.correct);
     const idx = trayPieces.findIndex((p) => p.id === pieceId);
+    const trayCols = Math.max(1, Math.floor((size.containerWidth - size.gap) / (size.pieceSize + size.gap)));
     return {
-      x: size.gap + idx * (size.pieceSize + size.gap),
-      y: size.containerHeight - size.pieceSize - size.gap,
+      x: size.gap + (idx % trayCols) * (size.pieceSize + size.gap),
+      y: BOARD_HEIGHT + size.gap + Math.floor(idx / trayCols) * (size.pieceSize + size.gap),
     };
   }
 
-  function handleDragEnd(piece: Piece, _e: unknown, info: { point: { x: number; y: number } }) {
+  function handleDragEnd(
+    piece: Piece,
+    _e: unknown,
+    info: { offset: { x: number; y: number } },
+  ) {
+    if (phase !== 'playing') return;
     const stageRect = stageRef.current?.getBoundingClientRect();
     if (!stageRect) return;
-    const localX = info.point.x - stageRect.left;
-    const localY = info.point.y - stageRect.top;
+    const startPosition = livePositions[piece.id];
+    if (!startPosition) return;
+
+    // Framer Motion reports the total drag offset, not the dragged element's
+    // top-left position. Resolve the element position before hit-testing.
+    const localX = startPosition.x + info.offset.x;
+    const localY = startPosition.y + info.offset.y;
     const closest = findClosestSlot(localX, localY);
     if (closest === null) {
       // Return to tray
@@ -223,14 +242,14 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
 
     if (slotAlreadyFilled) {
       // Wrong placement (slot is occupied by something else)
-      penalize(piece.id, 'OCCUPIED');
+      penalize('OCCUPIED SLOT');
       returnToTray(piece.id);
       return;
     }
 
     if (!targetCorrect) {
       // Wrong slot
-      penalize(piece.id, 'WRONG SLOT');
+      penalize(`WRONG PLACE: ${piece.label} BELONGS IN ${SLOT_LABELS[piece.correctSlot]}`);
       returnToTray(piece.id);
       return;
     }
@@ -245,7 +264,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
       delete next[piece.id];
       return next;
     });
-    setFlash(`OK ${piece.label}`);
+    setFlash(`LOCKED: ${piece.label}`);
     setTimeout(() => setFlash(null), 700);
 
     // Win check — fire from the event handler so we don't setPhase in an
@@ -264,7 +283,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
     setTrayPositions((p) => ({ ...p, [pieceId]: trayPositionFor(pieceId) }));
   }
 
-  function penalize(_pieceId: string, reason: string) {
+  function penalize(reason: string) {
     setIntegrity((i) => {
       const next = Math.max(0, i - 12);
       if (next <= 0) {
@@ -282,7 +301,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
     <div className="w-full">
       <div className="flex items-center justify-between mb-3">
         <span className="font-pixel text-[8px] text-kai-muted">
-          PLACED {placedCount}/{PIECES.length}
+          WIREFRAME {placedCount}/{PIECES.length}
         </span>
         <div className="flex items-center gap-2 font-pixel text-[8px]">
           <span className="text-kai-muted">INTEGRITY</span>
@@ -317,6 +336,21 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
         />
       </div>
 
+      <div className="mb-3 border border-kai-border/60 bg-kai-panel/40 px-3 py-2">
+        <div className="font-pixel text-[9px] text-white mb-1">BUILD THE PAGE WIREFRAME</div>
+        <div className="font-display text-xs leading-relaxed text-kai-muted">
+          Drag each block into its matching slot. Follow the page hierarchy from left to right, then continue on the second row.
+          Leave EMPTY SPACE empty. Correct blocks lock in place. Wrong drops cost 12 integrity.
+        </div>
+        <div className="mt-2 flex flex-wrap items-center gap-x-1 gap-y-1 font-pixel text-[7px] text-kai-red">
+          {SLOT_LABELS.map((label, index) => (
+            <span key={label} className="whitespace-nowrap">
+              {String(index + 1).padStart(2, '0')} {label}{index < SLOT_LABELS.length - 1 ? ' >' : ''}
+            </span>
+          ))}
+        </div>
+      </div>
+
       <AnimatePresence>
         {flash && (
           <motion.div
@@ -325,7 +359,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={`font-pixel text-[8px] mb-2 ${
-              flash.startsWith('OK') ? 'text-green-400' : 'text-kai-red'
+              flash.startsWith('LOCKED') ? 'text-green-400' : 'text-kai-red'
             }`}
           >
             {flash}
@@ -336,18 +370,30 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
       <div
         ref={stageRef}
         className="pixel-border hud-panel relative w-full overflow-hidden"
-        style={{ height: 320 }}
+        style={{ height: STAGE_HEIGHT }}
       >
+        <div className="absolute inset-x-0 top-0 px-2 pt-2">
+          <div className="mb-1 flex items-center justify-between font-pixel text-[7px] text-kai-muted">
+            <span>TARGET BLUEPRINT</span>
+            <span>ROW 1 / ROW 2</span>
+          </div>
+        </div>
+
         {/* Slot layer */}
-        <div className="absolute inset-0 p-2 grid grid-cols-4 grid-rows-2 gap-2">
+        <div className="absolute inset-x-0 p-2 grid grid-cols-4 grid-rows-2 gap-2" style={{ top: BOARD_TOP, height: BOARD_HEIGHT - BOARD_TOP }}>
           {slots.map((slot) => (
             <div
               key={slot.index}
-              className="border border-dashed border-kai-border/60 flex items-center justify-center text-kai-muted/40 font-pixel text-[7px]"
+              className="border border-dashed border-kai-border/60 flex flex-col items-center justify-center text-kai-muted/40 font-pixel text-[7px]"
             >
-              {slot.pieceId ? '' : `0${slot.index + 1}`}
+              <span>{String(slot.index + 1).padStart(2, '0')}</span>
+              <span className="mt-1 text-[6px] text-kai-muted/60">{slot.pieceId ? 'LOCKED' : SLOT_LABELS[slot.index]}</span>
             </div>
           ))}
+        </div>
+
+        <div className="absolute inset-x-2 border-t border-kai-border/40 pt-1 font-pixel text-[7px] text-kai-muted" style={{ top: BOARD_HEIGHT }}>
+          COMPONENT TRAY
         </div>
 
         {/* Pieces layer */}
@@ -358,7 +404,7 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
             return (
               <motion.div
                 key={piece.id}
-                drag={!isPlaced}
+                drag={!isPlaced && phase === 'playing'}
                 dragMomentum={false}
                 dragElastic={0.05}
                 onDragEnd={(e, info) => handleDragEnd(piece, e, info)}
@@ -368,7 +414,9 @@ export function UIPuzzle({ onComplete }: UIPuzzleProps) {
                 className={`absolute pixel-border hud-panel flex flex-col items-center justify-center font-pixel text-[7px] select-none ${
                   isPlaced
                     ? 'bg-green-500/20 border-green-400 text-green-300 cursor-default'
-                    : 'cursor-grab text-kai-text hover:border-kai-red'
+                    : phase === 'playing'
+                      ? 'cursor-grab text-kai-text hover:border-kai-red'
+                      : 'cursor-default text-kai-muted'
                 }`}
                 style={{
                   width: size.pieceSize,
