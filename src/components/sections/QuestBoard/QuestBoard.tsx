@@ -268,10 +268,15 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
   const next = SECTION_IDS[(currentIndex + 1) % SECTION_IDS.length];
 
   return (
-    <motion.div className="mt-8 flex flex-wrap items-center justify-between gap-2 sm:mt-10 sm:gap-3">
+    <motion.div
+      className="flex items-center justify-center gap-4 pb-[30px] mt-[15px]"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.78, duration: 0.5 }}
+    >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
 
-      <div className="order-first flex w-full items-center justify-center gap-1.5 sm:order-none sm:w-auto sm:gap-2.5">
+      <div className="flex items-center gap-2.5">
         {SECTION_IDS.map((section) => {
           const isActive = section === active;
           return (
@@ -279,8 +284,8 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
               key={section}
               onClick={() => onNavigate(section)}
               title={SECTION_LABELS[section]}
-              aria-label={SECTION_LABELS[section]}
-              className="group relative flex h-[22px] w-[22px] items-center justify-center"
+              className="group relative flex items-center justify-center"
+              style={{ width: '22px', height: '22px' }}
             >
               <motion.span
                 className="block border"
@@ -295,7 +300,7 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
                 transition={{ duration: 0.2 }}
               />
               <span
-                className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap font-pixel opacity-0 transition-opacity duration-150 group-hover:opacity-100 sm:block"
+                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
                 style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
               >
                 {SECTION_LABELS[section]}
@@ -330,12 +335,12 @@ function NavBtn({
       onClick={onClick}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.94 }}
-      className="flex items-center gap-1.5 whitespace-nowrap font-pixel transition-all sm:gap-2"
+      className="flex items-center gap-2 font-pixel transition-all"
       style={{
-        fontSize: 'clamp(7px, 2vw, 9px)',
+        fontSize: '9px',
         color: '#7a6068',
         border: '1px solid rgba(61,15,26,0.9)',
-        padding: 'clamp(6px, 2vw, 9px) clamp(10px, 4vw, 18px)',
+        padding: '9px 18px',
         background: 'rgba(8,2,6,0.78)',
         clipPath: clip,
       }}
