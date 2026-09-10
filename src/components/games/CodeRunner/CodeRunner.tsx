@@ -23,6 +23,7 @@ import { HUD } from './HUD';
 const BEST_SCORE_KEY = 'kaishi_code_runner_best_score';
 const MAX_LIVES = 3;
 const START_POS = { x: 3, y: 68 };
+const IMPACT_SFX = '/assets/audio/hit-enemy-fall-fsx.mp3';
 
 interface PlatformDef {
   id: string;
@@ -37,10 +38,10 @@ interface PlatformDef {
 
 const PLATFORMS: PlatformDef[] = [
   { id: 'p1', x: 0, y: 82, width: 18, height: 6 },
-  { id: 'p2', x: 23, y: 68, width: 13, height: 5 },
-  { id: 'p3', x: 41, y: 78, width: 11, height: 5, moving: true, range: [41, 58], speed: 9 },
-  { id: 'p4', x: 63, y: 62, width: 13, height: 5 },
-  { id: 'p5', x: 80, y: 74, width: 18, height: 6 },
+  { id: 'p2', x: 23, y: 68, width: 11, height: 5 },
+  { id: 'p3', x: 41, y: 78, width: 9, height: 5, moving: true, range: [41, 58], speed: 11 },
+  { id: 'p4', x: 63, y: 62, width: 11, height: 5 },
+  { id: 'p5', x: 80, y: 74, width: 15, height: 6 },
 ];
 
 const FRAGMENTS = [
@@ -55,12 +56,15 @@ interface HazardDef {
   id: string;
   y: number;
   range: [number, number];
-  speed?: number;
+  speed: number;
+  phase: number;
 }
 
 const HAZARDS: HazardDef[] = [
-  { id: 'e1', y: 76, range: [24, 34] },
-  { id: 'e2', y: 56, range: [64, 74] },
+  { id: 'e1', y: 76, range: [24, 34], speed: 2.8, phase: 0.2 },
+  { id: 'e2', y: 56, range: [64, 74], speed: 3.6, phase: 1.8 },
+  { id: 'e3', y: 76, range: [43, 53], speed: 2.2, phase: 3.1 },
+  { id: 'e4', y: 70, range: [79, 91], speed: 4.2, phase: 4.7 },
 ];
 
 const PORTAL: Rect = { x: 92, y: 56, width: 6, height: 24 };
@@ -103,7 +107,7 @@ function getHazardPositions(time: number): Record<string, number> {
       const [min, max] = h.range;
       const mid = (min + max) / 2;
       const amp = (max - min) / 2;
-      return [h.id, mid + Math.sin(time * 1.6 + h.range[0]) * amp];
+      return [h.id, mid + Math.sin(time * h.speed + h.phase) * amp];
     }),
   );
 }
@@ -142,6 +146,27 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
   const keysRef = useRef({ left: false, right: false, up: false });
   const timeRef = useRef(0);
   const invulnTimerRef = useRef(0);
+  const impactAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const audio = new Audio(IMPACT_SFX);
+    audio.preload = 'auto';
+    audio.volume = 0.72;
+    impactAudioRef.current = audio;
+    return () => {
+      audio.pause();
+      impactAudioRef.current = null;
+    };
+  }, []);
+
+  const playImpactSfx = useCallback(() => {
+    const audio = impactAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    void audio.play().catch(() => {
+      // Browsers may reject playback until the first game interaction.
+    });
+  }, []);
 
   // Keyboard input
   useEffect(() => {
@@ -225,6 +250,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
 
         // Fell into a pit
         if (!onGround && nextY + PLAYER_HEIGHT > STAGE_BOTTOM) {
+          playImpactSfx();
           lives -= 1;
           invulnTimerRef.current = 1;
           const respawn = lives > 0 ? { x: START_POS.x, y: START_POS.y } : { x: prev.x, y: prev.y };
@@ -257,6 +283,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
             const hx = hazardPositions[h.id];
             const hazardRect: Rect = { x: hx, y: h.y, width: 4, height: 6 };
             if (intersects(playerRect, hazardRect)) {
+              playImpactSfx();
               lives -= 1;
               invulnTimerRef.current = 1.1;
               invulnerable = true;
@@ -303,7 +330,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         };
       });
     },
-    [],
+    [playImpactSfx],
   );
 
   useGameLoop(update, state.status === 'playing');
@@ -371,7 +398,7 @@ export function CodeRunner({ onFinish, onExit }: CodeRunnerProps) {
         ))}
 
         {HAZARDS.map((h) => (
-          <Enemy key={h.id} x={state.hazardPositions[h.id]} y={h.y} />
+          <Enemy key={h.id} x={state.hazardPositions[h.id]} y={h.y} speed={h.speed} />
         ))}
 
         {/* Portal */}

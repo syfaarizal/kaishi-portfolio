@@ -3,15 +3,22 @@ import { STAGE_WIDTH } from './Physics';
 interface EnemyProps {
   x: number;
   y: number;
+  speed?: number;
 }
 
 const OBSTACLE_SPRITE = '/assets/game/hazards-game.png';
 
-export function Enemy({ x, y }: EnemyProps) {
+export function Enemy({ x, y, speed = 1 }: EnemyProps) {
   return (
     <div
       className="absolute flex items-center justify-center"
-      style={{ left: `${(x / STAGE_WIDTH) * 100}%`, top: `${y}%`, width: `${(4 / STAGE_WIDTH) * 100}%`, height: `6%` }}
+      style={{
+        left: `${(x / STAGE_WIDTH) * 100}%`,
+        top: `${y}%`,
+        width: `${(4 / STAGE_WIDTH) * 100}%`,
+        height: `6%`,
+        filter: `drop-shadow(0 0 ${Math.min(10, 4 + speed)}px rgba(255,17,68,0.7))`,
+      }}
     >
       <img
         src={OBSTACLE_SPRITE}
