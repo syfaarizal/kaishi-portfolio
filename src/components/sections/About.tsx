@@ -1163,21 +1163,26 @@ function GallerySection() {
   );
 }
 
-function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
-  const sections: SectionId[] = ['hero','about','skills','projects','loadout','contact'];
-  const labels: Record<SectionId,string> = {
-    hero:'INTRO',about:'PROFILE',skills:'INVENTORY',projects:'QUEST BOARD',loadout:'LOADOUT',contact:'PORTAL'
+function NavDotsBar({ onNavigate }: { onNavigate: (id: SectionId) => void }) {
+  const sections: SectionId[] = ['hero', 'about', 'skills', 'projects', 'loadout', 'contact'];
+  const labels: Record<SectionId, string> = {
+    hero: 'INTRO', about: 'PROFILE', skills: 'INVENTORY',
+    projects: 'QUEST BOARD', loadout: 'LOADOUT', contact: 'PORTAL',
   };
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.78, duration: 0.5 }}
-      className="flex items-center justify-center gap-4 pb-[30px] mt-[15px]"
+      className="flex items-center justify-center pb-[30px] mt-[15px] px-3"
+      style={{ gap: 'clamp(6px, 2vw, 16px)' }}
     >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate('hero')} side="left" />
 
-      <div className="flex items-center gap-2.5">
+      <div
+        className="flex items-center"
+        style={{ gap: 'clamp(4px, 1.5vw, 10px)' }}
+      >
         {sections.map((s) => {
           const active = s === 'about';
           return (
@@ -1186,22 +1191,22 @@ function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
               onClick={() => onNavigate(s)}
               title={labels[s]}
               className="group relative flex items-center justify-center"
-              style={{ width: '22px', height: '22px' }}
+              style={{ width: '18px', height: '18px' }}
             >
               <motion.span
                 className="block border"
                 animate={{
-                  width: active ? '14px' : '10px',
-                  height: active ? '14px' : '10px',
-                  background: active ? '#cc1133' : 'transparent',
+                  width:       active ? '11px' : '8px',
+                  height:      active ? '11px' : '8px',
+                  background:  active ? '#cc1133' : 'transparent',
                   borderColor: active ? '#cc1133' : 'rgba(204,17,51,0.5)',
-                  boxShadow: active ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                  boxShadow:   active ? '0 0 10px #cc1133, 0 0 20px rgba(204,17,51,0.4)' : 'none',
                   rotate: 45,
                 }}
                 transition={{ duration: 0.2 }}
               />
               <span
-                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 hidden sm:block"
                 style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
               >
                 {labels[s]}
@@ -1216,8 +1221,8 @@ function NavDotsBar({onNavigate}:{onNavigate:(id:SectionId)=>void}) {
   );
 }
 
-function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>void;side:'left'|'right'}) {
-  const clip = side==='left'
+function NavBtn({ label, icon, onClick, side }: { label: string; icon: string; onClick: () => void; side: 'left' | 'right' }) {
+  const clip = side === 'left'
     ? 'polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)'
     : 'polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%)';
   return (
@@ -1225,21 +1230,21 @@ function NavBtn({label,icon,onClick,side}:{label:string;icon:string;onClick:()=>
       onClick={onClick}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.94 }}
-      className="flex items-center gap-2 font-pixel transition-all"
+      className="flex-shrink-0 flex items-center gap-1.5 sm:gap-2 font-pixel transition-all whitespace-nowrap"
       style={{
-        fontSize: '9px',
+        fontSize: 'clamp(7px, 2vw, 9px)',
         color: '#7a6068',
         border: '1px solid rgba(61,15,26,0.9)',
-        padding: '9px 18px',
+        padding: 'clamp(6px, 2vw, 9px) clamp(8px, 3vw, 18px)',
         background: 'rgba(8,2,6,0.78)',
         clipPath: clip,
       }}
-      onMouseEnter={(e)=>{const el=e.currentTarget as HTMLElement;el.style.color='#cc1133';el.style.borderColor='#cc1133';el.style.boxShadow='0 0 12px rgba(204,17,51,0.3)';}}
-      onMouseLeave={(e)=>{const el=e.currentTarget as HTMLElement;el.style.color='#7a6068';el.style.borderColor='rgba(61,15,26,0.9)';el.style.boxShadow='none';}}
+      onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#cc1133'; el.style.borderColor = '#cc1133'; el.style.boxShadow = '0 0 12px rgba(204,17,51,0.3)'; }}
+      onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.color = '#7a6068'; el.style.borderColor = 'rgba(61,15,26,0.9)'; el.style.boxShadow = 'none'; }}
     >
-      {side==='left' && <span style={{fontSize:'13px'}}>{icon}</span>}
-      {label}
-      {side==='right' && <span style={{fontSize:'13px'}}>{icon}</span>}
+      {side === 'left' && <span style={{ fontSize: '13px' }}>{icon}</span>}
+      <span className="hidden sm:inline">{label}</span>
+      {side === 'right' && <span style={{ fontSize: '13px' }}>{icon}</span>}
     </motion.button>
   );
 }
