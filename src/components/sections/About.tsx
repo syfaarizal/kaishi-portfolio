@@ -419,7 +419,7 @@ function BiographyPanel({inView}:{inView:boolean}) {
           <motion.div className="absolute top-0 bottom-0 w-[40%] bg-[linear-gradient(90deg,transparent,#cc113311,transparent)] pointer-events-none"
             animate={{x:['-120%','120%']}} transition={{duration:3.5,repeat:Infinity,repeatDelay:4,ease:'easeInOut'}}
           />
-          <div className="w-[70px] h-[70px] border border-[#cc1133]/40 bg-[#cc1133]/10 flex mx-auto sm:mx-[14px] items-center justify-center shadow-[0_0_14px_#cc113344] rotate-45 shrink-0 hidden sm:flex">
+          <div className="w-[70px] h-[70px] border border-[#cc1133]/40 bg-[#cc1133]/10 hidden sm:flex mx-auto sm:mx-[14px] items-center justify-center shadow-[0_0_14px_#cc113344] rotate-45 shrink-0">
             <img src="/assets/icon-kai-code.png" alt="code" width={20} height={20} className="-rotate-45" style={{filter:`drop-shadow(0 0 6px ${R})`}} />
           </div>
           <div className="flex-1 flex items-center gap-[12px] justify-between flex-col sm:flex-row">
