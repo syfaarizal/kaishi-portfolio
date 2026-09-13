@@ -227,7 +227,7 @@ export function Loadout({ onNavigate }: LoadoutProps) {
         <span className="font-pixel text-[8px]" style={{ color: 'rgba(204,17,51,0.4)' }}>◇</span>
       </div>
 
-      <div className="relative z-10 flex flex-col pt-20 sm:pt-24 md:pt-[80px] pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 md:px-8 lg:px-10 min-h-full h-full">
+      <div className="relative z-10 flex flex-col pt-20 pb-10 sm:pt-24 md:pt-[80px] sm:pb-10 md:pb-10 px-4 sm:px-6 md:px-8 lg:px-10 min-h-full h-full">
         {/* Header */}
         <header className="mb-6 sm:mb-7 md:mb-8">
           <div className="flex items-center gap-3 mb-2.5 sm:mb-3">
