@@ -476,11 +476,15 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.78, duration: 0.5 }}
-      className="flex items-center justify-center gap-4 pb-[30px] mt-[30px]"
+      className="flex items-center justify-center pb-[30px] mt-[15px] px-3"
+      style={{ gap: 'clamp(6px, 2vw, 16px)' }}
     >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
 
-      <div className="flex items-center gap-2.5">
+      <div
+        className="flex items-center"
+        style={{ gap: 'clamp(4px, 1.5vw, 10px)' }}
+      >
         {SECTION_IDS.map((section) => {
           const isActive = section === active;
           return (
@@ -489,22 +493,22 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
               onClick={() => onNavigate(section)}
               title={SECTION_LABELS[section]}
               className="group relative flex items-center justify-center"
-              style={{ width: '22px', height: '22px' }}
+              style={{ width: '18px', height: '18px' }}
             >
               <motion.span
                 className="block border"
                 animate={{
-                  width: isActive ? '14px' : '10px',
-                  height: isActive ? '14px' : '10px',
-                  background: isActive ? '#cc1133' : 'transparent',
+                  width:       isActive ? '11px' : '8px',
+                  height:      isActive ? '11px' : '8px',
+                  background:  isActive ? '#cc1133' : 'transparent',
                   borderColor: isActive ? '#cc1133' : 'rgba(204,17,51,0.5)',
-                  boxShadow: isActive ? '0 0 12px #cc1133, 0 0 24px rgba(204,17,51,0.4)' : 'none',
+                  boxShadow:   isActive ? '0 0 10px #cc1133, 0 0 20px rgba(204,17,51,0.4)' : 'none',
                   rotate: 45,
                 }}
                 transition={{ duration: 0.2 }}
               />
               <span
-                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                className="absolute -top-7 left-1/2 -translate-x-1/2 font-pixel whitespace-nowrap pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 hidden sm:block"
                 style={{ fontSize: '6px', color: '#cc1133', textShadow: '0 0 8px #cc1133' }}
               >
                 {SECTION_LABELS[section]}
@@ -529,12 +533,12 @@ function NavBtn({ label, icon, onClick, side }: { label: string; icon: string; o
       onClick={onClick}
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.94 }}
-      className="flex items-center gap-2 font-pixel transition-all"
+      className="flex-shrink-0 flex items-center gap-1.5 sm:gap-2 font-pixel transition-all whitespace-nowrap"
       style={{
-        fontSize: '9px',
+        fontSize: 'clamp(7px, 2vw, 9px)',
         color: '#7a6068',
         border: '1px solid rgba(61,15,26,0.9)',
-        padding: '9px 18px',
+        padding: 'clamp(6px, 2vw, 9px) clamp(8px, 3vw, 18px)',
         background: 'rgba(8,2,6,0.78)',
         clipPath: clip,
       }}
@@ -552,7 +556,7 @@ function NavBtn({ label, icon, onClick, side }: { label: string; icon: string; o
       }}
     >
       {side === 'left' && <span style={{ fontSize: '13px' }}>{icon}</span>}
-      {label}
+      <span className="hidden sm:inline">{label}</span>
       {side === 'right' && <span style={{ fontSize: '13px' }}>{icon}</span>}
     </motion.button>
   );
