@@ -255,7 +255,7 @@ export function Contact({ onNavigate }: ContactProps) {
         <span className="font-pixel text-[7px] text-[#cc1133]">STATUS: READY</span>
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 pb-24 sm:px-6 sm:py-20 sm:pb-28 lg:px-12 lg:py-24">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 pt-16 pb-7 sm:px-6 sm:pt-20 sm:pb-7 lg:px-12 lg:pt-24 lg:pb-7">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
