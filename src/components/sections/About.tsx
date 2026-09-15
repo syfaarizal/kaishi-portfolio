@@ -11,12 +11,12 @@ const GALLERY_FILTERS = ['ALL','WORK','LIFE','CODE','EXPERIMENT'] as const;
 type GFilter = typeof GALLERY_FILTERS[number];
 
 const GALLERY: GalleryItem[] = [
-  { id:1, title:'DARK DASHBOARD',   sub:'UI/UX • WEB APP',   tag:'WORK',       image:'/assets/gallery/KaiShiPose1.png' },
-  { id:2, title:'NEON CODE',        sub:'UI DESIGN ◆',       tag:'CODE',       image:'/assets/gallery/KaiShiPose2.png' },
-  { id:3, title:'MIDNIGHT SESSION', sub:'CODING ◆',          tag:'LIFE',       image:'/assets/gallery/KaiShiPose3.png' },
-  { id:4, title:'GAME DEV',         sub:'PROJECT ◆',         tag:'WORK',       image:'/assets/gallery/KaiShiPose4.png' },
-  { id:5, title:'CONTENT CREATOR',  sub:'YOUTUBE • TIKTOK',  tag:'LIFE',       image:'/assets/gallery/KaiShiPose5.png' },
-  { id:6, title:'CHAOS MODE',       sub:'EXPERIMENT ◆',      tag:'EXPERIMENT', image:'/assets/gallery/KaiShiPose6.png' },
+  { id:1, title:'DARK DASHBOARD',   sub:'UI/UX • WEB APP',   tag:'WORK',       image:'/assets/gallery/dark-dashboard.png' },
+  { id:2, title:'NEON CODE',        sub:'UI DESIGN ◆',       tag:'CODE',       image:'/assets/gallery/neon-code.png' },
+  { id:3, title:'MIDNIGHT SESSION', sub:'CODING ◆',          tag:'LIFE',       image:'/assets/gallery/midnight-session.png' },
+  { id:4, title:'GAME DEV',         sub:'PROJECT ◆',         tag:'WORK',       image:'/assets/gallery/game-dev.png' },
+  { id:5, title:'CONTENT CREATOR',  sub:'YOUTUBE • TIKTOK',  tag:'LIFE',       image:'/assets/gallery/content-creator.png' },
+  { id:6, title:'CHAOS MODE',       sub:'EXPERIMENT ◆',      tag:'EXPERIMENT', image:'/assets/gallery/chaos-mode.png' },
 ];
 
 const CORE_STATS = [
