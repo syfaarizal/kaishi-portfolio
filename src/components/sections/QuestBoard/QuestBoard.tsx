@@ -135,7 +135,7 @@ export function QuestBoard({ onNavigate }: QuestBoardProps) {
       />
 
       <div className="relative z-10 h-full overflow-y-auto">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 md:py-24">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-12 pt-16 pb-5 sm:pt-20 sm:pb-10 md:pt-24 md:pb-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -272,7 +272,7 @@ function SectionNav({ active, onNavigate }: { active: SectionId; onNavigate: (id
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.78, duration: 0.5 }}
-      className="flex items-center justify-center pb-[30px] mt-[15px] px-3"
+      className="flex items-center justify-center mt-[50px] px-3"
       style={{ gap: 'clamp(6px, 2vw, 16px)' }}
     >
       <NavBtn label="PREV" icon="◀" onClick={() => onNavigate(previous)} side="left" />
