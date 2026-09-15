@@ -23,7 +23,7 @@ const CORE_STATS = [
   { label:'CODING POWER',    value:86, icon:'code'     },
   { label:'PROBLEM SOLVING', value:92, icon:'puzzle'   },
   { label:'DESIGN SENSE',    value:78, icon:'palette'  },
-  { label:'CREATIVE POWER',      value:89, icon:'lightning'},
+  { label:'CREATIVE POWER',  value:89, icon:'lightning'},
   { label:'LOGIC',           value:90, icon:'brain'    },
   { label:'ADAPTABILITY',    value:87, icon:'cycle'    },
 ];
